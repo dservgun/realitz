@@ -23,7 +23,7 @@ import Data.Set
   appetite for risk. However, the transaction fees adds up and the risk 
   can be offset if most of the cash transactions are managed on a Tezos.
 
-  == Pre-investment tasks
+  == Request for investment phase.
 
   During this phase, the group short lists a set of properties that meet a particular risk profile. 
 
