@@ -88,19 +88,70 @@ data Contamination = Contamination {
 } deriving (Show)
 
 
+data Email = Email {_unEmail :: Text} deriving (Show) 
+data Phone = Phone {_unPhone :: Text} deriving (Show) 
+
+data Lab = Lab {
+  _contactDetails :: Address 
+  , _contactEmail :: Email 
+  , _contactPhone :: Phone
+  , _licenseStartDate :: UTCTiime
+  , _licenseEndDate :: UTCTime
+} deriving (Show)
+
+data ContaminationProtocol = ContaminationProtocol {
+  _protoUrl :: URL 
+  , comments :: Text
+} deriving (Show) 
+
+
+{- 
+  Given a 'ContaminationProtocol' return all protocols that can be used instead. Will return an empty 
+  list or more generally a 'Functor' that has no elements 'equal' to the input 'ContaminationProtocol'.
+  For example if there are not protocols other than the one input, we can safely say that this protocol 
+  is unique. 
+-}
+equivalentProtoocols :: (MonadIO m, Functor f)  => ContaminationProtocol -> m (f ContaminationProtocol)
+equivalentProtocols = undefined 
+
+{-| A license is valid for a lab if the date on which this function is invoked, is within
+   the 'licenseStartDate' and 'licenseEndDate'. Also, this implies, that on a block chain,
+   the current timestamp is the same as the the contract is executed.
+-}
+-- The operation is deliberatly inside 'MonadIO' because the current date is not available outside 
+-- an IO monad. Obviously, what feels elegant and obvious now, may not be in hindsight.
+validLicense :: MonadIO m => Lab -> m Boolean 
+validLicense = undefined
+
+
+
 data Detail = Detail {
   chemicalName :: Text
   , casNumber :: CasNumber
   , contamination :: Contamination
+  , _measuredOn :: UTCTiime
+  -- | The laboratory performing the tests.
+  , _lab :: Lab
+  -- | The specific protocol the laboratory is tasked to follow to 
+  -- | measure contamination. Typically, these are in the forma
+  -- | of a link to a pdf document published by either the state or 
+  -- | a federal regulatory body. Smoe protocols could be sufficiently 
+  -- | standard that an industry association could be responsible for 
+  -- | pubishing the protocol.
+  , _protocol :: ContaminationProtocol
 } deriving (Show)
 
-{-| The contamination summary report for the property.
-
+{-| 
+  A summary report of contamination captures state of the contamination.
 -}
 data Summary = Summary {
   _summary :: Text
   , _details :: Text
 } deriving (Show)
+
+-- | Given a set of details, is there a trendline or has the data remained flat.
+trendlineEstablished :: Functor f => f Detail -> Boolean 
+trendlineEstablished = undefined
 
 {-| The state the property is listed in, should be one of the 51 states in
 the country. This version supports US states, though we can support variety of
