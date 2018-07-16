@@ -150,3 +150,6 @@ The proceeds of the sale are sent as a check/wire to the signatories. The images
 transaction.
 
 #### Repeat.
+
+### Mark-to-market accounting
+Crypto currencies have unregulated fluctuations, therefore the process would settle an account daily to manage risk.
