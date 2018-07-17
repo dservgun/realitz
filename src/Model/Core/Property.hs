@@ -16,13 +16,14 @@ module Model.Core.Property where
 import Data.Text
 import Data.Time
 import Data.Set
+
 {-|
   = Remediation of properties contaminated with oil.
   The process of remediation of contaminated properties has quite a few
-  steps and does provide an investment opportunity to investors with an 
-  appetite for risk. However, the transaction fees adds up and the risk 
-  can be offset if most of the cash transactions are managed on a Tezos.
-
+  steps while providing an investment opportunity to entities with an 
+  appetite for risk. This application supports a model where the risk is limited 
+  to cleanup costs, which in themselves can be quite significant, and not to the cost
+  of acquiring a given property. 
   == Request for investment phase.
 
   During this phase, the group short lists a set of properties that meet a particular risk profile. 
@@ -35,6 +36,13 @@ import Data.Set
   == Offer phase 
 
   During this phase, an offer is made to the seller that usually includes an option to purchase the property at a price before an agreed upon date. The option has a premium as well as a list of tasks the option holder agrees to perform, which in this case involves cleaning up the property during before the option expires. Obviously, the profitability of the deal is influenced by a number of factors and this document will outline some of the parameters that need to be managed during the active phase of a project.
+
+  == Share certificate issue phase 
+  Paper shares, that are legally binding, will be issued proportional to the tezzies invested 
+  in the property. This is when the investment needed for the cleanup of the property is transferred
+  to the cleanup account associated with the property. At this point the amounts are NON-REFUNDABLE.
+  Which is generally true on a block chain, in this case since there is an associated paper transaction 
+  that is legally binding, there could be a clawback in the event of company contract violations.
 
   == Pre-cleanup phase
   Option agreement also has a liability clause that governs the participation of a licensed contractor so that the property is covered. 
@@ -61,101 +69,11 @@ import Data.Set
   Settlement amount is transfered to an escrow account that holds the settlement amout for a settlement time (default to 24 hours). Distribution is executed using generally accepted distribution practices.
 -}
 
-newtype CasNumber = CasNumber {_elements :: [Int]} deriving (Show)
-newtype TezosAddress = TezosAddress {_add :: Text} deriving (Show)
-
-{-|
-Contamination of a compound is measured in ratio and this is conventional
-depending on the nature of the contaminant. Here we are representing the
-contamination by the most commonly used measures in most reports, though
-the units can be better expressed as more contaminants are monitored.
--}
-data ContaminationUOM = 
-    PartsPerMillion | PartsPerBillion deriving (Show)
-
-{-|
-  The amount of '_cas' in terms of the 'ContaminationUOM'. For example, 
-  200 'PartsPerBillion' of _Tetrachloroethene (PCE)_. The final report needed to
-  obtain an NFA on a property will have 2 parameters, the actual contamination 
-  measured and the allowed limit of the contamination. Obviously, the 
-  measured value needs to be less than the allowed limit to obtain closure.
--}
-
-data Contamination = Contamination {
-  _cas :: CasNumber
-  , _amount :: Integer
-  , _unitOfMeasure :: ContaminationUOM
-} deriving (Show)
-
-
-data Email = Email {_unEmail :: Text} deriving (Show) 
-data Phone = Phone {_unPhone :: Text} deriving (Show) 
-
-data Lab = Lab {
-  _contactDetails :: Address 
-  , _contactEmail :: Email 
-  , _contactPhone :: Phone
-  , _licenseStartDate :: UTCTiime
-  , _licenseEndDate :: UTCTime
-} deriving (Show)
-
-data ContaminationProtocol = ContaminationProtocol {
-  _protoUrl :: URL 
-  , comments :: Text
-} deriving (Show) 
-
-
-{- 
-  Given a 'ContaminationProtocol' return all protocols that can be used instead. Will return an empty 
-  list or more generally a 'Functor' that has no elements 'equal' to the input 'ContaminationProtocol'.
-  For example if there are not protocols other than the one input, we can safely say that this protocol 
-  is unique. 
--}
-equivalentProtoocols :: (MonadIO m, Functor f)  => ContaminationProtocol -> m (f ContaminationProtocol)
-equivalentProtocols = undefined 
-
-{-| A license is valid for a lab if the date on which this function is invoked, is within
-   the 'licenseStartDate' and 'licenseEndDate'. Also, this implies, that on a block chain,
-   the current timestamp is the same as the the contract is executed.
--}
--- The operation is deliberatly inside 'MonadIO' because the current date is not available outside 
--- an IO monad. Obviously, what feels elegant and obvious now, may not be in hindsight.
-validLicense :: MonadIO m => Lab -> m Boolean 
-validLicense = undefined
 
 
 
-data Detail = Detail {
-  chemicalName :: Text
-  , casNumber :: CasNumber
-  , contamination :: Contamination
-  , _measuredOn :: UTCTiime
-  -- | The laboratory performing the tests.
-  , _lab :: Lab
-  -- | The specific protocol the laboratory is tasked to follow to 
-  -- | measure contamination. Typically, these are in the forma
-  -- | of a link to a pdf document published by either the state or 
-  -- | a federal regulatory body. Smoe protocols could be sufficiently 
-  -- | standard that an industry association could be responsible for 
-  -- | pubishing the protocol.
-  , _protocol :: ContaminationProtocol
-} deriving (Show)
-
-{-| 
-  A summary report of contamination captures state of the contamination.
--}
-data Summary = Summary {
-  _summary :: Text
-  , _details :: Text
-} deriving (Show)
-
--- | Given a set of details, is there a trendline or has the data remained flat.
-trendlineEstablished :: Functor f => f Detail -> Boolean 
-trendlineEstablished = undefined
-
-{-| The state the property is listed in, should be one of the 51 states in
-the country. This version supports US states, though we can support variety of
-  countries that need this application.
+{-| The state the property is listed in, should be one of the 51 states in United States. The risk
+associated with a contaminated is sufficiently to limit the boundary to within the United States.
 -}
 data State = State {
   stateCode :: Text
@@ -169,32 +87,15 @@ data Property = Property {
   , _state :: State
 } deriving (Show)
 
-data ReportIdentifier = ReportIdentifier {_id :: Text} deriving (Show)
-data ReportType = 
-  RemedialInvestigation | RiskAssessment | Cleanup deriving (Show)
 
-data Report = Report {
-  -- | Date on which the report was prepared.
-  preparedDate :: UTCTime 
-  -- | The type of report. 
-  , reportType :: ReportType
-  -- | 'Detail' outlines additional detail based on the phase of the 
-  -- | contaminated property. 
-  , reportDetails :: Set Detail
-  -- | A high level summary of the report. 
-  , reportSummary :: Set Summary
-  , caseNumber :: ReportIdentifier
-  , preparer :: CaseManager
-} deriving (Show)
-
--- | The case manager responsible for this property.
-data CaseManager = CaseManager {
-  _cmName :: Text
-  , _contact :: TezosAddress
-  , _phone :: Text 
-  , _email :: Text
-} deriving (Show)
-
+{-| The option on the property granting __\limited\__ cleanup rights on the property
+along with the time horizon for the option. This option is binding in the local jurisdiction
+or within the boundaries of a Country. Therefore, such options can most likely be executed
+by members forming an entity that is liable for cleanup. The liability, at least in the 
+USA is usually limited therefore the partners in the entity can decide to suspend cleanup 
+at anytime during the option period. Moreover, since the option stipulates acquiring a
+liability insurance for the property for the duration of the option any ensuing risks are offset.
+-}
 data RealEstateOption = 
   RealEstateOption {
     property :: Property
@@ -210,14 +111,44 @@ data Contractor = Contractor {
   , _licenseExpiresOn :: UTCTime
 }deriving(Show)
 
+
 {-| 
 The tezzies expressed in terms of an __/amount/__ and
-an __/exponent/__ that following general rules of currency 
-computation and presentation. 
+an __/exponent/__ ; general rules of currency 
+computation and presentation apply. 
 -}
 -- TODO: implement the presentation of tezzies.
 data Tezzies = Tezzies {
   _tAmount :: Integer, 
   _exponent :: Integer
 } deriving (Show)
+
+
+{-| 
+  This is a representation of the physical certificate issued by the company 
+  accountant that is legally binding on the entity. The increased transparency helps
+  ease the investor concerns as the shares of all investors is accessible.
+-}
+data InvestorShareCertificate = InvestorShareCertificate {
+  _investor :: ContactInformation
+  , _investorAddress :: TezosAddress
+  , _investmentAmount :: Tezzies
+  , _propertyShare :: Rational 
+  , _issueDate :: UTCTime
+  , _certificateLocation :: URL
+} deriving (Show)
+
+newtype USD = USD {_unUSD :: Rational}
+{-|
+  Settlement is when the sale has concluded on behalf of the investors and is usually 
+  in cash. This is where the transaction steps off the block-chain and settles in local 
+  currency. Ideally this step could have been executed on the block chain, however, 
+  the value of these transactions could be large and errors can be devastating.
+-}
+data CertificateSettlement = CertificateSettlement {
+  _investorShareCertificate :: InvestorShareCertificate
+  , _distributionAmount :: USD
+  , _distributionDate :: UTCTime
+}
+
 

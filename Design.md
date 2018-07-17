@@ -4,12 +4,8 @@
 
 The overarching goal of this application to allow for a real-estate investor, an environment contractor and the property owner to manage the 
 various steps in the process of cleanup of properties contaminated with oil. From an environmental viewpoint, this presents a huge problem for counties
-and municipalities around the world and managing costs as well as transaction costs will help cut down costs. The other aspect of this business is the level of 
-risk involved in cleaning up these properties that at times get transferred to the taxpayer and could leave the county on the hook for steep cleanup costs.  The block chain 
-part of this solution is only part of the overall solution to help controlling the costs of cleanup. The other part is choice of the products proven on the field to controlling
+and municipalities around the world and managing real costs as well as transaction costs can only help in reducing the overall budget for cleanup. The block chain part of this solution is only part of the overall solution to help controlling the costs of cleanup. The other part is choice of the products proven on the field to controlling
 the costs of the cleanup. This document obviously focuses on the software solution that we intend to build. 
-
-
 
 ## Platform
 
@@ -26,7 +22,7 @@ The application needs to run on
 ## Security constraints
 
 Security concerns and auditability of the application require the application source code to be open source to help prevent 0-day defects. No external calls can be 
-made without the private key being encrypted. (There must be some way to prevent any application deployments that violate this rule). 
+made without the private key being encrypted. (TODO: There must be some way to prevent any application deployments that violate this rule). 
 
 
 ## Choice of programming language 
@@ -152,4 +148,6 @@ transaction.
 #### Repeat.
 
 ### Mark-to-market accounting
-Crypto currencies have unregulated fluctuations, therefore the process would settle an account daily to manage risk.
+Crypto currencies have unregulated fluctuations, therefore the process would settle the core account daily to manage risk. As a practice, the accounts will only contain monies to be paid
+for the next 24 hours, to prevent any tezzies accruing interest on these accounts.
+
