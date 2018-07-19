@@ -1,15 +1,16 @@
 module Model.Core.Lab 
-	(
-		Lab(..)
-		, validLicense
-	)
+  (
+    Lab(..)
+    , validLicense
+  )
 where
+import Control.Monad.IO.Class
 import Data.Time 
 import Model.Core.Types
 
 data Lab = Lab {
-  , _contact :: ContactInformation
-  , _licenseStartDate :: UTCTiime
+  _contact :: ContactInformation
+  , _licenseStartDate :: UTCTime
   , _licenseEndDate :: UTCTime
 } deriving (Show)
 
@@ -20,7 +21,6 @@ data Lab = Lab {
 -}
 -- The operation is deliberatly inside 'MonadIO' because the current date is not available outside 
 -- an IO monad. Obviously, what feels elegant and obvious now, may not be in hindsight.
-validLicense :: MonadIO m => Lab -> m Boolean 
+validLicense :: MonadIO m => Lab -> m Bool 
 validLicense = undefined
-
 

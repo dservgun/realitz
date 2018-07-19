@@ -1,5 +1,9 @@
 module Model.Core.Types where 
 
+import Data.Text 
+import Control.Monad.IO.Class
+import Network.URL
+
 
 newtype CasNumber = CasNumber {_elements :: [Int]} deriving (Show)
 newtype TezosAddress = TezosAddress {_add :: Text} deriving (Show)
@@ -30,13 +34,13 @@ data Contamination = Contamination {
 
 data Email = Email {_unEmail :: Text} deriving (Show) 
 data Phone = Phone {_unPhone :: Text} deriving (Show) 
+data Address = Address{_unAddress :: Text} deriving (Show)
 
-data ContatInformation = ContactInformation {
+data ContactInformation = ContactInformation {
   _contactDetails :: Address
   , _contactEmail :: Email 
   , _contactPhone :: Phone 
-
-}
+} deriving (Show)
 
 
 {-| 
@@ -55,7 +59,7 @@ data CotaminantTestProtocol = CotaminantTestProtocol {
   For example if there are not protocols other than the one input, we can safely say that this protocol 
   is unique. 
 -}
-equivalentProtoocols :: (MonadIO m, Functor f)  => CotaminantTestProtocol -> m (f CotaminantTestProtocol)
+equivalentProtocols :: (MonadIO m, Functor f)  => CotaminantTestProtocol -> m (f CotaminantTestProtocol)
 equivalentProtocols = undefined 
 
 -- | The case manager responsible for this property.

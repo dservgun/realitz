@@ -18,5 +18,5 @@ data Technician = Technician {
 {-| The '_licenseEndDate' for the 'Lab' and the 'Technician' should 
 be greater than the date of the eecution of the method.
 -}
-licenseValidForTechnician :: Technician -> IO Boolean 
+licenseValidForTechnician :: Technician -> IO Bool 
 licenseValidForTechnician = undefined

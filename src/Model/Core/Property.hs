@@ -16,6 +16,9 @@ module Model.Core.Property where
 import Data.Text
 import Data.Time
 import Data.Set
+import Model.Core.Types
+import Model.Core.Technician
+import Network.URL
 
 {-|
   = Remediation of properties contaminated with oil.
@@ -68,7 +71,6 @@ import Data.Set
   == Escrow account
   Settlement amount is transfered to an escrow account that holds the settlement amout for a settlement time (default to 24 hours). Distribution is executed using generally accepted distribution practices.
 -}
-
 
 
 
