@@ -19,10 +19,13 @@ executable realestate
   main-is:             Main.hs
   default-language:    Haskell2010
   other-modules : 
-    Model.Core.Property
-    , Model.Core.Types
-    , Model.Core.Technician
-    , Model.Core.Lab
+    Realitz.Model.Core.Property
+    , Realitz.Model.Core.Types
+    , Realitz.Model.Core.Technician
+    , Realitz.Model.Core.Lab
+    , Realitz.Tezos.RPC.Types
+    , Realitz.Tezos.RPC.InvalidBlock
+    , Realitz.Tezos.RPC.Error
   build-depends:       
     base >= 4.7 && < 5
     , text >= 1.2 && < 1.3

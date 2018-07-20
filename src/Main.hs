@@ -1,5 +1,5 @@
 module Main where
-import Model.Core.Property
+import Realitz.Model.Core.Property
 
 -- | Test help
 main :: IO ()

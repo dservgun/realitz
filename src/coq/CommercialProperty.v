@@ -28,4 +28,23 @@ environmental consultant to highlight any areas missed in the preliminary report
 as to continuing on the property or otherwise*)
 
 (** Offer phase *)
-(** The group presents an offer to purchase an option on the property with limited access rights and cleanup rights on the property. 
+(** The group presents an offer to purchase an option on the property with limited access rights and cleanup rights on the property. Acquiring an option transfers the right to 
+buy a property at an agreed price before the option expires. This contract is analogous to the 
+popular options however the group takes on the role of both the market maker as well as the 
+option writer. Which essentially implies that the risk of acquiring the option is transferred for a specified period. *)
+
+(** Pre-cleanup phase *)
+(** During this phase all of the contractors along with fall-back contractors are identified 
+and assigned to the project. Each contractor has a liability requirement that needs to be met before the contractor can work on any given property. This phase formalizes the process and each contractor arrangement for the property is documented in this phase. 
+*)
+
+(** Project planning *)
+(** Each project is divided into task that has a rate and number of units associated with it. Moreover, each task has a start date, end date with [WorkAuthorization] and [WorkInspection] to release [Payment]s worker.
+*)
+
+(** Investor exposure*)
+(** A given investor will usually have a risk appetite that will be computed based on the 
+risk profile. Additionally, each transaction will need to go through a pre-approval process to help cover for any losses in existing investemnts*)
+
+
+

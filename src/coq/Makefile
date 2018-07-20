@@ -1,4 +1,4 @@
-Modules := CommercialProperty 
+Modules := CommercialProperty Task
 VS := $(MODULES:%=%.v)
 LIB := Realitz
 
