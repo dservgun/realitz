@@ -27,6 +27,10 @@ executable realestate
     , Realitz.Tezos.RPC.Types
     , Realitz.Tezos.RPC.InvalidBlock
     , Realitz.Tezos.RPC.Error
+    , Realitz.Tezos.RPC.Common
+    , Realitz.Tezos.RPC.Operations.InternalResultStatus
+    , Realitz.Tezos.RPC.Operations.ResultStatus
+    , Realitz.Tezos.RPC.Protocol    
   build-depends:       
     base >= 4.7 && < 5
     , text >= 1.2 && < 1.3
