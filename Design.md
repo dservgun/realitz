@@ -151,3 +151,8 @@ transaction.
 Crypto currencies have unregulated fluctuations, therefore the process would settle the core account daily to manage risk. As a practice, the accounts will only contain monies to be paid
 for the next 24 hours, to prevent any tezzies accruing interest on these accounts.
 
+### Reference
+Collect references in coq here : 
+* [coq slides](https://www.lri.fr/~paulin/LASER/coq-slides4.pdf)
+* [Typeclasses](http://people.csail.mit.edu/jgross/personal-website/papers/academic-papers-local/mathclasses-diamond.pdf)
+* [Record types](http://www.konne.me/2015/02/04/data-abstraction-0.html)
