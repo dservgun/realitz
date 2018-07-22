@@ -18,17 +18,9 @@ import Data.ByteString (ByteString)
 import Realitz.Tezos.RPC.Error as Error
 import Realitz.Tezos.RPC.Operations.ResultStatus
 import Realitz.Tezos.RPC.Operations.InternalResultStatus
+import Realitz.Tezos.RPC.Common
 
 
-newtype ChainId = ChainId {_unChainId :: Text} deriving (Show)
-newtype UpdateKind = UpdateKind {_updateKind :: Text} deriving (Show)
-newtype BlockHash = BlockHash {_unBlockHash :: ByteString} deriving (Show)
-newtype Expiration = Expiration {_unExpiration :: UTCTime} deriving (Show)
-newtype OperationHash = OperationHash {_unOpHash :: ByteString} deriving (Show) 
-newtype ContextHash = ContextHash {_unContextHash :: ByteString} deriving (Show)
-newtype InvalidBlocks = InvalidBlocks {_invBlocks :: [BlockHash]} deriving (Show)
-newtype ValidBlocks = ValidBlocks {_validBlocks :: [BlockHash]} deriving (Show)
-newtype Delegate = Delegate {_unDelegate :: ByteString} deriving (Show)
 {-| 
 -- @ 
 

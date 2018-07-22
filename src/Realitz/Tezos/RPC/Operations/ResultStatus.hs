@@ -3,7 +3,6 @@ module Realitz.Tezos.RPC.Operations.ResultStatus where
 import Realitz.Tezos.RPC.Error as Error
 import Realitz.Tezos.RPC.Common
 import Data.Text
-newtype UpdateKind = UpdateKind {_updateKind :: Text} deriving Show 
 
 {-| 
 -- @

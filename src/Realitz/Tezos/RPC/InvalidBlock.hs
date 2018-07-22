@@ -1,6 +1,6 @@
 
 module Realitz.Tezos.RPC.InvalidBlock where 
-import Realitz.Tezos.RPC.Types
+import Realitz.Tezos.RPC.Common
 import Realitz.Tezos.RPC.Error
 import Data.Text
 
