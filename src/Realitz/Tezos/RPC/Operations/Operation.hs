@@ -1,5 +1,11 @@
 module Realitz.Tezos.RPC.Operations.Operation where
 
+import Data.ByteString
+import Data.Text
+import Realitz.Tezos.RPC.Common
+import Realitz.Tezos.RPC.Protocol
+
+newtype OperationKind = OperationKind {_unOperation :: Text} deriving Show 
 {-| 
 -- @
   case class Operation(
@@ -37,6 +43,38 @@ module Realitz.Tezos.RPC.Operations.Operation where
 -- @
 -}
 
+data Operation = Operation {
+  _kind :: OperationKind
+  , block :: Maybe BlockHash 
+  , level :: Maybe Level
+  , slots :: [Slot]
+  , nonce :: Maybe Nonce 
+  , op1 :: Maybe InlinedEndorsement
+  , op2 :: Maybe InlinedEndorsement
+  , bh1 :: Maybe BlockHeader 
+  , bh2 :: Maybe BlockHeader
+  , pkh :: Maybe ByteString
+  , secret :: Maybe ByteString
+  , proposals :: [ByteString] 
+  , period :: Maybe ByteString
+  , source :: Maybe ByteString 
+  , ballot :: Maybe ByteString 
+  , fee :: Maybe ByteString
+  , counter :: Maybe Int
+  , gasLimit :: Maybe String 
+  , storageLimit :: Maybe String 
+  , publicKey :: Maybe PublicKey
+  , amount :: Maybe String
+  , destination :: Maybe TzAddress
+  , parameters :: Maybe Parameter 
+  , managerPubKey :: Maybe PublicKey 
+  , balance :: Maybe ByteString 
+  , spendable :: Maybe ByteString 
+  , delegatable :: Maybe Bool 
+  , delegate :: Maybe TzAddress
+} deriving Show
+
+
 {-| 
 -- @
   case class OperationGroup (
@@ -50,9 +88,9 @@ module Realitz.Tezos.RPC.Operations.Operation where
 -- @
 -}
 
-data OperationGroup = Operation {
+data OperationGroup = OperationGroup {
   protocol :: Protocol 
-  , chainId :: Maybe Chain 
+  , chainId :: Maybe ChainId 
   , hash :: BlockHash 
   , branch :: Branch 
   , contents :: [Operation]

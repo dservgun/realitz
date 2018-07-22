@@ -21,16 +21,17 @@ executable realestate
   default-language:    Haskell2010
   other-modules : 
     Realitz.Model.Core.Property
-    , Realitz.Model.Core.Types
-    , Realitz.Model.Core.Technician
     , Realitz.Model.Core.Lab
-    , Realitz.Tezos.RPC.Types
-    , Realitz.Tezos.RPC.InvalidBlock
-    , Realitz.Tezos.RPC.Error
+    , Realitz.Model.Core.Technician
+    , Realitz.Model.Core.Types
     , Realitz.Tezos.RPC.Common
+    , Realitz.Tezos.RPC.Error
+    , Realitz.Tezos.RPC.InvalidBlock
     , Realitz.Tezos.RPC.Operations.InternalResultStatus
+    , Realitz.Tezos.RPC.Operations.Operation    
     , Realitz.Tezos.RPC.Operations.ResultStatus
-    , Realitz.Tezos.RPC.Protocol    
+    , Realitz.Tezos.RPC.Protocol
+    , Realitz.Tezos.RPC.Types
   build-depends:       
     base >= 4.7 && < 5
     , text >= 1.2 && < 1.3
