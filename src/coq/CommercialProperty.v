@@ -1,8 +1,15 @@
 Require Import List ZArith Bool String.
+Require Export ZArith_base.
+Require Export Coq.Reals.Rdefinitions.
+Require Import Coq.Lists.List.
 
 (**
 Remediation of properties contaminated with oil and associated volatile organic compounds (VOCS) present a unique challenge as well as an investment opportunity to investors with an appetite for risk. The goal of this application is to streamline as well as document all of the steps from the inception of the project to settlement. The overall goal of the application is to manage the costs of documenation as well as to provide local regulatory authority with the progress on a property transparently. 
 *)
+
+Record Property := mkProperty {
+  address : string
+}
 
 (** * Application lifecycle *)
 (** The application needs to address the needs of various participants or actors and this section 
@@ -41,10 +48,27 @@ and assigned to the project. Each contractor has a liability requirement that ne
 (** Project planning *)
 (** Each project is divided into task that has a rate and number of units associated with it. Moreover, each task has a start date, end date with [WorkAuthorization] and [WorkInspection] to release [Payment]s worker.
 *)
+Record Task : Set := mkTask {
+  taskId : Z; 
+  taskDescription : string; 
+  rate : R;
+  numberOfUnits : Z
+}
+
+Record Edge : Set := mkEdge {
+  from : Task; 
+  to : Task
+}
+
+Record Project : Set := mkProject {
+  tasks : list Edge
+}
 
 (** Investor exposure*)
 (** A given investor will usually have a risk appetite that will be computed based on the 
 risk profile. Additionally, each transaction will need to go through a pre-approval process to help cover for any losses in existing investemnts*)
-
-
-
+Record InvestorExposure : Set := mkInvestorExposure{
+  (** The exposure for each investor so far. *)
+  exposure : R;
+  property : list Property
+}.
