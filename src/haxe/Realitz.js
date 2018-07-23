@@ -4,5 +4,17 @@ var Realitz = function() { };
 Realitz.main = function() {
 	console.log("Hello Realitz");
 };
+var realitz_core_Property = function() { };
+realitz_core_Property.prototype = {
+	Property: function() {
+		console.log("Constructing property");
+	}
+};
+var realitz_tezos_rpc_Types = function() { };
+realitz_tezos_rpc_Types.prototype = {
+	Types: function() {
+		console.log("Constructor");
+	}
+};
 Realitz.main();
 })();
