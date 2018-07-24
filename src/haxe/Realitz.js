@@ -10,6 +10,7 @@ realitz_core_Property.prototype = {
 		console.log("Constructing property");
 	}
 };
+var realitz_tezos_rpc_BlockHeader = function() { };
 var realitz_tezos_rpc_Types = function() { };
 realitz_tezos_rpc_Types.prototype = {
 	Types: function() {
