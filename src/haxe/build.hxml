@@ -1,3 +1,4 @@
+-cp .
+-v 
 -js Realitz.js
 -main Realitz.hx
-
