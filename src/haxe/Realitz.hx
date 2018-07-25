@@ -2,6 +2,7 @@
 import realitz.core.Property;
 import realitz.tezos.rpc.BlockHeader;
 import realitz.tezos.rpc.Types;
+import realitz.tezos.rpc.Error;
 
 class Realitz {
   static function main () {

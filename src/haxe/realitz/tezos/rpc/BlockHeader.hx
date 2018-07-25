@@ -1,6 +1,7 @@
 package realitz.tezos.rpc;
 
 import haxe.io.Bytes;
+import haxe.Int64;
 
 /** 
 Code walkthrough process: it is simpler and probably intended that 
@@ -49,4 +50,87 @@ class BlockHeaderWithData {
   * Check on irc if this is the right way to doing this.
   */ 
   var data : Bytes;
+}
+
+class BlockHash {
+  var hash : String;
+}
+
+class ChainId {
+  var hash : String;
+}
+
+class BlockResponse {
+  var block : BlockHash; 
+  var level : Int ;
+  var errors : List<Error>;
+}
+
+class InjectBlock {
+  var data : Bytes;
+  var operations : 
+    List <List < {branch : BlockHash, data : Bytes} > >;
+}
+
+class InjectOperation {
+  var data : Bytes;
+}
+
+class OperationHash {
+  var hash : String;
+}
+
+class Component {
+  var name : String ;
+  var _interface : Bytes;
+  var implementation : Bytes;
+}
+
+class ProtocolHash { 
+  var hash : String;
+}
+
+class ContextHash {
+  var hash : String;
+}
+class InjectProtocol {
+  var expectedEnvVersion : Int;
+  var components : List<Component>;
+} 
+
+class Bootstrapped {
+  var block : BlockHash ;
+  var timestamp : Int64;
+}
+
+class Fitness {
+  var fitness : List<Bytes>;
+}
+
+class PublicKey {
+  var hash : String;
+}
+
+class BlockInformation {
+  var chainId  : ChainId;
+  var hash : BlockHash;
+  var level : Int; 
+  var proto : Int;
+  var predecessor : BlockHash ;
+  var timestamp : Int64;
+  var validationPass : Int;
+  var operationsHash : OperationHash;
+  var fitness : Fitness;
+  var context : ContextHash; 
+  var protocolData : Bytes;
+}
+
+class IdPoint {
+  var address : String;
+  var port : Int;
+}
+class ConnectionInformation {
+  var incoming : Bool;
+  var peerId : PublicKey;
+  var idPoint : IdPoint;
 }
