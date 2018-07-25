@@ -129,8 +129,125 @@ class IdPoint {
   var address : String;
   var port : Int;
 }
+
+class ConnectionVersion {
+  var name : String;
+  var major : Int;
+  var minor : Int;
+}
+
+typedef PeerId = PublicKey
+
+class Metadata {
+  var data : Bytes; //TO Be completed
+}
 class ConnectionInformation {
   var incoming : Bool;
-  var peerId : PublicKey;
+  var peerId : PeerId;
   var idPoint : IdPoint;
+  var remoteSocketPort : Int;
+  var versions : List<ConnectionVersion>;
+  var privateConnection : Bool;
+  var localMetadata : Metadata;
+  var remoteMetadata : Metadata;
 }
+
+enum PoolEvent {
+  TooFewConnections;
+  TooManyConnections;
+  NewPoint(point : IdPoint);
+  NewPeer (peer : PeerId);
+  /**
+  * Garbage collection of known point table has been triggered. 
+  */
+  GCPoints;
+  /**
+  * Garbage collection of known peer ids table has been triggered.
+  /*
+  GCPeerIds;
+  /**
+  * We accepted a connection.
+  */
+  IncomingConnection(point : IdPoint);
+  /**
+  * We connected to a remote endpoint.
+  */
+  OutgoingConnection(point : IdPoint);
+  /**
+  * Authentication failed for the P2PPoint.
+  */
+  AuthenticationFailed(point : IdPoint);
+  /*
+    (** We accepted a connection after authentifying the remote peer. *)
+  
+    | Rejecting_request of P2p_point.Id.t * Id.t * P2p_peer_id.t
+    (** We rejected a connection after authentifying the remote peer. *)
+    | Request_rejected of P2p_point.Id.t * (Id.t * P2p_peer_id.t) option
+    (** The remote peer rejected our connection. *)  
+  */
+  AcceptingRequest (point : IdPoint, identifier : PeerId, 
+    peerId : PublicKey);
+  RejectingRequest (point : IdPoint, identifier : PeerId, 
+    peerId : PublicKey);
+  RequestRejected (point : IdPoint, identifier : PeerId, peerId : PeerId);
+
+}
+
+/*
+file : p2p_connection.mli
+module Pool_event : sig
+
+  type t =
+
+    | Too_few_connections
+    | Too_many_connections
+
+    | New_point of P2p_point.Id.t
+    | New_peer of P2p_peer_id.t
+
+    | Gc_points
+    (** Garbage collection of known point table has been triggered. *)
+
+    | Gc_peer_ids
+    (** Garbage collection of known peer_ids table has been triggered. *)
+
+    (* Connection-level events *)
+
+    | Incoming_connection of P2p_point.Id.t
+    (** We accept(2)-ed an incoming connection *)
+    | Outgoing_connection of P2p_point.Id.t
+    (** We connect(2)-ed to a remote endpoint *)
+    | Authentication_failed of P2p_point.Id.t
+    (** Remote point failed authentication *)
+
+    | Accepting_request of P2p_point.Id.t * Id.t * P2p_peer_id.t
+    (** We accepted a connection after authentifying the remote peer. *)
+    | Rejecting_request of P2p_point.Id.t * Id.t * P2p_peer_id.t
+    (** We rejected a connection after authentifying the remote peer. *)
+    | Request_rejected of P2p_point.Id.t * (Id.t * P2p_peer_id.t) option
+    (** The remote peer rejected our connection. *)
+
+    | Connection_established of Id.t * P2p_peer_id.t
+    (** We succesfully established a authentified connection. *)
+
+    | Swap_request_received of { source : P2p_peer_id.t }
+    (** A swap request has been received. *)
+    | Swap_ack_received of { source : P2p_peer_id.t }
+    (** A swap ack has been received *)
+    | Swap_request_sent of { source : P2p_peer_id.t }
+    (** A swap request has been sent *)
+    | Swap_ack_sent of { source : P2p_peer_id.t }
+    (** A swap ack has been sent *)
+    | Swap_request_ignored of { source : P2p_peer_id.t }
+    (** A swap request has been ignored *)
+    | Swap_success of { source : P2p_peer_id.t }
+    (** A swap operation has succeeded *)
+    | Swap_failure of { source : P2p_peer_id.t }
+    (** A swap operation has failed *)
+
+    | Disconnection of P2p_peer_id.t
+    (** We decided to close the connection. *)
+    | External_disconnection of P2p_peer_id.t
+    (** The connection was closed for external reason. *)
+
+*/
