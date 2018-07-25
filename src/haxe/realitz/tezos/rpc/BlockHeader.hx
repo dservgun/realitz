@@ -137,7 +137,7 @@ class ConnectionVersion {
 }
 
 typedef PeerId = PublicKey
-
+typedef ConnectionId = PublicKey
 class Metadata {
   var data : Bytes; //TO Be completed
 }
@@ -177,65 +177,67 @@ enum PoolEvent {
   * Authentication failed for the P2PPoint.
   */
   AuthenticationFailed(point : IdPoint);
-  /*
-    (** We accepted a connection after authentifying the remote peer. *)
-  
-    | Rejecting_request of P2p_point.Id.t * Id.t * P2p_peer_id.t
-    (** We rejected a connection after authentifying the remote peer. *)
-    | Request_rejected of P2p_point.Id.t * (Id.t * P2p_peer_id.t) option
-    (** The remote peer rejected our connection. *)  
-  */
+
   AcceptingRequest (point : IdPoint, identifier : PeerId, 
     peerId : PublicKey);
+
+  /** 
+  * We rejected a connection after authentifying the remote peer.
+  */
   RejectingRequest (point : IdPoint, identifier : PeerId, 
     peerId : PublicKey);
+  /**
+  * The remote peer rejected our connection.
+  */
   RequestRejected (point : IdPoint, identifier : PeerId, peerId : PeerId);
 
+  /**
+  * We successfully established an authenticated connection
+  */
+  ConnectionEstablished(identifier : ConnectionId, peer : PeerId);
+
+  /**
+  * A swap request received of a source.
+  */
+  SwapRequestReceived (source : PeerId);
+  /**
+  * A swap ack has been received
+  */
+  SwapAckReceived (source : PeerId);
+
+  /**
+  * A swap request has been sent out.
+  */
+  SwapRequestSent (source : PeerId);
+  /**
+  * Swap ack has been sent
+  */
+  SwapAckSent (source : PeerId);
+
+  /**
+  * A swap request has been ignored.
+  */
+  SwapRequestIgnored(source : PeerId);
+  /**
+  * Swap operation has succeeded.
+  */
+  SwapSuccess (source : PeerId);
+  /**
+  * Swap operation has failed.
+  */
+  SwapFailure (source : PeerId);
+  /**
+  * We decided to close the connection.
+  */
+  Disconnection (peerId : PeerId);
+  /**
+  * The connection was closed for external reason.
+  */
+  ExternalDisconnection (peerId : PeerId);
 }
 
 /*
 file : p2p_connection.mli
-module Pool_event : sig
-
-  type t =
-
-    | Too_few_connections
-    | Too_many_connections
-
-    | New_point of P2p_point.Id.t
-    | New_peer of P2p_peer_id.t
-
-    | Gc_points
-    (** Garbage collection of known point table has been triggered. *)
-
-    | Gc_peer_ids
-    (** Garbage collection of known peer_ids table has been triggered. *)
-
-    (* Connection-level events *)
-
-    | Incoming_connection of P2p_point.Id.t
-    (** We accept(2)-ed an incoming connection *)
-    | Outgoing_connection of P2p_point.Id.t
-    (** We connect(2)-ed to a remote endpoint *)
-    | Authentication_failed of P2p_point.Id.t
-    (** Remote point failed authentication *)
-
-    | Accepting_request of P2p_point.Id.t * Id.t * P2p_peer_id.t
-    (** We accepted a connection after authentifying the remote peer. *)
-    | Rejecting_request of P2p_point.Id.t * Id.t * P2p_peer_id.t
-    (** We rejected a connection after authentifying the remote peer. *)
-    | Request_rejected of P2p_point.Id.t * (Id.t * P2p_peer_id.t) option
-    (** The remote peer rejected our connection. *)
-
-    | Connection_established of Id.t * P2p_peer_id.t
-    (** We succesfully established a authentified connection. *)
-
-    | Swap_request_received of { source : P2p_peer_id.t }
-    (** A swap request has been received. *)
-    | Swap_ack_received of { source : P2p_peer_id.t }
-    (** A swap ack has been received *)
-    | Swap_request_sent of { source : P2p_peer_id.t }
-    (** A swap request has been sent *)
     | Swap_ack_sent of { source : P2p_peer_id.t }
     (** A swap ack has been sent *)
     | Swap_request_ignored of { source : P2p_peer_id.t }
@@ -251,3 +253,30 @@ module Pool_event : sig
     (** The connection was closed for external reason. *)
 
 */
+
+class ConnectionInfo {
+  var connectionId : IdPoint;
+  var timestamp : Int64;
+}
+class ConnectionMetadata {
+  var disableMempool : Bool;
+  var privateNode : Bool;
+}
+enum PeerState {
+  Running;
+}
+
+class Peer {
+  var score : Int;
+  var trusted : Bool;
+  var connectionMetadata : ConnectionMetadata;
+  var peerState : PeerState;
+  var reachableAt : IdPoint;
+  var statistics : PeerStatistics;
+  var lastFailedConnection : List<ConnectionInfo>;
+  var lastRejectedConnection : List<ConnectionInfo>;
+  var lastEstablishedConnection : List<ConnectionInfo>;
+  var lastDisconnection : List<ConnectionInfo>;
+  var lastSeen : List<ConnectionInfo>;
+  var lastMiss : List<ConnectionInfo>;
+}
