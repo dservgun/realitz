@@ -264,6 +264,12 @@ class ConnectionMetadata {
 }
 enum PeerState {
   Running;
+  Accepted;
+  Disconnected;
+}
+
+class PeerStatistics {
+  var stats : String;
 }
 
 class Peer {
