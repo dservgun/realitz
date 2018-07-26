@@ -1,3 +1,5 @@
+package realitz.tezos.rpc;
+
 /*****************************************************************************/
 /*                                                                           */
 /* Open Source License                                                       */
@@ -23,17 +25,61 @@
 /*                                                                           */
 /*****************************************************************************/
 
-//TODO: add build file such that it picks up all the files.
-import realitz.core.Property;
-import realitz.tezos.rpc.BlockHeader;
-import realitz.tezos.rpc.Types;
-import realitz.tezos.rpc.Error;
+import haxe.Int64;
+import haxe.ds.Option;
 import realitz.tezos.rpc.WorkerTypes;
-import realitz.tezos.rpc.BlockValidator;
+import realitz.tezos.rpc.Types;
 
-class Realitz {
-  static function main () {
-    trace("Hello Realitz");
-    var e : Error = EmptyAnswer;
+/*
+* file : block_validator.mli
+* val pending_requests : t -> (Time.t * Block_validator_worker_state.Request.view) list
+val current_request : t -> (Time.t * Time.t * Block_validator_worker_state.Request.view) option
+val last_events : t -> (Lwt_log_core.level * Block_validator_worker_state.Event.t list) list
+  type view = {
+    chain_id : Chain_id.t ;
+    block : Block_hash.t ;
+    peer: P2p_peer.Id.t option ;
   }
+
+*/
+
+class BlockRequestView {
+  var chainId : ChainId;
+  var block : BlockHash ;
+  var peer : Option<PeerId>;
+}
+
+class BlockRequest {
+  var timestamp : Int64;
+  var requestView : BlockRequestView;
+}
+class Backlog {
+  var level : String;
+  var events : List<WorkerStateEvent>;
+}
+
+/*
+
+module Event : sig
+  type t =
+    | Validation_success of Request.view * Worker_types.request_status
+    | Validation_failure of Request.view * Worker_types.request_status * error list
+    | Debug of string
+  val level : t -> Logging.level
+  val encoding : t Data_encoding.encoding
+  val pp : Format.formatter -> t -> unit
+end
+*/
+
+enum WorkerStateEvent {
+    Debug (message : String);
+    ValidationSuccess (view : BlockRequestView, status : RequestStatus);
+    ValidationFailure (view : BlockRequestView, status : RequestStatus, errors : List<Error>);
+}
+
+class BlockValidator {
+  var status : WorkerStatus;
+  var pendingRequests : List<BlockRequest>;
+  var currentRequest : BlockRequest;
+  var backlog : List<Backlog>;
 }

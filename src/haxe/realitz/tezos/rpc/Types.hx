@@ -103,3 +103,18 @@ enum Answer {
   Error(error : String);
 }
 
+class BlockHash {
+  var hash : String;
+}
+
+class ChainId {
+  var hash : String;
+}
+
+typedef PeerId = PublicKey
+typedef ConnectionId = PublicKey
+
+class PublicKey {
+  var hash : String;
+}
+

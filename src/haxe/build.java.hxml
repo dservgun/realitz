@@ -1,0 +1,4 @@
+-cp .
+-v 
+-java mrealitz
+-main Realitz.hx

@@ -28,12 +28,8 @@ package realitz.tezos.rpc;
 import haxe.io.Bytes;
 import haxe.Int64;
 import haxe.ds.Option;
-
+import realitz.tezos.rpc.Types;
 /** 
-Code walkthrough process: it is simpler and probably intended that 
-as implementers of client api, we assume types specified in the 
-.mli (ml interface files). This ensures that during client implementations
-we inadvertently peek into server implementation.
 Block header and the header with data refer to the 
 types defined here : file : block_header.mli.
 
@@ -59,7 +55,7 @@ type t = {
 
 class BlockHeader {
   var level :  Int;
-  var proto : Int ;
+  var protoLevel : Int ;
   var predecessor : Bytes ;
   var timestamp : Bytes;
   var validationPass : Int; 
@@ -78,13 +74,6 @@ class BlockHeaderWithData {
   var data : Bytes;
 }
 
-class BlockHash {
-  var hash : String;
-}
-
-class ChainId {
-  var hash : String;
-}
 
 class BlockResponse {
   var block : BlockHash; 
@@ -133,10 +122,6 @@ class Fitness {
   var fitness : List<Bytes>;
 }
 
-class PublicKey {
-  var hash : String;
-}
-
 class BlockInformation {
   var chainId  : ChainId;
   var hash : BlockHash;
@@ -162,8 +147,6 @@ class ConnectionVersion {
   var minor : Int;
 }
 
-typedef PeerId = PublicKey
-typedef ConnectionId = PublicKey
 class Metadata {
   var data : Bytes; //TO Be completed
 }
@@ -321,8 +304,4 @@ class Peer {
   var lastDisconnection : List<ConnectionInfo>;
   var lastSeen : List<ConnectionInfo>;
   var lastMiss : List<ConnectionInfo>;
-}
-
-class BlockValidator {
-  
 }
