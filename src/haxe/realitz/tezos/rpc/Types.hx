@@ -28,6 +28,7 @@ package realitz.tezos.rpc;
 import haxe.ds.Option;
 import haxe.Int64;
 
+typedef BigNum = String;
 class ProtocolHash { 
   var hash : String;
 }
