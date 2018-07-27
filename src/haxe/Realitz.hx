@@ -30,6 +30,7 @@ import realitz.tezos.rpc.Types;
 import realitz.tezos.rpc.Error;
 import realitz.tezos.rpc.WorkerTypes;
 import realitz.tezos.rpc.BlockValidator;
+import realitz.tezos.rpc.BlockHeaderMetadata;
 
 class Realitz {
   static function main () {
