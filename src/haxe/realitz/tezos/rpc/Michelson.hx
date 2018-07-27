@@ -27,61 +27,7 @@ package realitz.tezos.rpc;
 
 import realitz.tezos.rpc.Types;
 import haxe.io.Bytes;
-/*
-  $michelson.v1.primitives:
-    | "lambda" | "operation" | "EMPTY_SET"
-    | "SWAP" | "MEM" | "RIGHT"
-    | "CONTRACT" | "or"
-    | "CONCAT" | "nat" | "bytes"
-    | "Unit" | "Some"
-    | "UNPACK" | "NOT"
-    | "LEFT" | "timestamp"
-    | "AMOUNT" | "DROP"
-    | "ABS" | "contract"
-    | "GE" | "PUSH"
-    | "LT" | "address"
-    | "NEQ" | "NEG"
-    | "None" | "CONS"
-    | "EXEC" | "NIL"
-    | "CAST" | "MUL"
-    | "ADDRESS" | "EDIV"
-    | "STEPS_TO_QUOTA" | "SUB"
-    | "INT" | "SOURCE"
-    | "CAR" | "CREATE_ACCOUNT"
-    | "LSL" | "OR" | "IF_NONE"
-    | "SELF" | "IF"
-    | "Left" | "int"
-    | "big_map" | "SENDER"
-    | "option" | "DUP"
-    | "EQ" | "NOW" | "key_hash"
-    | "GET" | "list"
-    | "key" | "True"
-    | "GT" | "parameter"
-    | "IF_LEFT" | "FAILWITH"
-    | "PAIR" | "LOOP_LEFT"
-    | "Pair" | "RENAME"
-    | "EMPTY_MAP" | "CREATE_CONTRACT" | "HASH_KEY"
-    | "ISNAT" | "code" | "AND"
-
-*/
-//M prefix for dealing with potentially ambiguous labels.
-enum MichelsonV1Primitive {
-  ADD (disp : String); LE (disp : String); UPDATE (disp : String);
-  Unit (disp : String); MString (disp : String); 
-  MCompare (disp : String); MLambda (disp : String);
-  LOOP (disp : String); ELT (disp : String); ImplicitAccount (disp : String);
-  NONE (disp : String); Signature (disp : String); SetVal (disp : String);
-  Mutez (disp : String); Blake2B (disp : String); SHA256 (disp : String);
-  ITER (disp : String); MBool (disp : String); MMap (disp : String);
-  IFCons (disp : String); LSR (disp : String); SetDelegate (disp : String);
-  Storage (disp : String); XOR (disp : String); CDR (disp : String); 
-  TransferTokens (disp : String); MSome (disp : String); MFalse (disp : String);
-  SHA512 (disp : String); CheckSignature (disp : String); 
-  Balance (disp : String);
-  IsNat (disp : String) ; MCode (disp : String); MAND (disp : String); 
-  EmptyMap (disp : String); CreateContract (disp : String); 
-  HashKey (disp : String); Pair (disp : String);
-}
+import realitz.tezos.rpc.MichelsonPrimitives;
 enum MichelsonV1Expression {
   IntExpression(exp : BigNum);
   StringExpression(exp : String);
