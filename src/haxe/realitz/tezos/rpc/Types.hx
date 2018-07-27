@@ -124,6 +124,7 @@ class ChainId {
 typedef PeerId = PublicKey
 typedef ConnectionId = PublicKey
 typedef Baker = PublicKey
+typedef PublicKeyHash = BlockHash
 class PublicKey {
   var hash : String;
 }

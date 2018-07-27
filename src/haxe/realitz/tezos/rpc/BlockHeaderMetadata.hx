@@ -160,8 +160,7 @@ enum VotingPeriodKind {
   $inlined.endorsement.contents:
     { "kind": "endorsement",
       "level": integer ∈ [-2^31-2, 2^31+2] }
-  $int64:
-    string
+  $int64:string
   $micheline.michelson_v1.expression:
     { "int": $bignum }
     || { "string": string }
@@ -608,4 +607,38 @@ enum BalanceUpdate {
   Rewards(kind : ContractKind, deletage : PublicKey, level : Int, change : Int64);
   Fees (kind : ContractKind, delegate : PublicKey, level : Int, change : Int64);
   Deposits(kind : ContractKind, delegate : PublicKey, level : Int, change : Int64);
+}
+
+/*
+  $inlined.endorsement:
+    { "branch": $block_hash,
+      "operations": $inlined.endorsement.contents,
+      "signature"?: $Signature }
+  $inlined.endorsement.contents:
+    { "kind": "endorsement",
+      "level": integer ∈ [-2^31-2, 2^31+2] }
+*/
+class Signature {
+  var signature : String;
+  var publicKey : PublicKey;
+  var publicKeyHash : PublicKeyHash;
+}
+class InlinedEndorsement {
+  var branch : BlockHash;
+  var operations : InlinedEndorsementContent;
+  var signature : Signature;
+}
+
+/*
+  $inlined.endorsement.contents:
+    { "kind": "endorsement",
+      "level": integer ∈ [-2^31-2, 2^31+2] }
+*/
+
+enum EndorsementKind {
+  Endorsement;
+}
+class InlinedEndorsementContent {
+  var kind : EndorsementKind;
+  var level : Int;
 }

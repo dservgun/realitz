@@ -208,6 +208,15 @@ realitz_tezos_rpc_BalanceUpdate.Contract = function(contractId,change) { var $x 
 realitz_tezos_rpc_BalanceUpdate.Rewards = function(kind,deletage,level,change) { var $x = ["Rewards",1,kind,deletage,level,change]; $x.__enum__ = realitz_tezos_rpc_BalanceUpdate; return $x; };
 realitz_tezos_rpc_BalanceUpdate.Fees = function(kind,delegate,level,change) { var $x = ["Fees",2,kind,delegate,level,change]; $x.__enum__ = realitz_tezos_rpc_BalanceUpdate; return $x; };
 realitz_tezos_rpc_BalanceUpdate.Deposits = function(kind,delegate,level,change) { var $x = ["Deposits",3,kind,delegate,level,change]; $x.__enum__ = realitz_tezos_rpc_BalanceUpdate; return $x; };
+var realitz_tezos_rpc_Signature = function() { };
+realitz_tezos_rpc_Signature.__name__ = true;
+var realitz_tezos_rpc_InlinedEndorsement = function() { };
+realitz_tezos_rpc_InlinedEndorsement.__name__ = true;
+var realitz_tezos_rpc_EndorsementKind = { __ename__ : true, __constructs__ : ["Endorsement"] };
+realitz_tezos_rpc_EndorsementKind.Endorsement = ["Endorsement",0];
+realitz_tezos_rpc_EndorsementKind.Endorsement.__enum__ = realitz_tezos_rpc_EndorsementKind;
+var realitz_tezos_rpc_InlinedEndorsementContent = function() { };
+realitz_tezos_rpc_InlinedEndorsementContent.__name__ = true;
 var realitz_tezos_rpc_BlockRequestView = function() { };
 realitz_tezos_rpc_BlockRequestView.__name__ = true;
 var realitz_tezos_rpc_BlockRequest = function() { };
