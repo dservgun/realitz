@@ -3,7 +3,7 @@ package realitz.tezos.rpc;
 /*****************************************************************************/
 /*                                                                           */
 /* Open Source License                                                       */
-/* Copyright (c) Dinkar Ganti, dinkar.ganti@gmail.com */
+/* Copyright (c) Dinkar Ganti, dinkar.ganti@gmail.com                        */
 /*                                                                           */
 /* Permission is hereby granted, free of charge, to any person obtaining a   */
 /* copy of this software and associated documentation files (the "Software"),*/
@@ -101,13 +101,6 @@ class Component {
   var implementation : Bytes;
 }
 
-class ProtocolHash { 
-  var hash : String;
-}
-
-class ContextHash {
-  var hash : String;
-}
 class InjectProtocol {
   var expectedEnvVersion : Int;
   var components : List<Component>;

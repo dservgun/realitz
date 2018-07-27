@@ -26,6 +26,15 @@
 package realitz.tezos.rpc;
 
 import haxe.ds.Option;
+import haxe.Int64;
+
+class ProtocolHash { 
+  var hash : String;
+}
+
+class ContextHash {
+  var hash : String;
+}
 
 /*
 File : RPC_service.mli
@@ -49,6 +58,7 @@ enum HttpStatusCode{
   Error;
 }
 
+typedef Time = Int64;
 /*
 type rpc_error =
   | Empty_answer
@@ -113,7 +123,7 @@ class ChainId {
 
 typedef PeerId = PublicKey
 typedef ConnectionId = PublicKey
-
+typedef Baker = PublicKey
 class PublicKey {
   var hash : String;
 }

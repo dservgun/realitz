@@ -28,6 +28,71 @@ package realitz.tezos.rpc;
 import realitz.tezos.rpc.Types;
 import realitz.tezos.rpc.WorkerTypes;
 
-// This is not the same as alphanet, as mentioned elsewhere in the 
-// docs.
 
+/*
+
+type t =
+  | Not_running
+  | Forking of {
+      protocol: Protocol_hash.t ;
+      expiration: Time.t ;
+    }
+  | Running of {
+      chain_id: Chain_id.t ;
+      genesis: Block_hash.t ;
+      protocol: Protocol_hash.t ;
+      expiration: Time.t ;
+    }
+
+*/
+
+enum TestChainStatus {
+  NotRunning;
+  Forking (protocol : Protocol, expiration : Time);
+  Running (chainId : ChainId, genesis : BlockHash, protocol : Protocol, expiration : Time);
+}
+
+
+/*
+TODO: Ask someone, where in the core code is the structure or the interface defined 
+for the metadata. Currently using the json schema. It works, but it will be nice 
+to tie to the file in the code that publishes the json.
+
+*/
+class BlockHeaderMetadata {
+  var protocol : ProtocolHash;
+  var nextProtocol : ProtocolHash;
+  var testChainStatus : TestChainStatus
+  var maxOperationsTTL : Int;
+  var maxOperationDataLength : Int;
+  var maxOperationListLength : Int;
+  var baker : Baker;
+  var level : Level;
+  var votingPeriodKind : VotingPeriodKind;
+}
+
+
+class Level {
+  var level : Int;
+  var levelPosition : Int;
+  var cycle : Int;
+  var cyclePosition : Int;
+  var votingPeriod : Int;
+  var votingPeriodPosition : Int;
+  var expectedCommitment : Bool;
+  var nonceHash : BlockHash 
+  var consumedGas : Int64; // TODO : need to see if this will suffice. Spec says bignum.
+  var deactivated : BlockHash;
+  var balanceUpdates : List<BalanceUpdate>;
+}
+
+enum VotingPeriodKind {
+  Proposal;
+  TestingVote;
+  Testing;
+  PromotionVote;
+}
+
+class BalanceUpdate {
+  
+}
