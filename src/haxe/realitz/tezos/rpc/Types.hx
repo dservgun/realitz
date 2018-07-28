@@ -27,14 +27,36 @@ package realitz.tezos.rpc;
 
 import haxe.ds.Option;
 import haxe.Int64;
-
+import haxe.io.Bytes;
+typedef Protocol = String;
 typedef BigNum = String;
-class ProtocolHash { 
-  var hash : String;
+typedef Mutez = String;
+typedef PositiveBigNum = String;
+
+class ProtocolHash {    var hash : String; }
+
+class BlockHeader {
+  var level :  Int;
+  var protoLevel : Int ;
+  var predecessor : Bytes ;
+  var timestamp : Bytes;
+  var validationPass : Int; 
+  var operationsHash : Array<Array<Bytes>>;
+  var fitness : Array<Bytes>; 
+  var context : Bytes;
 }
 
 class ContextHash {
   var hash : String;
+}
+class OperationHash {
+  var hash : String;
+}
+
+class InlinedEndorsement {
+  var branch : BlockHash;
+  var operations : InlinedEndorsementContent;
+  var signature : Signature;
 }
 
 /*
@@ -126,7 +148,42 @@ typedef PeerId = PublicKey
 typedef ConnectionId = PublicKey
 typedef Baker = PublicKey
 typedef PublicKeyHash = BlockHash
+typedef OperationsHash = BlockHash
 class PublicKey {
   var hash : String;
 }
 
+/*
+  $inlined.endorsement:
+    { "branch": $block_hash,
+      "operations": $inlined.endorsement.contents,
+      "signature"?: $Signature }
+  $inlined.endorsement.contents:
+    { "kind": "endorsement",
+      "level": integer ∈ [-2^31-2, 2^31+2] }
+*/
+class Signature {
+  var signature : String;
+  var publicKey : PublicKey;
+  var publicKeyHash : PublicKeyHash;
+}
+
+/*
+  $inlined.endorsement.contents:
+    { "kind": "endorsement",
+      "level": integer ∈ [-2^31-2, 2^31+2] }
+*/
+
+enum EndorsementKind {
+  Endorsement;
+}
+class InlinedEndorsementContent {
+  var kind : EndorsementKind;
+  var level : Int;
+}
+
+
+typedef ContractId = BlockHash
+enum ContractKind {
+  Freezer;
+}

@@ -1,3 +1,5 @@
+package realitz.tezos.rpc;
+
 /*****************************************************************************/
 /*                                                                           */
 /* Open Source License                                                       */
@@ -23,23 +25,14 @@
 /*                                                                           */
 /*****************************************************************************/
 
-//TODO: add build file such that it picks up all the files.
-import realitz.core.Property;
-import realitz.tezos.rpc.BlockHeader;
-import realitz.tezos.rpc.BlockHeaderMetadata;
-import realitz.tezos.rpc.BlockPreValidator;
-import realitz.tezos.rpc.BlockValidator;
-import realitz.tezos.rpc.Error;
-import realitz.tezos.rpc.Michelson;
-import realitz.tezos.rpc.MichelsonPrimitives;
-import realitz.tezos.rpc.Operation;
 import realitz.tezos.rpc.Types;
 import realitz.tezos.rpc.WorkerTypes;
+import haxe.Int64;
 
 
-class Realitz {
-  static function main () {
-    trace("Hello Realitz");
-    var e : Error = EmptyAnswer;
-  }
+enum BalanceUpdate {
+  Contract(contractId : ContractId, change : Int64);
+  Rewards(kind : ContractKind, deletage : PublicKey, level : Int, change : Int64);
+  Fees (kind : ContractKind, delegate : PublicKey, level : Int, change : Int64);
+  Deposits(kind : ContractKind, delegate : PublicKey, level : Int, change : Int64);
 }

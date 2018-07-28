@@ -1,116 +1,43 @@
-package realitz.tezos.rpc;
-
-/*****************************************************************************/
-/*                                                                           */
-/* Open Source License                                                       */
-/* Copyright (c) Dinkar Ganti, dinkar.ganti@gmail.com */
-/*                                                                           */
-/* Permission is hereby granted, free of charge, to any person obtaining a   */
-/* copy of this software and associated documentation files (the "Software"),*/
-/* to deal in the Software without restriction, including without limitation */
-/* the rights to use, copy, modify, merge, publish, distribute, sublicense,  */
-/* and/or sell copies of the Software, and to permit persons to whom the     */
-/* Software is furnished to do so, subject to the following conditions:      */
-/*                                                                           */
-/* The above copyright notice and this permission notice shall be included   */
-/* in all copies or substantial portions of the Software.                    */
-/*                                                                           */
-/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR*/
-/* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,  */
-/* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL   */
-/* THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER*/
-/* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING   */
-/* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER       */
-/* DEALINGS IN THE SOFTWARE.                                                 */
-/*                                                                           */
-/*****************************************************************************/
-
-import realitz.tezos.rpc.Types;
-import realitz.tezos.rpc.MetadataTypes;
-import realitz.tezos.rpc.WorkerTypes;
-import haxe.Int64;
-
-/*
-
-type t =
-  | Not_running
-  | Forking of {
-      protocol: Protocol_hash.t ;
-      expiration: Time.t ;
-    }
-  | Running of {
-      chain_id: Chain_id.t ;
-      genesis: Block_hash.t ;
-      protocol: Protocol_hash.t ;
-      expiration: Time.t ;
-    }
-
-*/
-
-enum TestChainStatus {
-  NotRunning;
-  Forking (protocol : Protocol, expiration : Time);
-  Running (chainId : ChainId, genesis : BlockHash, protocol : Protocol, expiration : Time);
-}
-
-
-/*
-TODO: Ask someone, where in the core code is the structure or the interface defined 
-for the metadata. Currently using the json schema. It works, but it will be nice 
-to tie to the file in the code that publishes the json.
-
-*/
-class BlockHeaderMetadata {
-  var protocol : ProtocolHash;
-  var nextProtocol : ProtocolHash;
-  var testChainStatus : TestChainStatus;
-  var maxOperationsTTL : Int;
-  var maxOperationDataLength : Int;
-  var maxOperationListLength : Int;
-  var baker : Baker;
-  var level : Level;
-  var votingPeriodKind : VotingPeriodKind;
-}
-
-
-class Level {
-  var level : Int;
-  var levelPosition : Int;
-  var cycle : Int;
-  var cyclePosition : Int;
-  var votingPeriod : Int;
-  var votingPeriodPosition : Int;
-  var expectedCommitment : Bool;
-  var nonceHash : BlockHash; 
-  var consumedGas : Int64; // TODO : need to see if this will suffice. Spec says bignum.
-  var deactivated : BlockHash;
-  var balanceUpdates : List<BalanceUpdate>;
-}
-
-enum VotingPeriodKind {
-  Proposal;
-  TestingVote;
-  Testing;
-  PromotionVote;
-}
-/*
- { "protocol": "PtCJ7pwoxe8JasnHY8YonnLYjcVHmhiARPJvqcC6VfHT5s8k8sY",
+  { "protocol": "PtCJ7pwoxe8JasnHY8YonnLYjcVHmhiARPJvqcC6VfHT5s8k8sY",
     "chain_id": $Chain_id,
     "hash": $block_hash,
     "header": $raw_block_header,
     "metadata": $block_header_metadata,
     "operations": [ [ $operation ... ] ... ] }
-  $Chain_id:  string
-  $Context_hash: string
-  $Ed25519.Public_key_hash: string
-  $Operation_hash: string
-  $Operation_list_list_hash: string
-  $Protocol_hash: string
-  $Signature:string
-  $Signature.Public_key:string
-  $Signature.Public_key_hash:string
-  $bignum:string
-  $block_hash:string
+  $Chain_id:
+    /* Network identifier (Base58Check-encoded) */
+    string
+  $Context_hash:
+    /* A hash of context (Base58Check-encoded) */
+    string
+  $Ed25519.Public_key_hash:
+    /* An Ed25519 public key hash (Base58Check-encoded) */
+    string
+  $Operation_hash:
+    /* A Tezos operation ID (Base58Check-encoded) */
+    string
+  $Operation_list_list_hash:
+    /* A list of list of operations (Base58Check-encoded) */
+    string
+  $Protocol_hash:
+    /* A Tezos protocol ID (Base58Check-encoded) */
+    string
+  $Signature:
+    /* A Ed25519, Secp256k1 or P256 signature (Base58Check-encoded) */
+    string
+  $Signature.Public_key:
+    /* A Ed25519, Secp256k1, or P256 public key (Base58Check-encoded) */
+    string
+  $Signature.Public_key_hash:
+    /* A Ed25519, Secp256k1, or P256 public key hash (Base58Check-encoded) */
+    string
+  $bignum:
+    /* Big number
+       Decimal representation of a big number */
+    string
+  $block_hash:
+    /* A block identifier (Base58Check-encoded) */
+    string
   $block_header.alpha.full_header:
     { "level": integer ∈ [-2^31-2, 2^31+2],
       "proto": integer ∈ [0, 255],
@@ -149,10 +76,27 @@ enum VotingPeriodKind {
       "consumed_gas": $positive_bignum,
       "deactivated": [ $Signature.Public_key_hash ... ],
       "balance_updates": $operation_metadata.alpha.balance_updates }
-  $contract_id:string
-  $cycle_nonce:string
-  $error:any
-  $fitness:[ /^[a-zA-Z0-9]+$/ ... ]
+  $contract_id:
+    /* A contract handle
+       A contract notation as given to an RPC or inside scripts. Can be a
+       base58 implicit contract hash or a base58 originated contract hash. */
+    string
+  $cycle_nonce:
+    /* A nonce hash (Base58Check-encoded) */
+    string
+  $error:
+    /* The full list of RPC errors would be too long to include.
+       It is available at RPC `/errors` (GET).
+       Errors specific to protocol Alpha have an id that starts with
+       `proto.alpha`. */
+    any
+  $fitness:
+    /* Block fitness
+       The fitness, or score, of a block, that allow the Tezos to decide
+       which chain is the best. A fitness value is a list of byte sequences.
+       They are compared as follows: shortest lists are smaller; lists of the
+       same length are compared according to the lexicographical order. */
+    [ /^[a-zA-Z0-9]+$/ ... ]
   $inlined.endorsement:
     { "branch": $block_hash,
       "operations": $inlined.endorsement.contents,
@@ -160,7 +104,10 @@ enum VotingPeriodKind {
   $inlined.endorsement.contents:
     { "kind": "endorsement",
       "level": integer ∈ [-2^31-2, 2^31+2] }
-  $int64:string
+  $int64:
+    /* 64 bit integers
+       Decimal representation of 64 bit integers */
+    string
   $micheline.michelson_v1.expression:
     { "int": $bignum }
     || { "string": string }
@@ -546,7 +493,10 @@ enum VotingPeriodKind {
            "delegate": $Signature.Public_key_hash,
            "level": integer ∈ [-2^31-2, 2^31+2],
            "change": $int64 } ... ]
-  $positive_bignum:string
+  $positive_bignum:
+    /* Positive big number
+       Decimal representation of a positive big number */
+    string
   $raw_block_header:
     { "level": integer ∈ [-2^31-2, 2^31+2],
       "proto": integer ∈ [0, 255],
@@ -575,27 +525,6 @@ enum VotingPeriodKind {
          "expiration": $timestamp }
   $timestamp: $timestamp.rfc || $int64
   $timestamp.rfc:
-*/
-/*
-  $operation_metadata.alpha.balance_updates:
-    [ { "kind": "contract",
-        "contract": $contract_id,
-        "change": $int64 }
-      || { "kind": "freezer",
-           "category": "rewards",
-           "delegate": $Signature.Public_key_hash,
-           "level": integer ∈ [-2^31-2, 2^31+2],
-           "change": $int64 }
-      || { "kind": "freezer",
-           "category": "fees",
-           "delegate": $Signature.Public_key_hash,
-           "level": integer ∈ [-2^31-2, 2^31+2],
-           "change": $int64 }
-      || { "kind": "freezer",
-           "category": "deposits",
-           "delegate": $Signature.Public_key_hash,
-           "level": integer ∈ [-2^31-2, 2^31+2],
-           "change": $int64 } 
-*/
-
-
+    /* RFC 3339 formatted timestamp
+       A date in human readble form as specified in RFC 3339. */
+    string

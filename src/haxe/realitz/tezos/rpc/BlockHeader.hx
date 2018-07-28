@@ -29,6 +29,7 @@ import haxe.io.Bytes;
 import haxe.Int64;
 import haxe.ds.Option;
 import realitz.tezos.rpc.Types;
+
 /** 
 Block header and the header with data refer to the 
 types defined here : file : block_header.mli.
@@ -53,16 +54,6 @@ type t = {
 
 */
 
-class BlockHeader {
-  var level :  Int;
-  var protoLevel : Int ;
-  var predecessor : Bytes ;
-  var timestamp : Bytes;
-  var validationPass : Int; 
-  var operationsHash : Array<Array<Bytes>>;
-  var fitness : Array<Bytes>; 
-  var context : Bytes;
-}
 
 
 class BlockHeaderWithData {
@@ -91,9 +82,6 @@ class InjectOperation {
   var data : Bytes;
 }
 
-class OperationHash {
-  var hash : String;
-}
 
 class Component {
   var name : String ;
