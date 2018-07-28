@@ -1,5 +1,3 @@
-### Realitz (pronounced *realitezzies*)
+### Realitz (pronounced *reali-tezzies*, because...)
 ### Credits
-
-* Conseil libraries go here.
 * To add as needed.
