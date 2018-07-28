@@ -210,6 +210,43 @@ realitz_tezos_rpc_WorkerStateEvent.ValidationSuccess = function(view,status) { v
 realitz_tezos_rpc_WorkerStateEvent.ValidationFailure = function(view,status,errors) { var $x = ["ValidationFailure",2,view,status,errors]; $x.__enum__ = realitz_tezos_rpc_WorkerStateEvent; return $x; };
 var realitz_tezos_rpc_BlockValidator = function() { };
 realitz_tezos_rpc_BlockValidator.__name__ = true;
+var realitz_tezos_rpc_ContextConstants = function(aJsonString) {
+	var json = JSON.parse(aJsonString);
+	this.proofOfWorkNonceSize = json.proof_of_work_nonce_size;
+	this.nonceLength = json.nonce_length;
+	this.maxRevelationsPerBlock = json.max_revelations_per_block;
+	this.maxOperationDataLength = json.maxe_operation_data_length;
+	this.preservedCycles = json.preserved_cycles;
+	this.blocksPerCycle = json.blocks_per_cycle;
+	this.blocksPerCommitment = json.blocks_per_commitment;
+	this.blocksPerRollSnapshot = json.blocks_per_roll_snapshot;
+	this.blocksPerVotingPeriod = json.blocks_per_voting_period;
+	this.timeBetweenBlocks = json.time_between_blocks;
+	this.endorsersPerBlock = json.endorsers_per_blocks;
+	this.hardGasLimitPerOperation = json.hard_gas_limit_per_operation;
+	this.hardGasLimitPerBlock = json.hard_gas_limit_per_block;
+	this.proofOfWorkThreshold = json.proof_of_work_threshold;
+	this.tokensPerRoll = json.tokens_per_roll;
+	this.michelsonMaximumTypevarSize = json.michelson_maximum_typevar_size;
+	this.seedNonceRevelationTip = json.seed_nonce_revelation_tip;
+	this.originationBurn = json.origination_burn;
+	this.blockSecurityDeposit = json.block_security_deposit;
+	this.endorsementSecurityDeposit = json.endorsement_security_deposit;
+	this.blockReward = json.block_reward;
+	this.endorsementReward = json.endorsement_reward;
+	this.costPerByte = json.cost_per_byte;
+	this.hardStorageLimitPerOperation = json.hard_storage_limit_per_operation;
+};
+realitz_tezos_rpc_ContextConstants.__name__ = true;
+realitz_tezos_rpc_ContextConstants.prototype = {
+	toJson: function() {
+		return JSON.stringify(this.toDynamic());
+	}
+	,toDynamic: function() {
+		var result = { proof_of_work_nonce_size : this.proofOfWorkNonceSize, nonce_length : this.nonceLength, max_revelations_per_block : this.maxRevelationsPerBlock, max_operation_data_length : this.maxOperationDataLength, preserved_cycles : this.preservedCycles, blocks_per_cycle : this.blocksPerCycle, blocks_per_commitment : this.blocksPerCommitment, blocks_per_roll_snapshot : this.blocksPerRollSnapshot, blocks_per_voting_period : this.blocksPerVotingPeriod, time_between_blocks : this.timeBetweenBlocks, endersors_per_block : this.endorsersPerBlock, hard_gas_limit_per_operation : this.hardGasLimitPerOperation, hard_gas_limit_per_block : this.hardGasLimitPerBlock, proof_of_work_threshold : this.proofOfWorkThreshold, tokens_per_roll : this.tokensPerRoll, michelson_maximum_typevar_size : this.michelsonMaximumTypevarSize, seed_nonce_revelationTip : this.seedNonceRevelationTip, origination_burn : this.originationBurn, block_security_deposit : this.blockSecurityDeposit, endorsement_security_deposit : this.endorsementSecurityDeposit, block_reward : this.blockReward, endorsement_reward : this.endorsementReward, cost_per_byte : this.costPerByte, hard_storage_limit_per_operation : this.hardStorageLimitPerOperation};
+		return result;
+	}
+};
 var realitz_tezos_rpc_Error = { __ename__ : true, __constructs__ : ["EmptyAnswer","ConnectionFailed","BadRequest","MethodNotAllowed","UnsupportedMedia","NotAcceptable","UnexpectedStatusCode","UnexpectedContentType","UnexpectedContent","OcamlException"] };
 realitz_tezos_rpc_Error.EmptyAnswer = ["EmptyAnswer",0];
 realitz_tezos_rpc_Error.EmptyAnswer.__enum__ = realitz_tezos_rpc_Error;
@@ -328,6 +365,10 @@ realitz_tezos_rpc_MichelsonV1Primitive.TransferTokens = function(disp) { var $x 
 realitz_tezos_rpc_MichelsonV1Primitive.Unit = function(disp) { var $x = ["Unit",91,disp]; $x.__enum__ = realitz_tezos_rpc_MichelsonV1Primitive; return $x; };
 realitz_tezos_rpc_MichelsonV1Primitive.UPDATE = function(disp) { var $x = ["UPDATE",92,disp]; $x.__enum__ = realitz_tezos_rpc_MichelsonV1Primitive; return $x; };
 realitz_tezos_rpc_MichelsonV1Primitive.XOR = function(disp) { var $x = ["XOR",93,disp]; $x.__enum__ = realitz_tezos_rpc_MichelsonV1Primitive; return $x; };
+var realitz_tezos_rpc_Delegate = function() { };
+realitz_tezos_rpc_Delegate.__name__ = true;
+var realitz_tezos_rpc_Contract = function() { };
+realitz_tezos_rpc_Contract.__name__ = true;
 var realitz_tezos_rpc_ScriptedContract = function() { };
 realitz_tezos_rpc_ScriptedContract.__name__ = true;
 var realitz_tezos_rpc_Operation = { __ename__ : true, __constructs__ : ["ContentsAndResults","Contents"] };

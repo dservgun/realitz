@@ -32,11 +32,24 @@ import realitz.tezos.rpc.MetadataTypes;
 import haxe.io.Bytes;
 import realitz.tezos.rpc.Michelson;
 
-typedef Contract = ContractId;
+class Delegate {
+  var settable (default, null) : Bool;
+  var value (default, null) : PublicKeyHash;
+
+}
+
+class Contract {
+  var manager (default, null) : PublicKeyHash;
+  var balance (default, null) : Mutez;
+  var spendable (default, null)  : Bool;
+  var delegate (default, null) : Delegate;
+  var script (default, null) : ScriptedContract;
+  var counter (default, null) : PositiveBigNum;
+}
 
 class ScriptedContract {
-  var code : MichelsonV1Expression; 
-  var storage : MichelsonV1Expression;
+  var code (default, null) : MichelsonV1Expression; 
+  var storage (default, null) : MichelsonV1Expression;
 }
 enum Operation {
   ContentsAndResults(protocol : Protocol, 
