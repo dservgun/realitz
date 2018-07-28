@@ -29,7 +29,6 @@ package realitz.tezos.rpc;
 import haxe.io.Bytes;
 import realitz.tezos.rpc.Types;
 import realitz.tezos.rpc.MetadataTypes;
-import haxe.io.Bytes;
 import realitz.tezos.rpc.Michelson;
 
 class Delegate {

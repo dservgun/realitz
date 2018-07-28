@@ -46,6 +46,11 @@ class BlockHeader {
   var context : Bytes;
 }
 
+enum Nonces {
+  Nonce (nonce : Bytes);
+  Hash (hash : String);
+}
+
 class ContextHash {
   var hash : String;
 }
@@ -58,6 +63,7 @@ class InlinedEndorsement {
   var operations : InlinedEndorsementContent;
   var signature : Signature;
 }
+
 
 /*
 File : RPC_service.mli
@@ -186,4 +192,11 @@ class InlinedEndorsementContent {
 typedef ContractId = BlockHash
 enum ContractKind {
   Freezer;
+}
+
+class EndorsementRight {
+  var level (default, null) : Int;
+  var delegate (default, null) : PublicKeyHash;
+  var slots : List<Int>; 
+  var estimatedTime : Date;
 }
