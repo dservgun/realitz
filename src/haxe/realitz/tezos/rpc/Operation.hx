@@ -23,6 +23,7 @@
 /*                                                                           */
 /*****************************************************************************/
 
+
 package realitz.tezos.rpc;
 
 import haxe.io.Bytes;
@@ -33,11 +34,6 @@ import realitz.tezos.rpc.Michelson;
 
 typedef Contract = ContractId;
 
-/*
-  $scripted.contracts:
-    { "code": $micheline.michelson_v1.expression,
-      "storage": $micheline.michelson_v1.expression }
-*/
 class ScriptedContract {
   var code : MichelsonV1Expression; 
   var storage : MichelsonV1Expression;
@@ -175,8 +171,17 @@ enum OperationResultTransactionEnum {
     paidStorageSizeDiff : BigNum);
 }
 
+
+//TODO: This design is not what the core code reflects. 
+//We need some kind of a generic so that the type could be 
+//varying with the type of the result. For example,
+//If the Result is a transaction -> return OperationResultTransactionEnum.
+//As it stands, this enum doesn't reflect that.
 enum OperationResultEnum {
   OperationResultTransactionEnum;
+  OperationResultRevealEnum;
+  OperationResultOriginationEnum;
+  OperationResultDelegationEnum;
 }
 
 class OperationResultMetadata {

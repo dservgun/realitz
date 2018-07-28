@@ -386,9 +386,15 @@ realitz_tezos_rpc_OperationResultTransactionEnum.Applied = function(status,stora
 realitz_tezos_rpc_OperationResultTransactionEnum.Failed = function(status,errors) { var $x = ["Failed",1,status,errors]; $x.__enum__ = realitz_tezos_rpc_OperationResultTransactionEnum; return $x; };
 realitz_tezos_rpc_OperationResultTransactionEnum.Skipped = function(status) { var $x = ["Skipped",2,status]; $x.__enum__ = realitz_tezos_rpc_OperationResultTransactionEnum; return $x; };
 realitz_tezos_rpc_OperationResultTransactionEnum.Backtracked = function(status,errors,storage,balanceUpdates,originatedContracts,consumedGas,storageSize,paidStorageSizeDiff) { var $x = ["Backtracked",3,status,errors,storage,balanceUpdates,originatedContracts,consumedGas,storageSize,paidStorageSizeDiff]; $x.__enum__ = realitz_tezos_rpc_OperationResultTransactionEnum; return $x; };
-var realitz_tezos_rpc_OperationResultEnum = { __ename__ : true, __constructs__ : ["OperationResultTransactionEnum"] };
+var realitz_tezos_rpc_OperationResultEnum = { __ename__ : true, __constructs__ : ["OperationResultTransactionEnum","OperationResultRevealEnum","OperationResultOriginationEnum","OperationResultDelegationEnum"] };
 realitz_tezos_rpc_OperationResultEnum.OperationResultTransactionEnum = ["OperationResultTransactionEnum",0];
 realitz_tezos_rpc_OperationResultEnum.OperationResultTransactionEnum.__enum__ = realitz_tezos_rpc_OperationResultEnum;
+realitz_tezos_rpc_OperationResultEnum.OperationResultRevealEnum = ["OperationResultRevealEnum",1];
+realitz_tezos_rpc_OperationResultEnum.OperationResultRevealEnum.__enum__ = realitz_tezos_rpc_OperationResultEnum;
+realitz_tezos_rpc_OperationResultEnum.OperationResultOriginationEnum = ["OperationResultOriginationEnum",2];
+realitz_tezos_rpc_OperationResultEnum.OperationResultOriginationEnum.__enum__ = realitz_tezos_rpc_OperationResultEnum;
+realitz_tezos_rpc_OperationResultEnum.OperationResultDelegationEnum = ["OperationResultDelegationEnum",3];
+realitz_tezos_rpc_OperationResultEnum.OperationResultDelegationEnum.__enum__ = realitz_tezos_rpc_OperationResultEnum;
 var realitz_tezos_rpc_OperationResultMetadata = function() { };
 realitz_tezos_rpc_OperationResultMetadata.__name__ = true;
 var realitz_tezos_rpc_OperationResult = { __ename__ : true, __constructs__ : ["Reveal","Transaction","Origination","Delegation"] };
