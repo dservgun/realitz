@@ -477,7 +477,9 @@ var realitz_tezos_rpc_BlockHash = function(aString) {
 	this.hash = aString;
 };
 realitz_tezos_rpc_BlockHash.__name__ = true;
-var realitz_tezos_rpc_ChainId = function() { };
+var realitz_tezos_rpc_ChainId = function(aString) {
+	this.hash = aString;
+};
 realitz_tezos_rpc_ChainId.__name__ = true;
 var realitz_tezos_rpc_PublicKey = function() { };
 realitz_tezos_rpc_PublicKey.__name__ = true;
@@ -536,6 +538,21 @@ var realitz_tezos_rpc_encoding_MonitorBlock = function(jsonString) {
 	this.protocolData = json.protocol_data;
 };
 realitz_tezos_rpc_encoding_MonitorBlock.__name__ = true;
+var realitz_tezos_rpc_encoding_ValidBlock = function(jsonString) {
+	var json = JSON.parse(jsonString);
+	this.chainId = new realitz_tezos_rpc_ChainId(json.chain_id);
+	this.hash = json.hash;
+	this.level = json.level;
+	this.proto = json.proto;
+	this.predecessor = new realitz_tezos_rpc_BlockHash(json.predecessor);
+	this.timestamp = JSON.parse(json.timestamp);
+	this.validationPass = json.validation_pass;
+	this.operationsHash = JSON.parse(json.operations_hash);
+	this.fitness = new realitz_tezos_rpc_encoding_Fitness(json.fitness);
+	this.context = new realitz_tezos_rpc_ContextHash(json.context);
+	this.protocolData = json.protocol_data;
+};
+realitz_tezos_rpc_encoding_ValidBlock.__name__ = true;
 String.__name__ = true;
 Array.__name__ = true;
 Date.__name__ = ["Date"];

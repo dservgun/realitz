@@ -159,6 +159,9 @@ class BlockHash {
 
 class ChainId {
   var hash : String;
+  public function new (aString : String) {
+    hash = aString;
+  }
 }
 
 typedef PeerId = PublicKey

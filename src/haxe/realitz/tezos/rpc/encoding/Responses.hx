@@ -76,6 +76,7 @@ class MonitorBlock {
     context = new ContextHash (json.context);
     protocolData = json.protocol_data;
   }
+}
 
 class ValidBlock {
   var chainId : ChainId;
@@ -102,7 +103,6 @@ class ValidBlock {
     fitness = new Fitness(  json.fitness);
     context = new ContextHash (json.context);
     protocolData = json.protocol_data;
-  }
-  
-}  
+  }  
 }
+
