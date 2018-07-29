@@ -1,7 +1,9 @@
+package realitz.tezos.rpc.encoding;
+
 /*****************************************************************************/
 /*                                                                           */
 /* Open Source License                                                       */
-/* Copyright (c) Dinkar Ganti, dinkar.ganti@gmail.com */
+/* Copyright (c) Dinkar Ganti, dinkar.ganti@gmail.com                        */
 /*                                                                           */
 /* Permission is hereby granted, free of charge, to any person obtaining a   */
 /* copy of this software and associated documentation files (the "Software"),*/
@@ -23,26 +25,30 @@
 /*                                                                           */
 /*****************************************************************************/
 
-//TODO: add build file such that it picks up all the files.
-import realitz.core.Property;
-import realitz.tezos.rpc.BlockHeader;
-import realitz.tezos.rpc.BlockHeaderMetadata;
-import realitz.tezos.rpc.BlockPreValidator;
-import realitz.tezos.rpc.BlockValidator;
-import realitz.tezos.rpc.ContextConstants;
-import realitz.tezos.rpc.Error;
-import realitz.tezos.rpc.MetadataTypes;
-import realitz.tezos.rpc.Michelson;
-import realitz.tezos.rpc.MichelsonPrimitives;
-import realitz.tezos.rpc.Operation;
 import realitz.tezos.rpc.Types;
-import realitz.tezos.rpc.WorkerTypes;
-import realitz.tezos.rpc.encoding.Responses;
-import realitz.tezos.rpc.encoding.Requests;
+import haxe.io.Bytes;
 
-class Realitz {
-  static function main () {
-    trace("Hello Realitz");
-    var e : Error = EmptyAnswer;
-  }
+class InjectBlock {
+  var data : Bytes;
+  var operations : 
+    List <List < {branch : BlockHash, data : Bytes} > >;
 }
+
+class InjectOperation {
+  var data : Bytes;
+}
+
+
+
+
+class Component {
+  var name : String ;
+  var _interface : Bytes;
+  var implementation : Bytes;
+}
+
+class InjectProtocol {
+  var expectedEnvVersion : Int;
+  var components : List<Component>;
+} 
+

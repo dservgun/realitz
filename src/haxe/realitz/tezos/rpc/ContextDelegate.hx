@@ -23,26 +23,27 @@
 /*                                                                           */
 /*****************************************************************************/
 
-//TODO: add build file such that it picks up all the files.
-import realitz.core.Property;
-import realitz.tezos.rpc.BlockHeader;
-import realitz.tezos.rpc.BlockHeaderMetadata;
-import realitz.tezos.rpc.BlockPreValidator;
-import realitz.tezos.rpc.BlockValidator;
-import realitz.tezos.rpc.ContextConstants;
-import realitz.tezos.rpc.Error;
+
+package realitz.tezos.rpc;
+
+import haxe.io.Bytes;
+import realitz.tezos.rpc.Types;
 import realitz.tezos.rpc.MetadataTypes;
 import realitz.tezos.rpc.Michelson;
-import realitz.tezos.rpc.MichelsonPrimitives;
-import realitz.tezos.rpc.Operation;
-import realitz.tezos.rpc.Types;
-import realitz.tezos.rpc.WorkerTypes;
-import realitz.tezos.rpc.encoding.Responses;
-import realitz.tezos.rpc.encoding.Requests;
 
-class Realitz {
-  static function main () {
-    trace("Hello Realitz");
-    var e : Error = EmptyAnswer;
-  }
+class BalanceCycle {
+  var cycle (default, null) : Int;
+  var deposit (default, null) : Mutez;
+  var fees (default, null) : Mutez;
+  var rewards (default, null) : Mutez;
+}
+class ContextDelegate {
+  var balance (default, null) : Mutez;
+  var deactivated (default, null) : Bool;
+  var delegatedBalance (default, null) : Mutez;
+  var delegatedContracts (default, null) : List<ContractId>;
+  var frozenBalance (default, null) : Mutez;
+  var frozenBalanceByCycle (default, null) : BalanceCycle;
+  var gracePeriod (default, null): Int;
+  var stakingBalance (default, null) : Mutez;
 }

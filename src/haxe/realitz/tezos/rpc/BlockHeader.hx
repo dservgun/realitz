@@ -66,57 +66,6 @@ class BlockHeaderWithData {
 }
 
 
-class BlockResponse {
-  var block : BlockHash; 
-  var level : Int ;
-  var errors : List<Error>;
-}
-
-class InjectBlock {
-  var data : Bytes;
-  var operations : 
-    List <List < {branch : BlockHash, data : Bytes} > >;
-}
-
-class InjectOperation {
-  var data : Bytes;
-}
-
-
-class Component {
-  var name : String ;
-  var _interface : Bytes;
-  var implementation : Bytes;
-}
-
-class InjectProtocol {
-  var expectedEnvVersion : Int;
-  var components : List<Component>;
-} 
-
-class Bootstrapped {
-  var block : BlockHash ;
-  var timestamp : Int64;
-}
-
-class Fitness {
-  var fitness : List<Bytes>;
-}
-
-class BlockInformation {
-  var chainId  : ChainId;
-  var hash : BlockHash;
-  var level : Int; 
-  var proto : Int;
-  var predecessor : BlockHash ;
-  var timestamp : Int64;
-  var validationPass : Int;
-  var operationsHash : OperationHash;
-  var fitness : Fitness;
-  var context : ContextHash; 
-  var protocolData : Bytes;
-}
-
 class IdPoint {
   var address : String;
   var port : Int;

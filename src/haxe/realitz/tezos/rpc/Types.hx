@@ -33,7 +33,12 @@ typedef BigNum = String;
 typedef Mutez = String;
 typedef PositiveBigNum = String;
 
-class ProtocolHash {    var hash : String; }
+class ProtocolHash {  
+  var hash (default, null) : String; 
+  public function new(aString : String) {
+    hash = aString;
+  }
+}
 
 class BlockHeader {
   var level :  Int;
@@ -53,6 +58,9 @@ enum Nonces {
 
 class ContextHash {
   var hash : String;
+  public function new (jsonString : String) {
+    hash = haxe.Json.parse(jsonString);
+  }
 }
 class OperationHash {
   var hash : String;
@@ -144,6 +152,9 @@ enum Answer {
 
 class BlockHash {
   var hash : String;
+  public function new (aString : String) {
+    hash = aString;
+  }
 }
 
 class ChainId {
@@ -199,4 +210,10 @@ class EndorsementRight {
   var delegate (default, null) : PublicKeyHash;
   var slots : List<Int>; 
   var estimatedTime : Date;
+}
+
+class BlockResponse {
+  var block : BlockHash; 
+  var level : Int ;
+  var errors : List<Error>;
 }
