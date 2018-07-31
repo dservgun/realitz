@@ -553,6 +553,12 @@ var realitz_tezos_rpc_encoding_ValidBlock = function(jsonString) {
 	this.protocolData = json.protocol_data;
 };
 realitz_tezos_rpc_encoding_ValidBlock.__name__ = true;
+var realitz_tezos_rpc_encoding_Mempool = { __ename__ : true, __constructs__ : ["Applied","Refused","BranchRefused","BranchDelayed","Unprocessed"] };
+realitz_tezos_rpc_encoding_Mempool.Applied = function(hash,branch,data) { var $x = ["Applied",0,hash,branch,data]; $x.__enum__ = realitz_tezos_rpc_encoding_Mempool; return $x; };
+realitz_tezos_rpc_encoding_Mempool.Refused = function(hash,branch,data,error) { var $x = ["Refused",1,hash,branch,data,error]; $x.__enum__ = realitz_tezos_rpc_encoding_Mempool; return $x; };
+realitz_tezos_rpc_encoding_Mempool.BranchRefused = function(hash,branch,data,error) { var $x = ["BranchRefused",2,hash,branch,data,error]; $x.__enum__ = realitz_tezos_rpc_encoding_Mempool; return $x; };
+realitz_tezos_rpc_encoding_Mempool.BranchDelayed = function(hash,branch,data,error) { var $x = ["BranchDelayed",3,hash,branch,data,error]; $x.__enum__ = realitz_tezos_rpc_encoding_Mempool; return $x; };
+realitz_tezos_rpc_encoding_Mempool.Unprocessed = function(hash,branch,data) { var $x = ["Unprocessed",4,hash,branch,data]; $x.__enum__ = realitz_tezos_rpc_encoding_Mempool; return $x; };
 String.__name__ = true;
 Array.__name__ = true;
 Date.__name__ = ["Date"];

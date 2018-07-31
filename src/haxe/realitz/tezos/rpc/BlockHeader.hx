@@ -86,9 +86,6 @@ class ConnectionInformation {
   var idPoint : IdPoint;
   var remoteSocketPort : Int;
   var versions : List<ConnectionVersion>;
-  var privateConnection : Bool;
-  var localMetadata : Metadata;
-  var remoteMetadata : Metadata;
 }
 
 enum PoolEvent {
@@ -197,6 +194,7 @@ class ConnectionInfo {
   var connectionId : IdPoint;
   var timestamp : Int64;
 }
+
 class ConnectionMetadata {
   var disableMempool : Bool;
   var privateNode : Bool;
@@ -221,10 +219,10 @@ class Monitor {
   var port : Int;
 }
 
+
 class Peer {
   var score : Int;
   var trusted : Bool;
-  var connectionMetadata : ConnectionMetadata;
   var peerState : PeerState;
   var reachableAt : IdPoint;
   var statistics : PeerStatistics;
@@ -235,3 +233,5 @@ class Peer {
   var lastSeen : List<ConnectionInfo>;
   var lastMiss : List<ConnectionInfo>;
 }
+
+

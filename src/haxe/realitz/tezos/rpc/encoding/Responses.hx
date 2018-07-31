@@ -34,8 +34,11 @@ class ChainIdResponse {
   var response (default, null) : ChainId;
 }
 
+
 class InvalidBlockResponse {
-  var response (default, null) : BlockResponse;
+  var block (default, null) : BlockHash; 
+  var level (default, null) : Int ;
+  var errors (default, null) : List<Error>;
 }
 
 class Bootstrapped {
@@ -106,3 +109,10 @@ class ValidBlock {
   }  
 }
 
+enum Mempool {
+  Applied (hash : String, branch : String, data : Bytes);
+  Refused (hash : String, branch : String, data : Bytes, error : List<Error>);
+  BranchRefused (hash : String, branch : String, data : Bytes, error : List<Error>);
+  BranchDelayed (hash : String, branch : String, data : Bytes, error : List<Error>);
+  Unprocessed (hash : String, branch : String, data : Bytes);
+}
