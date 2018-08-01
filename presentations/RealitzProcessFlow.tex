@@ -14,9 +14,11 @@
   text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
 \tikzstyle{block} = [rectangle, draw, fill=blue!20, 
   text width=5em, text centered, rounded corners, minimum height = 4em]
+\tikzstyle{end} = [circle, draw, fill=green!20, 
+  text width = 5em, text centered, minimum height = 3em]
 \tikzstyle{line} = [draw, -latex']
 \tikzstyle{cloud} = [draw, ellipse, fill=red!20, node distance = 3cm, minimum height = 2em]
-\section{Process flow}
+\section{Process flow - a high level overview.}
   \begin{tikzpicture} [node distance = 2cm, auto]
   \node [block] (invest) {Investment Phase};
   \node [decision,  below of=invest] (investYes) {Investment Go};
@@ -26,16 +28,28 @@
   \node [block, below of=offer] (shares) {Issue Share Certificate};
   \node [block, below of=shares] (precleanup) {Pre-cleanup Phase};
   \node [block, below of=precleanup] (cleanup) {Cleanup Phase};
-  \node [block, below of=cleanup] (closure) {Closure Phase};
-  \node [block, below of=closure] (optionexercise) {Option Exercise Phase};
-  \node [block, below of=optionexercise]  (settlement) {Settlement and Funds transfer};
+  \node [block, right of=invest, node distance = 5cm] (closure) {Closure Phase};
+  \node [decision, right of=closure] (cleanupGo) {Cleanup successful};
+
+  \node [block, below of=cleanupGo, node distance = 3cm] (optionexercise) {Option Exercise Phase};
+  \node [end, below of=optionexercise, node distance = 3cm]  (settlement) {Settlement and Funds transfer};
   \node [block, left of=precleanup, node distance = 3cm ] (stop) {Stop};
   \node [block, right of=precleanup, node distance = 3cm ] (abort) {Abort}; 
   \path [line] (invest) -- (investYes);
   \path [line] (investYes) -- (research); 
   \path [line] (research) -- (researchYes); 
   \path [line] (researchYes) -- (offer);
+  \path [line] (offer) -- (shares); 
+  \path [line] (shares) -- (cleanup);
+  \path [line] (cleanup) -| (closure);
+  \path [line] (closure) -- (cleanupGo);
+  \path [line, solid] (cleanupGo) -- (optionexercise);
+  \path [line] (optionexercise) -- (settlement);
+  \path [line, dashed] (researchYes) -| (abort);
+  \path [line, dashed] (researchYes) -| (stop);
   \end{tikzpicture}
+
+\subsection{Introduction}
 A property enters the pipeline when it is added to the list of potential deals. Each potential deal goes through a research and evaluation phase. In this application, a phase has a significance in the the sense that there is a ballot accompanied with the phase. Remediation of properties contaminated with oil. The process of remediation of contaminated properties has quite a few steps while providing an investment opportunity to entities with an appetite for risk. This application supports a model where the risk is limited to cleanup costs, which in themselves can be quite significant, and not to the cost of acquiring a given property. 
 
 
