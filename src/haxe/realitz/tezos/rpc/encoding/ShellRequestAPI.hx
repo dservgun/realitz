@@ -1,7 +1,9 @@
+package realitz.tezos.rpc.encoding;
+
 /*****************************************************************************/
 /*                                                                           */
 /* Open Source License                                                       */
-/* Copyright (c) Dinkar Ganti, dinkar.ganti@gmail.com */
+/* Copyright (c) Dinkar Ganti, dinkar.ganti@gmail.com                        */
 /*                                                                           */
 /* Permission is hereby granted, free of charge, to any person obtaining a   */
 /* copy of this software and associated documentation files (the "Software"),*/
@@ -23,26 +25,35 @@
 /*                                                                           */
 /*****************************************************************************/
 
-//TODO: add build file such that it picks up all the files.
-import realitz.core.Property;
-import realitz.tezos.rpc.BlockHeader;
-import realitz.tezos.rpc.BlockHeaderMetadata;
-import realitz.tezos.rpc.BlockPreValidator;
-import realitz.tezos.rpc.BlockValidator;
-import realitz.tezos.rpc.ContextConstants;
-import realitz.tezos.rpc.Error;
-import realitz.tezos.rpc.MetadataTypes;
-import realitz.tezos.rpc.Michelson;
-import realitz.tezos.rpc.MichelsonPrimitives;
-import realitz.tezos.rpc.Operation;
 import realitz.tezos.rpc.Types;
-import realitz.tezos.rpc.WorkerTypes;
-import realitz.tezos.rpc.encoding.Responses;
-import realitz.tezos.rpc.encoding.Requests;
-import realitz.tezos.rpc.encoding.ShellRequestAPI;
-class Realitz {
-  static function main () {
-    trace("Hello Realitz");
-    var e : Error = EmptyAnswer;
+import haxe.io.Bytes;
+import haxe.Http;
+import haxe.ds.Option;
+
+class RPCConfig {
+  public var url (default, null) : String;
+  public var port (default, null) : String;
+  public function getHttp() : Http {
+    return (new Http("$url:$port"));
+  }
+}
+
+class Shell {
+  static function setLength (aLength : Option<Int>, request : Http) : Http {
+    switch (aLength) {
+      case None : request;
+      case Some(a) : {
+        request.setParameter("length", "$a");
+      }
+    }
+    return request;
+  }
+  static function getChains(config : RPCConfig, chainId : String, 
+    length : Option<Int>, 
+    head  : Option<BlockHash>, 
+    minDate : Option<Date>) : List<List<BlockHash>> {
+    var httpRequest : Http =  config.getHttp();
+    var httpRequest1 : Http = httpRequest.setParameter("length", httpRequest);
+
   }
 }

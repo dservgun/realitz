@@ -8,7 +8,12 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows}
 \pagestyle{empty}
+\title {Realitz - decentralizing cleanup of contaminated properties with Tezos}
+\author {Dinkar Ganti}
+\date {\today}
 \begin{document}
+
+\maketitle
 \ % Define block styles 
 \tikzstyle{decision} = [diamond, draw, fill = blue!20,
   text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
@@ -49,43 +54,62 @@
   \path [line, dashed] (researchYes) -| (stop);
   \end{tikzpicture}
 
-\subsection{Introduction}
-A property enters the pipeline when it is added to the list of potential deals. Each potential deal goes through a research and evaluation phase. In this application, a phase has a significance in the the sense that there is a ballot accompanied with the phase. Remediation of properties contaminated with oil. The process of remediation of contaminated properties has quite a few steps while providing an investment opportunity to entities with an appetite for risk. This application supports a model where the risk is limited to cleanup costs, which in themselves can be quite significant, and not to the cost of acquiring a given property. 
+\subsection{Introduction} \label {intro}
+A property enters the pipeline when it is added to the list of potential deals. Each potential deal goes through a research and evaluation phase. In this application, a phase has a significance in the the sense that there is a ballot accompanied with the phase. 
+
+The process of remediation of properties contaminated with oil provides with lucrative investment opportunity to investors with an appetite for risk. This application supports a model where the risk is limited to cleanup costs, which in themselves can be quite significant. Additionally, this application supports either a real-estate option or a swap (to be defined later).
 
 
-\subsection{InvestmentPhase}
-  During this phase, the group short lists a set of properties that meet a particular risk profile. 
+\subsection{Investment Phase} \label {investment}
+  On zero-day, this involves moving all the existing conversations on realitz with notes to \href {propertyscore}{score} the investment and match the score with a \href {riskprofile} risk appetite. This matching is initially going to be informal as the entry into the investment requires a \href{securitydeposit}{deposit}.
 
-\subsection{ResearchPhase}
+\subsection{Research Phase} \label {research}
 
-  During this phase all the relevant environment reports need to be collected for investors to vote on the project. This phase also includes a phase to send invites to an investor to solicit interest in the project. Initially, 
-  this can be a simple mailing list and a voting phase with the quorum of investors needed for the property.
-
-\subsection{OfferPhase}
+  During this phase all the relevant environment reports need to be collected for investors to vote on the project. The list of reports that will be attached to this phase include: 
+    \begin{itemize}
+      \item DEP's case report if filed.
+      \item Property plan: location and volume of tanks if any.
+      \item Site characterization report if available.
+      \item Comparable reports : as in what is a realistic upside on the property.
+    \end{itemize}
+  These reports provide an insight into the costs of the cleanup for the property and help an investor decide objectively. Even then, these properties present a great amount of risk and that investors can lose all their investment is something that cannot be stressed and  \href {disclaimerflow}{disclaimers} at various parts of the application need to be presented so the investor is aware of the risk as needed.
+\subsection{Offer Phase} \label {offer}
 
   During this phase, an offer is made to the seller that usually includes an option to purchase the property at a price before an agreed upon date. The option has a premium as well as a list of tasks the option holder agrees to perform, which in this case involves cleaning up the property during before the option expires. Obviously, the profitability of the deal is influenced by a number of factors and this document will outline some of the parameters that need to be managed during the active phase of a project.
 
-;  \subsection{ShareCertificateIssuePhase}
+  \subsection{Issue share certificates} \label {shares}
 
   Paper shares, that are legally binding, will be issued proportional to the tezzies invested 
   in the property. This is when the investment needed for the cleanup of the property is transferred to the cleanup account associated with the property. At this point the amounts are NON-REFUNDABLE. Which is generally true on a block chain, in this case since there is an associated paper transaction that is legally binding, there could be a clawback in the event of company contract violations.
 
-  \subsection{PreCleanupPhase}
+  \subsection{Pre-cleanup Phase} \label {precleanup}
   Option agreement also has a liability clause that governs the participation of a licensed contractor so that the property is covered. 
 
-  \subsection{PermittingAndApprovalsPhase}
+  \subsection{Permits and approvals} \label {permits}
   Before a property project can commence, the county needs to approve of the cleanup plan with some scheduling requirements. 
 
-  \subsection{CleanupPhase}
+  \subsection{Cleanup Phase} \label {cleanup}
   This is when the cleanup commences. As part of the cleanup the tanks are removed if any along with their certificate of removal with timestamps so that they can be traced at any time by any regulatory authority. 
 
-  \subsection{ClosurePhase}
+  \subsection{Closure Phase} \label {closure}
   Depending on the choice of available technologies, such as \href{https://shop.sarvabioremed.com/collections/vaporremed}, the timeline for cleanup may vary. However, the final cleanup requires that a contamination report in soil and associated groundwater report to ensure that the property is clean. If all goes well, the DEP issues an NFA report on the property. This is a decision point, where the group can decide to transfer the rights to the property back to the current owner or continue to cleanup for another cycle. 
 
-  \subsection{OptionExercisePhase}
+  \subsection{Exercise the real estate option or swap} \label {optionexercise}
   A vote is setup to seek approval to exercise the option if the date of cleanup is within the option's expiration date. For the vote to be meaningful this process needs to present the investors with a potential price on the property as a result of the cleanup. The request to vote needs to be accompanied with the potential price so that the investor group can arrive at a consensus price. 
 
-  \subsection{SettlementPhase}
+  \subsection{Settlement} \label {settlement}
   Obviously this is what the group is waiting for and this can take months as the remediation projects usually have multiple phases,as we mention earlier, these projects present high risk to an individual investor, though can present some opportunity when the risk is shared among multiple investors. Settlement amount is transfered to an escrow account that holds the settlement amout for a settlement time (default to 24 hours). Distribution is executed using generally accepted distribution practices.
+
+  \subsection {Property score} \label {propertyscore}  
+  Property score is a function that maps the costs and inputs to a number between -100 - 100. Negative numbers imply that there is a loss and the higher the number the better the return.
+  \subsection {Risk profile } \label {riskprofile}
+  Risk profile is a score that assigns a profile to an investor. The application at some point will use this to present relevant (to be defined) deals to the investor.
+  \subsection {Security deposit} \label {securitydeposit}
+  A minimum deposit is needed per property for an investor to declare a stake in the investment and the formula to arrive at the number will eventually be governed by the property score and the risk profile of the investor.
+  \subsection {Disclaimers and legalese} \label {disclaimerflow}
+  Depending on the legal requirements disclaimer forms need to be presented for user's consent. In this app disclaimers are needed when the security deposit is confirmed to the property's \href{escrow}{escrow} account.
+
+  \subsection {Escrow accounts} \label {escrow}
+  Escrow accounts are associated with each property to enable payments into and out of the property. The account is accessible by all members to see the current state of the investment for viewing the contents of the account. Account modifications will need approval of fiduciary committee overseeing the account. 
 
 \end{document}
