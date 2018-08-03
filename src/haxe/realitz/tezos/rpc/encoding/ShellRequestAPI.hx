@@ -29,6 +29,7 @@ import realitz.tezos.rpc.Types;
 import haxe.io.Bytes;
 import haxe.Http;
 import haxe.ds.Option;
+import realitz.tezos.rpc.encoding.Requests.InjectBlock;
 import realitz.tezos.rpc.encoding.Responses.InvalidBlockResponse;
 import realitz.tezos.rpc.encoding.Responses.Mempool;
 
@@ -135,7 +136,21 @@ class Shell {
     }else {
       return None;
     }
-
   }  
-
+  static function injectBlock (config : RPCConfig, chainId : String, aBlock : InjectBlock) {
+    
+    var httpRequest : Http = config.getHttpWithPath(
+      "injection/block"
+    );
+    httpRequest.setHeader("Content-type", "application/json");
+    httpRequest.setPostData(InjectBlock.toDynamic(aBlock));
+    httpRequest.request(true);
+    var res : Null<String> = httpRequest.responseData;
+    if (res != null) {
+      var result : Dynamic = haxe.Json.parse(res);
+      trace("Result " + res);
+    }else {
+      trace("No data found");
+    }
+  }
 }

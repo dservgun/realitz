@@ -105,11 +105,22 @@ var haxe_Http = function(url) {
 };
 haxe_Http.__name__ = true;
 haxe_Http.prototype = {
-	setParameter: function(param,value) {
+	setHeader: function(header,value) {
+		this.headers = Lambda.filter(this.headers,function(h) {
+			return h.header != header;
+		});
+		this.headers.push({ header : header, value : value});
+		return this;
+	}
+	,setParameter: function(param,value) {
 		this.params = Lambda.filter(this.params,function(p) {
 			return p.param != param;
 		});
 		this.params.push({ param : param, value : value});
+		return this;
+	}
+	,setPostData: function(data) {
+		this.postData = data;
 		return this;
 	}
 	,request: function(post) {
@@ -760,6 +771,30 @@ realitz_tezos_rpc_RequestStatus.Treated = function(timestamp) { var $x = ["Treat
 realitz_tezos_rpc_RequestStatus.Completed = function(timestamp) { var $x = ["Completed",2,timestamp]; $x.__enum__ = realitz_tezos_rpc_RequestStatus; return $x; };
 var realitz_tezos_rpc_encoding_InjectBlock = function() { };
 realitz_tezos_rpc_encoding_InjectBlock.__name__ = true;
+realitz_tezos_rpc_encoding_InjectBlock.getBlockOperations = function(opsList) {
+	var result = new List();
+	var _g_head = opsList.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var innerList = val;
+		var elementList = new List();
+		var _g_head1 = innerList.h;
+		while(_g_head1 != null) {
+			var val1 = _g_head1.item;
+			_g_head1 = _g_head1.next;
+			var element = val1;
+			var nElement = { branch : element.branch.hash, data : element.data};
+			elementList.add(nElement);
+		}
+		result.add(elementList);
+	}
+	return result;
+};
+realitz_tezos_rpc_encoding_InjectBlock.toDynamic = function(aBlock) {
+	var result = { data : aBlock.data, operations : realitz_tezos_rpc_encoding_InjectBlock.getBlockOperations(aBlock.operations)};
+	return result;
+};
 var realitz_tezos_rpc_encoding_InjectOperation = function() { };
 realitz_tezos_rpc_encoding_InjectOperation.__name__ = true;
 var realitz_tezos_rpc_encoding_Component = function() { };
@@ -957,6 +992,19 @@ realitz_tezos_rpc_encoding_Shell.getMempool = function(config,chainId) {
 		return haxe_ds_Option.Some(realitz_tezos_rpc_encoding_Mempool.fromDynamic(result));
 	} else {
 		return haxe_ds_Option.None;
+	}
+};
+realitz_tezos_rpc_encoding_Shell.injectBlock = function(config,chainId,aBlock) {
+	var httpRequest = config.getHttpWithPath("injection/block");
+	httpRequest.setHeader("Content-type","application/json");
+	httpRequest.setPostData(realitz_tezos_rpc_encoding_InjectBlock.toDynamic(aBlock));
+	httpRequest.request(true);
+	var res = httpRequest.responseData;
+	if(res != null) {
+		var result = JSON.parse(res);
+		console.log("Result " + res);
+	} else {
+		console.log("No data found");
 	}
 };
 String.__name__ = true;

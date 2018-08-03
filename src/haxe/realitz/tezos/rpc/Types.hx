@@ -151,7 +151,7 @@ enum Answer {
 }
 
 class BlockHash {
-  var hash : String;
+  public var hash (default, null) : String;
   public function new (aString : String) {
     hash = aString;
   }

@@ -32,6 +32,26 @@ class InjectBlock {
   var data : Bytes;
   var operations : 
     List <List < {branch : BlockHash, data : Bytes} > >;
+  private static function getBlockOperations(opsList : List<List< {branch : BlockHash, data : Bytes}>>) : List< List <{branch : String, data : Bytes}>> {
+    var result : List<List<{branch : String, data : Bytes}>> = new List();
+    for (innerList in opsList) {
+      var elementList : List<{branch : String, data : Bytes}> = 
+        new List();
+      for (element in innerList) {
+        var nElement = {branch :element.branch.hash, data : element.data};
+        elementList.add(nElement);
+      }
+      result.add(elementList);
+    }
+    return result;
+  }
+  public static function toDynamic(aBlock : InjectBlock) : Dynamic {
+    var result : Dynamic = {
+      data : aBlock.data, 
+      operations : getBlockOperations(aBlock.operations)
+    };
+    return result;
+  }
 }
 
 class InjectOperation {

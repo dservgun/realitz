@@ -105,11 +105,13 @@ class ValidBlock {
   }  
 }
 
+//TODO: Create the appropriate type.
+typedef ErrorDyn = Dynamic;
 enum MempoolType {
   Applied (hash : String, branch : String, data : Bytes);
-  Refused (hash : String, branch : String, data : Bytes, error : List<Error>);
-  BranchRefused (hash : String, branch : String, data : Bytes, error : List<Error>);
-  BranchDelayed (hash : String, branch : String, data : Bytes, error : List<Error>);
+  Refused (hash : String, branch : String, data : Bytes, error : List<ErrorDyn>);
+  BranchRefused (hash : String, branch : String, data : Bytes, error : List<ErrorDyn>);
+  BranchDelayed (hash : String, branch : String, data : Bytes, error : List<ErrorDyn>);
   Unprocessed (hash : String, branch : String, data : Bytes);
 }
 
