@@ -1,4 +1,6 @@
 -cp .
 -v 
+libs.hxml
 -js Realitz.js
 -main Realitz.hx
+-cmd echo "JS done."

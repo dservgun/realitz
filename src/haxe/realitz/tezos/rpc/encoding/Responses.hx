@@ -30,10 +30,6 @@ import haxe.Int64;
 import haxe.io.Bytes;
 
 
-class ChainIdResponse {
-  var response (default, null) : ChainId;
-}
-
 
 class InvalidBlockResponse {
   var block (default, null) : BlockHash; 
@@ -109,10 +105,83 @@ class ValidBlock {
   }  
 }
 
-enum Mempool {
+enum MempoolType {
   Applied (hash : String, branch : String, data : Bytes);
   Refused (hash : String, branch : String, data : Bytes, error : List<Error>);
   BranchRefused (hash : String, branch : String, data : Bytes, error : List<Error>);
   BranchDelayed (hash : String, branch : String, data : Bytes, error : List<Error>);
   Unprocessed (hash : String, branch : String, data : Bytes);
+}
+
+class Mempool {
+  function new (
+    app : List<MempoolType>,
+    refusedL : List<MempoolType>,
+    branchRefusedL : List<MempoolType>,
+    branchDelayedL : List<MempoolType>,
+    unprocessedL : List<MempoolType> 
+    ) {
+    applied = app;
+    refused = refusedL;
+    branchRefused = branchRefusedL;
+    branchDelayed = branchDelayedL;
+    unprocessed = unprocessedL;
+  } 
+  public var applied (default, null) : List<MempoolType>;
+  public var refused (default, null): List<MempoolType>;
+  public var branchRefused (default, null) : List<MempoolType>;
+  public var branchDelayed (default, null) : List<MempoolType>;
+  public var unprocessed (default, null) : List<MempoolType>;
+  private static function appliedMem(appliedMempool : Iterator<Dynamic>) : List<MempoolType> {
+    var result : List<MempoolType> = new List();
+    for (aVal in appliedMempool) {
+      result.add(Applied(aVal.hash, aVal.branch, aVal.data));
+    }
+    return result;
+  }
+  private static function refusedMem(appliedMempool : Iterator<Dynamic>) : List<MempoolType> {
+    var result : List<MempoolType> = new List();
+    for (aVal in appliedMempool) {
+      result.add(Refused(aVal.hash, aVal.branch, aVal.data, aVal.errors));
+    }
+    return result;
+  }
+
+  private static function branchRefusedMem(mempool : Iterator<Dynamic>) : List<MempoolType> {
+    var result : List<MempoolType> = new List();
+    for (aVal in mempool) {
+      result.add(BranchRefused(aVal.hash, aVal.branch, aVal.data, aVal.errors));
+    }
+    return result;
+  }
+
+  private static function branchDelayedMem(mempool : Iterator<Dynamic>) : List<MempoolType> {
+    var result : List<MempoolType> = new List();
+    for (aVal in mempool) {
+      result.add(BranchDelayed(aVal.hash, aVal.branch, aVal.data, aVal.errors));
+    }
+    return result;
+  }
+  private static function unprocessedMem (mempool : Iterator<Dynamic>) : List<MempoolType> {
+    var result : List<MempoolType> = new List();
+    for (aVal in mempool) {
+      result.add(Unprocessed(aVal.hash, aVal.branch, aVal.data));
+    }
+    return result;
+  }
+
+  var pool (default, null) : List<MempoolType>;
+  public static function fromDynamic(mempoolResponse : Dynamic) : Mempool {
+    var applied : List<MempoolType> = appliedMem(mempoolResponse.applied.iterator());
+    var refused : List<MempoolType> = 
+        refusedMem(mempoolResponse.refused);
+    var branchRefused : List<MempoolType> = 
+      branchRefusedMem(mempoolResponse.branch_refused);
+    var branchDelayed : List<MempoolType> = 
+      branchDelayedMem(mempoolResponse.branch_delayed);
+    var unprocessed : List<MempoolType>  = 
+      unprocessedMem(mempoolResponse.unprocessed);
+    return (new Mempool(applied, refused, branchRefused, branchDelayed, unprocessed));
+    
+  }
 }

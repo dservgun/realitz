@@ -1,4 +1,5 @@
 -cp .
 -v 
+libs.hxml
 -cpp mcpprealitz
 -main Realitz.hx

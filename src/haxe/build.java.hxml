@@ -1,4 +1,5 @@
 -cp .
 -v 
+libs.hxml
 -java mrealitz
 -main Realitz.hx

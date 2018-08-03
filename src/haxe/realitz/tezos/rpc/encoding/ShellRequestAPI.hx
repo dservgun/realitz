@@ -29,6 +29,8 @@ import realitz.tezos.rpc.Types;
 import haxe.io.Bytes;
 import haxe.Http;
 import haxe.ds.Option;
+import realitz.tezos.rpc.encoding.Responses.InvalidBlockResponse;
+import realitz.tezos.rpc.encoding.Responses.Mempool;
 
 class RPCConfig {
   public var url (default, null) : String;
@@ -36,24 +38,104 @@ class RPCConfig {
   public function getHttp() : Http {
     return (new Http("$url:$port"));
   }
+  public function getHttpWithPath(path : String) : Http {
+    return (new Http("$url:$port/$path"));
+  }
+
 }
 
 class Shell {
-  static function setLength (aLength : Option<Int>, request : Http) : Http {
-    switch (aLength) {
-      case None : request;
-      case Some(a) : {
-        request.setParameter("length", "$a");
+
+  private static function setOptionalParameters<A>
+    (aParameter : Option<A>, paramName : String, request : Http): Http {
+      switch (aParameter) {
+        case (Some(aParam)) : return (request.setParameter(paramName, "$aParam"));
+        case None : return request;
       }
     }
-    return request;
+  private static function setLength (aLength : Option<Int>, request : Http) : Http {
+    return (setOptionalParameters(aLength, "length", request));
   }
-  static function getChains(config : RPCConfig, chainId : String, 
+  private static function setHead (aHead : Option<BlockHash>, request : Http) : Http {
+    return (setOptionalParameters(aHead, "head", request));
+  }
+  private static function setMinDate(aDate : Option<Date>, request : Http) : Http {
+    return (setOptionalParameters(aDate, "min_date", request));
+  }
+  static function getBlocksForAChain(config : RPCConfig, chainId : String, 
     length : Option<Int>, 
     head  : Option<BlockHash>, 
     minDate : Option<Date>) : List<List<BlockHash>> {
-    var httpRequest : Http =  config.getHttp();
-    var httpRequest1 : Http = httpRequest.setParameter("length", httpRequest);
-
+    var httpRequest : Http =  config.getHttpWithPath("chains/$chainId/blocks");
+    var httpRequest1 : Http = setLength(length, httpRequest);
+    var httpRequest2 : Http = setHead(head, httpRequest1);
+    var httpRequest3 : Http = setMinDate(minDate, httpRequest2);
+    httpRequest3.request();
+    var res : Null<String> = httpRequest3.responseData;
+    if (res != null) {
+      var result = haxe.Json.parse(res);
+      return result;
+    }else {
+      return (new List());
+    }
   }
+
+  static function getChainId (config : RPCConfig, chainId : String) : Option<ChainId> {
+    var httpRequest : Http = config.getHttpWithPath("chains/$chainId/chain_id");
+    httpRequest.request();
+    var res : Null<String> = httpRequest.responseData;
+    if (res != null) {
+      return (Some (new ChainId(haxe.Json.parse(res))));
+    }else {
+      return None;
+    }
+  }
+
+  static function getInvalidBlocks(config : RPCConfig, chainId : String) : List<InvalidBlockResponse> {
+    var httpRequest : Http = config.getHttpWithPath("chains/$chainId/invalid_blocks");
+    httpRequest.request();
+    var res : Null<String> = httpRequest.responseData;
+    if (res != null) {
+      return (haxe.Json.parse(res));
+    }else {
+      return (new List());
+    }
+  }
+
+  static function getInvalidBlock(config : RPCConfig, chainId : String, blockHash : String) : Option<InvalidBlockResponse> {
+    var httpRequest : Http = config.getHttpWithPath(
+      "chains/$chainId/invalid_blocks/$blockkHash"
+    );
+    httpRequest.request();
+    var res : Null<String> = httpRequest.responseData;
+    if (res != null) {
+      return (Some(haxe.Json.parse(res)));
+    }else {
+      return None;
+    }
+  }
+
+  //TODO :
+  static function deleteInvalidBlock(config : RPCConfig, chainId : String, blockHash : String) {
+    var httpRequest : Http = config.getHttpWithPath(
+      "chains/$chainId/invalid_blocks/$blockHash"
+    );
+    throw "Function not supported.";
+  }
+
+  static function getMempool (config : RPCConfig, chainId : String) : Option<Mempool> {
+    var httpRequest : Http = config.getHttpWithPath(
+      "chains/$chainId/mempool"
+    );
+    httpRequest.request();
+    var res : Null<String> = httpRequest.responseData;
+    if (res != null) {
+      var result : Dynamic = haxe.Json.parse(res);
+      return Some(Mempool.fromDynamic(result));
+    }else {
+      return None;
+    }
+
+  }  
+
 }
