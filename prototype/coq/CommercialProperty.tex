@@ -1,0 +1,262 @@
+\documentclass[12pt]{report}
+\usepackage[]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fullpage}
+\usepackage{coqdoc}
+\usepackage{amsmath,amssymb}
+\usepackage{url}
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% This file has been automatically generated with the command
+%% coqdoc --latex CommercialProperty.v 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\coqlibrary{CommercialProperty}{Library }{CommercialProperty}
+
+\begin{coqdoccode}
+\coqdocemptyline
+\coqdocnoindent
+\coqdockw{Require} \coqdockw{Import} \coqdocvar{List} \coqdocvar{ZArith} \coqdocvar{Bool} \coqdocvar{String}.\coqdoceol
+\coqdocnoindent
+\coqdockw{Require} \coqdockw{Export} \coqdocvar{ZArith\_base}.\coqdoceol
+\coqdocnoindent
+\coqdockw{Require} \coqdockw{Export} \coqdocvar{Coq.Reals.Rdefinitions}.\coqdoceol
+\coqdocnoindent
+\coqdockw{Require} \coqdockw{Import} \coqdocvar{Coq.Lists.List}.\coqdoceol
+\coqdocnoindent
+\coqdocvar{From} \coqdocvar{mathcomp} \coqdockw{Require} \coqdockw{Import} \coqdocvar{all\_ssreflect}.\coqdoceol
+\coqdocnoindent
+\coqdockw{Set Implicit Arguments}.\coqdoceol
+\coqdocnoindent
+\coqdockw{Unset} \coqdockw{Strict} \coqdockw{Implicit}.\coqdoceol
+\coqdocnoindent
+\coqdockw{Unset} \coqdockw{Printing} \coqdockw{Implicit} \coqdocvar{Defensive}.\coqdoceol
+\coqdocemptyline
+\end{coqdoccode}
+Remediation of properties contaminated with oil and associated volatile organic compounds (VOCS) present a unique challenge as well as an investment opportunity to investors with an appetite for risk. The goal of this application is to streamline as well as document all of the steps from the inception of the project to settlement. The overall goal of the application is to manage the costs of documenation as well as to provide local regulatory authority with the progress on a property transparently. 
+
+
+\section{Application lifecycle}
+
+ The application needs to address the needs of various participants or actors and this section 
+outlines the various phases as well as the interaction needs where obvious. 
+
+ Milestone  A milestone is, as the name suggests a milestone in the project along with the the progress state for the project. 
+In this application, we would like to require that accomplishing a milestone be set to vote as well as expert opinion, for example 
+the relevant DEP case manager
+
+ Risk profile  A hueristics summarizing the risk on the property using generally acceptable accounting practices. Additionally, 
+the risk profile is a milestone for a property, therefore is a contract requiring a quorum of evaluators reaching consensus.  Group protocol  Membership to a grop is either by an invite or user driven  Pre-investment tasks  During this phase a group shortlists a set of properties that meet a particular risk profile 
+
+ Research phase  During this phase the relevant reports on the property are subject to evaluation to provide the group with a preliminary analysis
+ of the amount of contamination and the associated risk. This report may be followed up with a detailed report prepared by an 
+environmental consultant to highlight any areas missed in the preliminary report. This is a phase where most investors will usually decide 
+as to continuing on the property or otherwise
+
+ Offer phase  The group presents an offer to purchase an option on the property with limited access rights and cleanup rights on the property. Acquiring an option transfers the right to 
+buy a property at an agreed price before the option expires. This contract is analogous to the 
+popular options however the group takes on the role of both the market maker as well as the 
+option writer. Which essentially implies that the risk of acquiring the option is transferred for a specified period. 
+
+ Pre-cleanup phase  During this phase all of the contractors along with fall-back contractors are identified 
+and assigned to the project. Each contractor has a liability requirement that needs to be met before the contractor can work on any given property. This phase formalizes the process and each contractor arrangement for the property is documented in this phase. 
+
+
+ Project planning  Each project is divided into task that has a rate and number of units associated with it. Moreover, each task has a start date, end date with \coqdocvar{WorkAuthorization} and \coqdocvar{WorkInspection} to release \coqdocvar{Payment}s worker.
+
+
+ The address and location for the property. TODO: assign a risk score for the
+property. \begin{coqdoccode}
+\coqdocnoindent
+\coqdockw{Record} \coqdocvar{property} : \coqdockw{Type} := \coqdocvar{Property} \{\coqdocvar{address} : \coqdocvar{string}\}.\coqdoceol
+\coqdocemptyline
+\end{coqdoccode}
+Various tasks needed to completed on the property. These could involve \begin{coqdoccode}
+\coqdocnoindent
+\coqdockw{Record} \coqdocvar{task} : \coqdockw{Type} := \coqdocvar{Task} \{\coqdocvar{taskId} : \coqdocvar{Z}; \coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{taskDescription} : \coqdocvar{string};\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{rate} : \coqdocvar{R};\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{numberOfUnits} : \coqdocvar{R}\coqdoceol
+\coqdocindent{1.00em}
+\}.\coqdoceol
+\coqdocemptyline
+\coqdocnoindent
+\coqdockw{Record} \coqdocvar{budget} : \coqdockw{Type} := \coqdocvar{Bugdet} \{\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{amount} : \coqdocvar{R};\coqdoceol
+\coqdocnoindent
+\}.\coqdoceol
+\coqdocemptyline
+\coqdocnoindent
+\coqdockw{Inductive} \coqdocvar{ContaminationUnit} : \coqdockw{Type} := \coqdoceol
+\coqdocindent{1.00em}
+\ensuremath{|} \coqdocvar{PPM} \end{coqdoccode}
+Parts per million \begin{coqdoccode}
+\coqdocindent{1.00em}
+\ensuremath{|} \coqdocvar{PPB} \end{coqdoccode}
+Parts per billion \begin{coqdoccode}
+.\coqdoceol
+\coqdocemptyline
+\coqdocnoindent
+\coqdockw{Inductive} \coqdocvar{ContaminationType} : \coqdockw{Type} := \coqdoceol
+\coqdocindent{1.00em}
+\ensuremath{|} \coqdocvar{Soil} : \coqdocvar{ContaminationType}\coqdoceol
+\coqdocindent{1.00em}
+\ensuremath{|} \coqdocvar{Groundwater} : \coqdocvar{ContaminationType}.\coqdoceol
+\coqdocemptyline
+\coqdocnoindent
+\coqdockw{Record} \coqdocvar{contaminationRatio} : \coqdockw{Type} = \coqdocvar{ContaminationRatio} \{\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{amount} : \coqdocvar{R};\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{unit} : \coqdocvar{ContaminationUnit}\coqdoceol
+\coqdocnoindent
+\}.\coqdoceol
+\coqdocemptyline
+\coqdocnoindent
+\coqdockw{Record} \coqdocvar{contamination} : \coqdockw{Type} = \coqdocvar{Contamination} \{\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{contaminationType} : \coqdocvar{ContaminationType};\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{ratio} : \coqdocvar{ContaminationRatio};\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{threshold} : \coqdocvar{ContaminationRatio}\coqdoceol
+\coqdocnoindent
+\}.\coqdoceol
+\coqdocemptyline
+\end{coqdoccode}
+Prove that the sum of all tasks is less than or equal to the amount in the budget\begin{coqdoccode}
+\coqdocemptyline
+\coqdocnoindent
+\coqdockw{Record} \coqdocvar{edge} : \coqdockw{Type} := \coqdocvar{Edge} \{\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{from} : \coqdocvar{Task}; \coqdoceol
+\coqdocnoindent
+\}.\coqdoceol
+\coqdocemptyline
+\coqdocnoindent
+\coqdockw{Record} \coqdocvar{project} : \coqdockw{Type} := \coqdocvar{Project} \{\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{tasks} : \coqdocvar{list} \coqdocvar{Edge}\coqdoceol
+\coqdocnoindent
+\}.\coqdoceol
+\coqdocemptyline
+\end{coqdoccode}
+Lemma : No task left behind. Given a project no task should be executed that has a
+predecessor pending or not approved 
+
+ Lemma : No cycles in the tasks.
+
+\section{Investor exposure*}
+
+
+A given investor will usually have a risk appetite that will be computed based on the 
+risk profile. Additionally, each transaction will need to go through 
+a pre-approval process to help cover for any losses in existing investments.
+\begin{coqdoccode}
+\coqdocemptyline
+\coqdocnoindent
+\coqdockw{Record} \coqdocvar{InvestorExposure} : \coqdockw{Type} := \coqdocvar{InvestorExposure} \{\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{exposure} : \coqdocvar{R};\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{properties} : \coqdocvar{list} \coqdocvar{Property}\coqdoceol
+\coqdocnoindent
+\}.\coqdoceol
+\coqdocemptyline
+\end{coqdoccode}
+\section{Coverage requirements}
+
+
+  Coverage requirements are quite stringent for contaminated properties and one of the 
+  requirements is to ensure that any worker working on the property to have appropriate
+  insurance. 
+\section{Appropriate insurance implies that}
+
+
+
+\begin{itemize}
+\item  Given a properties insurance in either percentage of the property value or amount. 
+
+\item  Given a workers insurance for an amount and a time window. 
+
+\end{itemize}
+    A worker is said to carry appropriate insurance if on the day of executing the 
+    task the \coqdocvar{workersInsurance} is active and is greater than the insurance the property 
+    needs. 
+    A corollary of the above rule is that once a task has been entered in the system to have started,
+    the task should get updates daily. In the event the updates are not received daily before the 
+    task has stopped, the task is canceled and published to on the block so that the \coqdocvar{projectManager}
+    can address the gap.
+
+
+\section{Trend line for a contamination is established.}
+
+
+  Establishing a trend line is important to understand the progress of the cleanup efforts
+  on a \coqdocvar{Property}. When data for contamination is submitted to the block, the data needs to 
+  display that a given strategy is working as expected. For example, if the \coqdocvar{Contamination} 
+  under question is in being measured and we have three points there should be downward trend. 
+  The purpose of this step is to help investors decide whether they want to continue with 
+  the project or leave the project at this phase. The business model ensures that the project
+  is funded sufficiently for such exits, nevertheless, these checks are important to ensure 
+  that the group is always in a consensus.
+
+
+\section{Distribution is correct.}
+
+
+  Ensure that distribution at the time of \coqdocvar{Settlement} reflects appropriately computes the 
+  percentages (or shares) of all the parties involved including a \coqdocvar{RealitzFee} and is
+  not greater than 100 (if we are using percentages to compute shares).
+  The percentage for \coqdocvar{RealitzFee} is a number between 0.5 - 1.0 in percent of 
+  each paying transaction conducted on Realitz. We should prove that at no point the amount of 
+  funds transfered are not greater than the upper bounds for the fees. 
+\section{Paying transactions}
+
+
+  These are transactions that have a real-life image of the transactions on the block. For example
+
+\begin{itemize}
+\item  Tank removal fees.
+
+\item  Case managers hours.
+
+\item  Lab report fees.
+
+\end{itemize}
+
+
+\section{Non paying transactions}
+
+
+  These are the kind of transactions that the system has added to manage the application on 
+  the block in the sense that the transactions have a gas cost and may still be a wallet operation
+  though are not charged by a commission by the dapp. For example, 
+
+\begin{itemize}
+\item  User creating and submitting a property for evaluation using her wallet.
+
+\item  User approving a task for completion.
+
+\item  User gathering and uploading \coqdocvar{MeetingNote}s on the system.
+
+\end{itemize}
+)
+
+
+Record realitzFee : type := RealitzFee \{percent : R\}.
+
+
+Record venue : type := Venue \{date : Date; location : string\}.
+
+
+Record meetingNote : type := MeetingNote \{
+  venue : Venue;
+  remarks : string;
+    participants : seq string
+  \}.\begin{coqdoccode}
+\end{coqdoccode}
+\end{document}
