@@ -34,7 +34,7 @@ typedef Mutez = String;
 typedef PositiveBigNum = String;
 
 class ProtocolHash {  
-  var hash (default, null) : String; 
+  public var hash (default, null) : String; 
   public function new(aString : String) {
     hash = aString;
   }
@@ -158,7 +158,7 @@ class BlockHash {
 }
 
 class ChainId {
-  var hash : String;
+  public var hash (default, null) : String;
   public function new (aString : String) {
     hash = aString;
   }

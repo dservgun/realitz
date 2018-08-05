@@ -40,6 +40,15 @@ class InvalidBlockResponse {
 class Bootstrapped {
   var block : BlockHash ;
   var timestamp : Int64;
+  public function new (dyn : Dynamic) {
+    block = dyn.block;
+    timestamp = dyn.timestamp;
+  }
+  public static function fromJSON(aString : String) : Bootstrapped  {
+    var dyn : Dynamic = haxe.Json.parse(aString);
+    return (new Bootstrapped(dyn));
+
+  }
 }
 
 

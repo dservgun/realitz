@@ -33,6 +33,7 @@ import realitz.tezos.rpc.encoding.Requests.InjectBlock;
 import realitz.tezos.rpc.encoding.Requests.InjectOperation;
 import realitz.tezos.rpc.encoding.Requests.InjectProtocol;
 import realitz.tezos.rpc.encoding.Responses.InvalidBlockResponse;
+import realitz.tezos.rpc.encoding.Responses.Bootstrapped;
 import realitz.tezos.rpc.encoding.Responses.Mempool;
 
 class RPCConfig {
@@ -64,6 +65,29 @@ class Shell {
   }
   private static function setMinDate(aDate : Option<Date>, request : Http) : Http {
     return (setOptionalParameters(aDate, "min_date", request));
+  }
+
+  private static function setNextProtocol(aProtocolHash : Option<ProtocolHash>, request : Http) : Http {
+    switch(aProtocolHash) {
+      case (Some(aProtoHash)) : 
+        return (setOptionalParameters(Some(aProtoHash.hash), "next_protocol", request));
+      case None : return request;
+    }
+  }
+  private static function setProtocol(aProtocolHash : Option<ProtocolHash>, request : Http) : Http {
+    switch(aProtocolHash) {
+      case (Some(aProtoHash)) : 
+        return (setOptionalParameters(Some(aProtoHash.hash), "protocol", request));
+      case None : return request;
+    }
+  }
+
+  private static function setChainIdParameter(aChainId : Option<ChainId>, request : Http) : Http {
+    switch (aChainId) {
+      case (Some(aCh)) : 
+        return (setOptionalParameters(Some(aCh.hash), "chain_id", request));
+      case None : return request;
+    }
   }
   static function getBlocksForAChain(config : RPCConfig, chainId : String, 
     length : Option<Int>, 
@@ -179,4 +203,68 @@ class Shell {
       trace("Inject protocol for $protocol failed");
     }
   }
+  static function monitorBootstrappedBlocks(config : RPCConfig) : Option<Bootstrapped> {
+    var httpRequest : Http = config.getHttpWithPath("monitor/bootstrapped");
+    httpRequest.request();
+    var res : Null<String> = httpRequest.responseData;
+    if (res != null) {
+      var result = Bootstrapped.fromJSON(res);
+      return (Some (result));
+    }else {
+      return None;
+    }
+  }
+  static function monitorHeadBlockForChain (config : RPCConfig, chainId : Option<ChainId>, nextProtocol : Option<ProtocolHash>) : Option<BlockHash> {
+    var httpRequestO : Http = config.getHttpWithPath("monitor/heads/$cId");
+    var httpRequest1 : Http = setNextProtocol(nextProtocol, httpRequestO);
+    var httpRequest : Http = setChainIdParameter(chainId, httpRequest1);
+    httpRequest.request();
+    var res : Null<String> = httpRequest.responseData;
+    if (res != null) {
+      return (Some (new BlockHash(res)));
+    }else {
+      return None;
+    }
+  }
+
+  //TODO : FIX ME (the documentation from the main source).
+  static function monitorProtocols (config : RPCConfig) : Option<BlockHash> {
+    var httpRequest : Http = config.getHttpWithPath("monitor/protocols");
+    httpRequest.request();
+    var res : Null<String> = httpRequest.responseData;
+    if (res != null) {
+      return (Some (new BlockHash(res)));
+    }else {
+      return None;
+    }
+  }
+
+  static function monitorValidBlocks(config : RPCConfig, protocol : Option<ProtocolHash>, nextProtocol : Option<ProtocolHash>, 
+  chainId : Option<ChainId>) : Option<ValidBlockSummary> {
+    var httpRequest : Http = config.getHttpWithPath("monitor/valid_blocks");
+    var httpRequest0 : Http = setProtocol(protocol, httpRequest);
+    var httpRequest1 : Http = setNextProtocol(protocol, httpRequest0);
+    var httpRequest2 : Http = setChainIdParameter(chainId, httpRequest1);
+    httpRequest2.request();
+    var res : Null<String> = httpRequest.responseData;
+    if (res != null){
+      var dyn : Dynamic = haxe.Json.parse(res);
+      return Some(new ValidBlockSummary(dyn));
+    }else {
+      return None;
+    }
+  }
+}
+
+//TODO: These types need to be consolidated. 
+//Notes: Implement the rpc client in haskell and 
+//get a better sense of the type system.
+class ValidBlockSummary {
+  public var chainId(default, null) : ChainId;
+  public var hash (default, null) : BlockHash;
+  public function new (dyn : Dynamic) {
+    chainId = new ChainId(dyn.chain_id);
+    hash = new BlockHash(dyn.hash);
+  }
+
 }

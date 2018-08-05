@@ -820,8 +820,15 @@ realitz_tezos_rpc_encoding_InjectProtocol.prototype = {
 };
 var realitz_tezos_rpc_encoding_InvalidBlockResponse = function() { };
 realitz_tezos_rpc_encoding_InvalidBlockResponse.__name__ = true;
-var realitz_tezos_rpc_encoding_Bootstrapped = function() { };
+var realitz_tezos_rpc_encoding_Bootstrapped = function(dyn) {
+	this.block = dyn.block;
+	this.timestamp = dyn.timestamp;
+};
 realitz_tezos_rpc_encoding_Bootstrapped.__name__ = true;
+realitz_tezos_rpc_encoding_Bootstrapped.fromJSON = function(aString) {
+	var dyn = JSON.parse(aString);
+	return new realitz_tezos_rpc_encoding_Bootstrapped(dyn);
+};
 var realitz_tezos_rpc_encoding_Fitness = function(jsonString) {
 	this.fitness = JSON.parse(jsonString);
 };
@@ -952,6 +959,33 @@ realitz_tezos_rpc_encoding_Shell.setHead = function(aHead,request) {
 realitz_tezos_rpc_encoding_Shell.setMinDate = function(aDate,request) {
 	return realitz_tezos_rpc_encoding_Shell.setOptionalParameters(aDate,"min_date",request);
 };
+realitz_tezos_rpc_encoding_Shell.setNextProtocol = function(aProtocolHash,request) {
+	switch(aProtocolHash[1]) {
+	case 0:
+		var aProtoHash = aProtocolHash[2];
+		return realitz_tezos_rpc_encoding_Shell.setOptionalParameters(haxe_ds_Option.Some(aProtoHash.hash),"next_protocol",request);
+	case 1:
+		return request;
+	}
+};
+realitz_tezos_rpc_encoding_Shell.setProtocol = function(aProtocolHash,request) {
+	switch(aProtocolHash[1]) {
+	case 0:
+		var aProtoHash = aProtocolHash[2];
+		return realitz_tezos_rpc_encoding_Shell.setOptionalParameters(haxe_ds_Option.Some(aProtoHash.hash),"protocol",request);
+	case 1:
+		return request;
+	}
+};
+realitz_tezos_rpc_encoding_Shell.setChainIdParameter = function(aChainId,request) {
+	switch(aChainId[1]) {
+	case 0:
+		var aCh = aChainId[2];
+		return realitz_tezos_rpc_encoding_Shell.setOptionalParameters(haxe_ds_Option.Some(aCh.hash),"chain_id",request);
+	case 1:
+		return request;
+	}
+};
 realitz_tezos_rpc_encoding_Shell.getBlocksForAChain = function(config,chainId,length,head,minDate) {
 	var httpRequest = config.getHttpWithPath("chains/$chainId/blocks");
 	var httpRequest1 = realitz_tezos_rpc_encoding_Shell.setLength(length,httpRequest);
@@ -1048,6 +1082,58 @@ realitz_tezos_rpc_encoding_Shell.injectProtocol = function(config,protocol) {
 		console.log("Inject protocol for $protocol failed");
 	}
 };
+realitz_tezos_rpc_encoding_Shell.monitorBootstrappedBlocks = function(config) {
+	var httpRequest = config.getHttpWithPath("monitor/bootstrapped");
+	httpRequest.request();
+	var res = httpRequest.responseData;
+	if(res != null) {
+		var result = realitz_tezos_rpc_encoding_Bootstrapped.fromJSON(res);
+		return haxe_ds_Option.Some(result);
+	} else {
+		return haxe_ds_Option.None;
+	}
+};
+realitz_tezos_rpc_encoding_Shell.monitorHeadBlockForChain = function(config,chainId,nextProtocol) {
+	var httpRequestO = config.getHttpWithPath("monitor/heads/$cId");
+	var httpRequest1 = realitz_tezos_rpc_encoding_Shell.setNextProtocol(nextProtocol,httpRequestO);
+	var httpRequest = realitz_tezos_rpc_encoding_Shell.setChainIdParameter(chainId,httpRequest1);
+	httpRequest.request();
+	var res = httpRequest.responseData;
+	if(res != null) {
+		return haxe_ds_Option.Some(new realitz_tezos_rpc_BlockHash(res));
+	} else {
+		return haxe_ds_Option.None;
+	}
+};
+realitz_tezos_rpc_encoding_Shell.monitorProtocols = function(config) {
+	var httpRequest = config.getHttpWithPath("monitor/protocols");
+	httpRequest.request();
+	var res = httpRequest.responseData;
+	if(res != null) {
+		return haxe_ds_Option.Some(new realitz_tezos_rpc_BlockHash(res));
+	} else {
+		return haxe_ds_Option.None;
+	}
+};
+realitz_tezos_rpc_encoding_Shell.monitorValidBlocks = function(config,protocol,nextProtocol,chainId) {
+	var httpRequest = config.getHttpWithPath("monitor/valid_blocks");
+	var httpRequest0 = realitz_tezos_rpc_encoding_Shell.setProtocol(protocol,httpRequest);
+	var httpRequest1 = realitz_tezos_rpc_encoding_Shell.setNextProtocol(protocol,httpRequest0);
+	var httpRequest2 = realitz_tezos_rpc_encoding_Shell.setChainIdParameter(chainId,httpRequest1);
+	httpRequest2.request();
+	var res = httpRequest.responseData;
+	if(res != null) {
+		var dyn = JSON.parse(res);
+		return haxe_ds_Option.Some(new realitz_tezos_rpc_encoding_ValidBlockSummary(dyn));
+	} else {
+		return haxe_ds_Option.None;
+	}
+};
+var realitz_tezos_rpc_encoding_ValidBlockSummary = function(dyn) {
+	this.chainId = new realitz_tezos_rpc_ChainId(dyn.chain_id);
+	this.hash = new realitz_tezos_rpc_BlockHash(dyn.hash);
+};
+realitz_tezos_rpc_encoding_ValidBlockSummary.__name__ = true;
 String.__name__ = true;
 Array.__name__ = true;
 Date.__name__ = ["Date"];
