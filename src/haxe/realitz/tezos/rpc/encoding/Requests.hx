@@ -28,6 +28,11 @@ package realitz.tezos.rpc.encoding;
 import realitz.tezos.rpc.Types;
 import haxe.io.Bytes;
 
+
+//TODO: Is the name right? Will Injection<type> read better than Inject<Type>
+// The reason we chose Inject is because that is how the current spec is defining
+// these operations.
+
 class InjectBlock {
   var data : Bytes;
   var operations : 
@@ -55,7 +60,7 @@ class InjectBlock {
 }
 
 class InjectOperation {
-  var data : Bytes;
+  public var data (default, null) : String;
 }
 
 
@@ -65,10 +70,30 @@ class Component {
   var name : String ;
   var _interface : Bytes;
   var implementation : Bytes;
+
+  public static function toJSON (components : List<Component>) : 
+    List<Dynamic> {
+    var result : List<Dynamic> = new List();
+    for (aComponent in components) {
+      result.add({"name" : aComponent.name, "interface" : aComponent._interface, 
+        "implementation" : aComponent.implementation
+        });
+    }
+    return result;
+  }
 }
+
 
 class InjectProtocol {
   var expectedEnvVersion : Int;
   var components : List<Component>;
+  public function toJSON() : String {
+    var dyn : Dynamic = 
+      {
+        "expected_env_version" : expectedEnvVersion,
+        "components" : Component.toJSON(components)
+      };
+    return haxe.Json.stringify(dyn);
+  }
 } 
 

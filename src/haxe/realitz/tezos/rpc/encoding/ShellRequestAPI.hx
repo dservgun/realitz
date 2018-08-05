@@ -30,6 +30,8 @@ import haxe.io.Bytes;
 import haxe.Http;
 import haxe.ds.Option;
 import realitz.tezos.rpc.encoding.Requests.InjectBlock;
+import realitz.tezos.rpc.encoding.Requests.InjectOperation;
+import realitz.tezos.rpc.encoding.Requests.InjectProtocol;
 import realitz.tezos.rpc.encoding.Responses.InvalidBlockResponse;
 import realitz.tezos.rpc.encoding.Responses.Mempool;
 
@@ -151,6 +153,30 @@ class Shell {
       trace("Result " + res);
     }else {
       trace("No data found");
+    }
+  }
+  static function injectOperation(config : RPCConfig, operation : InjectOperation) {
+    var httpRequest : Http = config.getHttpWithPath("injection/operation");
+    httpRequest.setHeader("Content-type", "application/json");
+    httpRequest.setPostData(operation.data);
+    httpRequest.request(true);
+    var res : Null<String> = httpRequest.responseData;
+    if (res != null) {
+      trace ("Result " + res);
+    }else {
+      trace ("Inject operation for $operation, failed");
+    }
+  }
+  static function injectProtocol(config : RPCConfig, protocol : InjectProtocol) {
+    var httpRequest : Http = config.getHttpWithPath("injection/protocol");
+    httpRequest.setHeader("Content-type", "application/json");
+    httpRequest.setPostData(protocol.toJSON());
+    httpRequest.request(true);
+    var res : Null<String> = httpRequest.responseData;
+    if (res != null) {
+      trace("Result " + res);
+    }else {
+      trace("Inject protocol for $protocol failed");
     }
   }
 }

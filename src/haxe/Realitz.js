@@ -799,8 +799,25 @@ var realitz_tezos_rpc_encoding_InjectOperation = function() { };
 realitz_tezos_rpc_encoding_InjectOperation.__name__ = true;
 var realitz_tezos_rpc_encoding_Component = function() { };
 realitz_tezos_rpc_encoding_Component.__name__ = true;
+realitz_tezos_rpc_encoding_Component.toJSON = function(components) {
+	var result = new List();
+	var _g_head = components.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var aComponent = val;
+		result.add({ "name" : aComponent.name, "interface" : aComponent._interface, "implementation" : aComponent.implementation});
+	}
+	return result;
+};
 var realitz_tezos_rpc_encoding_InjectProtocol = function() { };
 realitz_tezos_rpc_encoding_InjectProtocol.__name__ = true;
+realitz_tezos_rpc_encoding_InjectProtocol.prototype = {
+	toJSON: function() {
+		var dyn = { "expected_env_version" : this.expectedEnvVersion, "components" : realitz_tezos_rpc_encoding_Component.toJSON(this.components)};
+		return JSON.stringify(dyn);
+	}
+};
 var realitz_tezos_rpc_encoding_InvalidBlockResponse = function() { };
 realitz_tezos_rpc_encoding_InvalidBlockResponse.__name__ = true;
 var realitz_tezos_rpc_encoding_Bootstrapped = function() { };
@@ -1005,6 +1022,30 @@ realitz_tezos_rpc_encoding_Shell.injectBlock = function(config,chainId,aBlock) {
 		console.log("Result " + res);
 	} else {
 		console.log("No data found");
+	}
+};
+realitz_tezos_rpc_encoding_Shell.injectOperation = function(config,operation) {
+	var httpRequest = config.getHttpWithPath("injection/operation");
+	httpRequest.setHeader("Content-type","application/json");
+	httpRequest.setPostData(operation.data);
+	httpRequest.request(true);
+	var res = httpRequest.responseData;
+	if(res != null) {
+		console.log("Result " + res);
+	} else {
+		console.log("Inject operation for $operation, failed");
+	}
+};
+realitz_tezos_rpc_encoding_Shell.injectProtocol = function(config,protocol) {
+	var httpRequest = config.getHttpWithPath("injection/protocol");
+	httpRequest.setHeader("Content-type","application/json");
+	httpRequest.setPostData(protocol.toJSON());
+	httpRequest.request(true);
+	var res = httpRequest.responseData;
+	if(res != null) {
+		console.log("Result " + res);
+	} else {
+		console.log("Inject protocol for $protocol failed");
 	}
 };
 String.__name__ = true;

@@ -27,14 +27,14 @@ Require Import List ZArith Bool String.
 Require Export ZArith_base.
 Require Export Coq.Reals.Rdefinitions.
 Require Import Coq.Lists.List.
+From mathcomp Require Import all_ssreflect.
+Set Implicit Arguments.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
 
 (**
 Remediation of properties contaminated with oil and associated volatile organic compounds (VOCS) present a unique challenge as well as an investment opportunity to investors with an appetite for risk. The goal of this application is to streamline as well as document all of the steps from the inception of the project to settlement. The overall goal of the application is to manage the costs of documenation as well as to provide local regulatory authority with the progress on a property transparently. 
 *)
-
-Record Property := mkProperty {
-  address : string
-}
 
 (** * Application lifecycle *)
 (** The application needs to address the needs of various participants or actors and this section 
@@ -73,27 +73,46 @@ and assigned to the project. Each contractor has a liability requirement that ne
 (** Project planning *)
 (** Each project is divided into task that has a rate and number of units associated with it. Moreover, each task has a start date, end date with [WorkAuthorization] and [WorkInspection] to release [Payment]s worker.
 *)
-Record Task : Set := mkTask {
-  taskId : Z; 
-  taskDescription : string; 
+
+(** The address and location for the property. TODO: assign a risk score for the
+property. *)
+Record property : Type := Property {address : string}.
+
+(** Various tasks needed to completed on the property. These could involve *)
+Record task : Type := Task {taskId : Z; 
+  taskDescription : string;
   rate : R;
-  numberOfUnits : Z
+  numberOfUnits : R
+  }.
+
+Record budget : Type := Bugdet {
+  amount : R;
 }
 
-Record Edge : Set := mkEdge {
+(** Prove that the sum of all tasks is less than or equal to the amount in the budget*)
+
+
+Record edge : Type := Edge {
   from : Task; 
   to : Task
-}
+}.
 
-Record Project : Set := mkProject {
+Record project : Type := Project {
   tasks : list Edge
-}
+}.
+
+(** Lemma : No task left behind. Given a project no task should be executed that has a
+predecessor pending or not approved *)
+
+(** Lemma : No cycles in the task*)
 
 (** Investor exposure*)
 (** A given investor will usually have a risk appetite that will be computed based on the 
-risk profile. Additionally, each transaction will need to go through a pre-approval process to help cover for any losses in existing investemnts*)
-Record InvestorExposure : Set := mkInvestorExposure{
-  (** The exposure for each investor so far. *)
+risk profile. Additionally, each transaction will need to go through 
+a pre-approval process to help cover for any losses in existing investments.*)
+
+Record InvestorExposure : Type := InvestorExposure {
   exposure : R;
-  property : list Property
+  properties : list Property
 }.
+
