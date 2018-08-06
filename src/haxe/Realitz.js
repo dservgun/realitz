@@ -375,14 +375,8 @@ realitz_core_Property.prototype = {
 };
 var realitz_tezos_rpc_BlockHeaderWithData = function() { };
 realitz_tezos_rpc_BlockHeaderWithData.__name__ = true;
-var realitz_tezos_rpc_IdPoint = function() { };
-realitz_tezos_rpc_IdPoint.__name__ = true;
-var realitz_tezos_rpc_ConnectionVersion = function() { };
-realitz_tezos_rpc_ConnectionVersion.__name__ = true;
 var realitz_tezos_rpc_Metadata = function() { };
 realitz_tezos_rpc_Metadata.__name__ = true;
-var realitz_tezos_rpc_ConnectionInformation = function() { };
-realitz_tezos_rpc_ConnectionInformation.__name__ = true;
 var realitz_tezos_rpc_PoolEvent = { __ename__ : true, __constructs__ : ["TooFewConnections","TooManyConnections","NewPoint","NewPeer","GCPoints","IncomingConnection","OutgoingConnection","AuthenticationFailed","AcceptingRequest","RejectingRequest","RequestRejected","ConnectionEstablished","SwapRequestReceived","SwapAckReceived","SwapRequestSent","SwapAckSent","SwapRequestIgnored","SwapSuccess","SwapFailure","Disconnection","ExternalDisconnection"] };
 realitz_tezos_rpc_PoolEvent.TooFewConnections = ["TooFewConnections",0];
 realitz_tezos_rpc_PoolEvent.TooFewConnections.__enum__ = realitz_tezos_rpc_PoolEvent;
@@ -746,6 +740,15 @@ var realitz_tezos_rpc_ChainId = function(aString) {
 realitz_tezos_rpc_ChainId.__name__ = true;
 var realitz_tezos_rpc_PublicKey = function() { };
 realitz_tezos_rpc_PublicKey.__name__ = true;
+var realitz_tezos_rpc_IdPoint = function() { };
+realitz_tezos_rpc_IdPoint.__name__ = true;
+var realitz_tezos_rpc_ConnectionVersion = function() { };
+realitz_tezos_rpc_ConnectionVersion.__name__ = true;
+var realitz_tezos_rpc_ConnectionInformation = function() { };
+realitz_tezos_rpc_ConnectionInformation.__name__ = true;
+realitz_tezos_rpc_ConnectionInformation.parseJSON = function(dyn) {
+	return new List();
+};
 var realitz_tezos_rpc_Signature = function() { };
 realitz_tezos_rpc_Signature.__name__ = true;
 var realitz_tezos_rpc_EndorsementKind = { __ename__ : true, __constructs__ : ["Endorsement"] };
@@ -1127,6 +1130,17 @@ realitz_tezos_rpc_encoding_Shell.monitorValidBlocks = function(config,protocol,n
 		return haxe_ds_Option.Some(new realitz_tezos_rpc_encoding_ValidBlockSummary(dyn));
 	} else {
 		return haxe_ds_Option.None;
+	}
+};
+realitz_tezos_rpc_encoding_Shell.getNetworkConnections = function(config) {
+	var httpRequest = config.getHttpWithPath("network/connections");
+	httpRequest.request();
+	var res = httpRequest.responseData;
+	if(res != null) {
+		var dyn = JSON.parse(res);
+		return realitz_tezos_rpc_ConnectionInformation.parseJSON(dyn);
+	} else {
+		return new List();
 	}
 };
 var realitz_tezos_rpc_encoding_ValidBlockSummary = function(dyn) {

@@ -32,7 +32,17 @@
 \coqdockw{Unset} \coqdockw{Printing} \coqdockw{Implicit} \coqdocvar{Defensive}.\coqdoceol
 \coqdocemptyline
 \end{coqdoccode}
-Remediation of properties contaminated with oil and associated volatile organic compounds (VOCS) present a unique challenge as well as an investment opportunity to investors with an appetite for risk. The goal of this application is to streamline as well as document all of the steps from the inception of the project to settlement. The overall goal of the application is to manage the costs of documenation as well as to provide local regulatory authority with the progress on a property transparently. 
+ Remediation of properties contaminated with oil and associated volatile organic 
+ compounds (VOCS) present a unique challenge as well as an investment opportunity to 
+ investors with an appetite for risk. The goal of this application is to streamline as well as 
+ document all of the steps from the inception of the project to settlement. 
+
+
+ The overall goal of the application is to manage the costs of documentation as well as to provide
+  local regulatory authority with the progress on a property transparently. 
+\subsubsection{Author : Copyright (c) Dinkar Ganti, dinkar.ganti@gmail.com}
+
+
 
 
 \section{Application lifecycle}
@@ -244,19 +254,35 @@ a pre-approval process to help cover for any losses in existing investments.
 \item  User gathering and uploading \coqdocvar{MeetingNote}s on the system.
 
 \end{itemize}
-)
+\begin{coqdoccode}
+\coqdocemptyline
+\coqdocnoindent
+\coqdockw{Record} \coqdocvar{realitzFee} : \coqdockw{type} := \coqdocvar{RealitzFee} \{\coqdocvar{percent} : \coqdocvar{R}\}.\coqdoceol
+\coqdocemptyline
+\end{coqdoccode}
+\section{Venue}
 
 
-Record realitzFee : type := RealitzFee \{percent : R\}.
-
-
-Record venue : type := Venue \{date : Date; location : string\}.
-
-
-Record meetingNote : type := MeetingNote \{
-  venue : Venue;
-  remarks : string;
-    participants : seq string
-  \}.\begin{coqdoccode}
+\begin{coqdoccode}
+\coqdocnoindent
+\coqdockw{Record} \coqdocvar{venue} : \coqdockw{type} := \coqdocvar{Venue} \{\coqdocvar{date} : \coqdocvar{Date}; \coqdocvar{location} : \coqdocvar{string}\}.\coqdoceol
+\coqdocemptyline
+\coqdocnoindent
+\coqdockw{Record} \coqdocvar{meetingNote} : \coqdockw{type} := \coqdocvar{MeetingNote} \{\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{venue} : \coqdocvar{Venue};\coqdoceol
+\coqdocindent{1.00em}
+\coqdocvar{remarks} : \coqdocvar{string};\coqdoceol
+\coqdocindent{1.00em}
+\end{coqdoccode}
+Participant hashes that attended the meeting\begin{coqdoccode}
+\coqdocindent{1.00em}
+\coqdocvar{participants} : \coqdocvar{seq} \coqdocvar{string}\coqdoceol
+\coqdocindent{1.00em}
+\end{coqdoccode}
+Future release: any conference calls associated with the meeting so 
+  they are recorded appropriately and uploaded to the system for records \begin{coqdoccode}
+\coqdocnoindent
+\}.\coqdoceol
 \end{coqdoccode}
 \end{document}

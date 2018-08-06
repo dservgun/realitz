@@ -33,7 +33,14 @@ Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
 (**
-Remediation of properties contaminated with oil and associated volatile organic compounds (VOCS) present a unique challenge as well as an investment opportunity to investors with an appetite for risk. The goal of this application is to streamline as well as document all of the steps from the inception of the project to settlement. The overall goal of the application is to manage the costs of documenation as well as to provide local regulatory authority with the progress on a property transparently. 
+ Remediation of properties contaminated with oil and associated volatile organic 
+ compounds (VOCS) present a unique challenge as well as an investment opportunity to 
+ investors with an appetite for risk. The goal of this application is to streamline as well as 
+ document all of the steps from the inception of the project to settlement. 
+ 
+ The overall goal of the application is to manage the costs of documentation as well as to provide
+  local regulatory authority with the progress on a property transparently. 
+*** Author : Copyright (c) Dinkar Ganti, dinkar.ganti@gmail.com
 *)
 
 (** * Application lifecycle *)

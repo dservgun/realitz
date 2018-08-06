@@ -162,7 +162,10 @@ class Shell {
     }else {
       return None;
     }
-  }  
+  } 
+  /**
+    Injection operations
+  */ 
   static function injectBlock (config : RPCConfig, chainId : String, aBlock : InjectBlock) {
     
     var httpRequest : Http = config.getHttpWithPath(
@@ -203,6 +206,9 @@ class Shell {
       trace("Inject protocol for $protocol failed");
     }
   }
+  /**
+  * Monitoring operations.
+  */
   static function monitorBootstrappedBlocks(config : RPCConfig) : Option<Bootstrapped> {
     var httpRequest : Http = config.getHttpWithPath("monitor/bootstrapped");
     httpRequest.request();
@@ -254,6 +260,21 @@ class Shell {
       return None;
     }
   }
+
+  /** Network operations */
+  static function getNetworkConnections(config : RPCConfig) : 
+    List<ConnectionInformation> {
+      var httpRequest : Http = config.getHttpWithPath("network/connections");
+      httpRequest.request();
+      var res : Null<String> = httpRequest.responseData;
+      if (res != null) {
+        var dyn : Dynamic = haxe.Json.parse(res);
+        return (ConnectionInformation.parseJSON(dyn));
+      }else {
+        return (new List());
+      }
+    }
+
 }
 
 //TODO: These types need to be consolidated. 

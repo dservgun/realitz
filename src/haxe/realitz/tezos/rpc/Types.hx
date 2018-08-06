@@ -173,6 +173,28 @@ class PublicKey {
   var hash : String;
 }
 
+class IdPoint {
+  var address : String;
+  var port : Int;
+}
+
+class ConnectionVersion {
+  var name : String;
+  var major : Int;
+  var minor : Int;
+}
+
+class ConnectionInformation {
+  var incoming : Bool;
+  var peerId : PeerId;
+  var idPoint : IdPoint;
+  var remoteSocketPort : Int;
+  var versions : List<ConnectionVersion>;
+  public static function parseJSON(dyn : Dynamic) : List<ConnectionInformation> {
+    return (new List()); //TODO
+  }
+}
+
 /*
   $inlined.endorsement:
     { "branch": $block_hash,

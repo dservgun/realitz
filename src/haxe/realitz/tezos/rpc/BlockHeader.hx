@@ -66,26 +66,9 @@ class BlockHeaderWithData {
 }
 
 
-class IdPoint {
-  var address : String;
-  var port : Int;
-}
-
-class ConnectionVersion {
-  var name : String;
-  var major : Int;
-  var minor : Int;
-}
 
 class Metadata {
   var data : Bytes; //TO Be completed
-}
-class ConnectionInformation {
-  var incoming : Bool;
-  var peerId : PeerId;
-  var idPoint : IdPoint;
-  var remoteSocketPort : Int;
-  var versions : List<ConnectionVersion>;
 }
 
 enum PoolEvent {
