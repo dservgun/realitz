@@ -93,8 +93,8 @@ Math.__name__ = true;
 var Realitz = function() { };
 Realitz.__name__ = true;
 Realitz.main = function() {
-	console.log("Hello Realitz");
-	var e = realitz_tezos_rpc_Error.EmptyAnswer;
+	var config = new realitz_tezos_rpc_encoding_RPCConfig("localhost","18731");
+	console.log(realitz_tezos_rpc_encoding_Shell.getBlocksForAChain(config,"NetXyX7RcTn1u5z",haxe_ds_Option.None,haxe_ds_Option.None,haxe_ds_Option.None));
 };
 var haxe_Http = function(url) {
 	this.url = url;
@@ -740,14 +740,47 @@ var realitz_tezos_rpc_ChainId = function(aString) {
 realitz_tezos_rpc_ChainId.__name__ = true;
 var realitz_tezos_rpc_PublicKey = function() { };
 realitz_tezos_rpc_PublicKey.__name__ = true;
-var realitz_tezos_rpc_IdPoint = function() { };
+var realitz_tezos_rpc_IdPoint = function(aDyn) {
+	this.address = aDyn.addr;
+	this.port = aDyn.port;
+};
 realitz_tezos_rpc_IdPoint.__name__ = true;
-var realitz_tezos_rpc_ConnectionVersion = function() { };
+var realitz_tezos_rpc_ConnectionVersion = function(dyn) {
+	this.name = dyn.name;
+	this.major = dyn.major;
+	this.minor = dyn.minor;
+};
 realitz_tezos_rpc_ConnectionVersion.__name__ = true;
-var realitz_tezos_rpc_ConnectionInformation = function() { };
+realitz_tezos_rpc_ConnectionVersion.fromList = function(dynList) {
+	var result = new List();
+	var _g_head = dynList.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var aDyn = val;
+		result.add(new realitz_tezos_rpc_ConnectionVersion(aDyn));
+	}
+	return result;
+};
+var realitz_tezos_rpc_ConnectionInformation = function(aDyn) {
+	this.incoming = aDyn.incoming;
+	this.peerId = aDyn.peer_id;
+	this.idPoint = new realitz_tezos_rpc_IdPoint(aDyn.id_point);
+	this.remoteSocketPort = aDyn.remote_socket_port;
+	this.versions = realitz_tezos_rpc_ConnectionVersion.fromList(aDyn.versions);
+};
 realitz_tezos_rpc_ConnectionInformation.__name__ = true;
 realitz_tezos_rpc_ConnectionInformation.parseJSON = function(dyn) {
-	return new List();
+	var result = new List();
+	var _g_head = result.h;
+	while(_g_head != null) {
+		var val = _g_head.item;
+		_g_head = _g_head.next;
+		var aDyn = val;
+		var connInfo = new realitz_tezos_rpc_ConnectionInformation(aDyn);
+		result.add(connInfo);
+	}
+	return result;
 };
 var realitz_tezos_rpc_Signature = function() { };
 realitz_tezos_rpc_Signature.__name__ = true;
@@ -932,7 +965,10 @@ realitz_tezos_rpc_encoding_Mempool.fromDynamic = function(mempoolResponse) {
 	var unprocessed = realitz_tezos_rpc_encoding_Mempool.unprocessedMem(mempoolResponse.unprocessed);
 	return new realitz_tezos_rpc_encoding_Mempool(applied,refused,branchRefused,branchDelayed,unprocessed);
 };
-var realitz_tezos_rpc_encoding_RPCConfig = function() { };
+var realitz_tezos_rpc_encoding_RPCConfig = function(aUrl,aPort) {
+	this.url = aUrl;
+	this.port = aPort;
+};
 realitz_tezos_rpc_encoding_RPCConfig.__name__ = true;
 realitz_tezos_rpc_encoding_RPCConfig.prototype = {
 	getHttp: function() {

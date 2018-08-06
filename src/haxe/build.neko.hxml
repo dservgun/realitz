@@ -1,6 +1,5 @@
 -cp .
 -v 
 libs.hxml
--js TestRealitz.js
+-neko TestRealitz.n
 -main TestRealitz.hx
--cmd echo "JS done."

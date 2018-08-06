@@ -176,12 +176,28 @@ class PublicKey {
 class IdPoint {
   var address : String;
   var port : Int;
+  public function new (aDyn : Dynamic) {
+    address = aDyn.addr;
+    port = aDyn.port;
+  }
 }
 
 class ConnectionVersion {
   var name : String;
   var major : Int;
   var minor : Int;
+  public function new (dyn : Dynamic) {
+    name = dyn.name;
+    major = dyn.major;
+    minor = dyn.minor;
+  }
+  public static function fromList(dynList : List<Dynamic>) {
+    var result : List<ConnectionVersion> = new List();
+    for (aDyn in dynList) {
+      result.add(new ConnectionVersion(aDyn));
+    }
+    return result;
+  }
 }
 
 class ConnectionInformation {
@@ -190,8 +206,20 @@ class ConnectionInformation {
   var idPoint : IdPoint;
   var remoteSocketPort : Int;
   var versions : List<ConnectionVersion>;
-  public static function parseJSON(dyn : Dynamic) : List<ConnectionInformation> {
-    return (new List()); //TODO
+  public function new (aDyn : Dynamic) {
+    incoming = aDyn.incoming;
+    peerId = aDyn.peer_id;
+    idPoint = new IdPoint(aDyn.id_point);
+    remoteSocketPort = aDyn.remote_socket_port;
+    versions = ConnectionVersion.fromList(aDyn.versions);
+  }
+  public static function parseJSON(dyn : List<Dynamic>) : List<ConnectionInformation> {
+    var result : List<ConnectionInformation> = new List();
+    for (aDyn in result) {
+      var connInfo = new ConnectionInformation(aDyn);
+      result.add(connInfo);
+    }
+    return result;
   }
 }
 

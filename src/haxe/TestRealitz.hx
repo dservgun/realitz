@@ -40,9 +40,19 @@ import realitz.tezos.rpc.WorkerTypes;
 import realitz.tezos.rpc.encoding.Responses;
 import realitz.tezos.rpc.encoding.Requests;
 import realitz.tezos.rpc.encoding.ShellRequestAPI;
-class Realitz {
+
+/**
+* A simple test shell for testing all requests given a config. 
+* Assuming localhost with a port.
+*/
+class TestRealitz {
+  
+  static function testGetChainId(config : RPCConfig, aChain : String) {
+    trace(Shell.getChainId(config, aChain));
+  }
   static function main () {
-    trace("Hello Realitz");
-    var e : Error = EmptyAnswer;
+    var config = new RPCConfig("http://localhost", "18731");
+    testGetChainId(config, "main");
+
   }
 }

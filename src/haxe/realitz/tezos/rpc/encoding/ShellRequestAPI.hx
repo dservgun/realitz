@@ -40,10 +40,15 @@ class RPCConfig {
   public var url (default, null) : String;
   public var port (default, null) : String;
   public function getHttp() : Http {
-    return (new Http("$url:$port"));
+    return (new Http('$url:$port'));
   }
   public function getHttpWithPath(path : String) : Http {
-    return (new Http("$url:$port/$path"));
+    return (new Http('$url:$port/$path'));
+  }
+
+  public function new (aUrl : String, aPort : String) {
+    url = aUrl;
+    port = aPort;
   }
 
 }
@@ -89,16 +94,19 @@ class Shell {
       case None : return request;
     }
   }
-  static function getBlocksForAChain(config : RPCConfig, chainId : String, 
+  public static function getBlocksForAChain(config : RPCConfig, chainId : String, 
     length : Option<Int>, 
     head  : Option<BlockHash>, 
     minDate : Option<Date>) : List<List<BlockHash>> {
-    var httpRequest : Http =  config.getHttpWithPath("chains/$chainId/blocks");
+    var requestString = "chains" + "/" + chainId + "/" + "blocks";
+    trace(requestString);
+    var httpRequest : Http =  config.getHttpWithPath(requestString);
     var httpRequest1 : Http = setLength(length, httpRequest);
     var httpRequest2 : Http = setHead(head, httpRequest1);
     var httpRequest3 : Http = setMinDate(minDate, httpRequest2);
     httpRequest3.request();
     var res : Null<String> = httpRequest3.responseData;
+    trace("Result " + res);
     if (res != null) {
       var result = haxe.Json.parse(res);
       return result;
@@ -107,15 +115,12 @@ class Shell {
     }
   }
 
-  static function getChainId (config : RPCConfig, chainId : String) : Option<ChainId> {
-    var httpRequest : Http = config.getHttpWithPath("chains/$chainId/chain_id");
+  public static function getChainId (config : RPCConfig, chainId : String) : Option<ChainId> {
+    var httpRequest : Http = config.getHttpWithPath("chains/" + chainId + "/chain_id");
+    trace(httpRequest);
+    httpRequest.setHeader("Content-type", "application/json");
     httpRequest.request();
-    var res : Null<String> = httpRequest.responseData;
-    if (res != null) {
-      return (Some (new ChainId(haxe.Json.parse(res))));
-    }else {
-      return None;
-    }
+    return (Some(new ChainId(haxe.Json.parse(httpRequest.responseData))));
   }
 
   static function getInvalidBlocks(config : RPCConfig, chainId : String) : List<InvalidBlockResponse> {
@@ -268,7 +273,7 @@ class Shell {
       httpRequest.request();
       var res : Null<String> = httpRequest.responseData;
       if (res != null) {
-        var dyn : Dynamic = haxe.Json.parse(res);
+        var dyn : List<Dynamic> = haxe.Json.parse(res);
         return (ConnectionInformation.parseJSON(dyn));
       }else {
         return (new List());
