@@ -40,6 +40,7 @@ import realitz.tezos.rpc.WorkerTypes;
 import realitz.tezos.rpc.encoding.Responses;
 import realitz.tezos.rpc.encoding.Requests;
 import realitz.tezos.rpc.encoding.ShellRequestAPI;
+import realitz.tezos.rpc.encoding.RPCConfig;
 
 /**
 * A simple test shell for testing all requests given a config. 
@@ -50,9 +51,29 @@ class TestRealitz {
   static function testGetChainId(config : RPCConfig, aChain : String) {
     trace(Shell.getChainId(config, aChain));
   }
+  static function testBlocksForAChain(config : RPCConfig, aChain : String) {
+    trace(Shell.getBlocksForAChain(config, aChain, None, None, None));
+  }
+  static function testInvalidBlocks(config : RPCConfig, aChain : String) {
+    trace(Shell.getInvalidBlocks(config, aChain));
+  }
+  static function testGetMempool (config : RPCConfig, aChain : String) {
+    trace(Shell.getMempool(config, aChain));
+  }
+  static function testMonitorBootstrapped(config : RPCConfig) {
+    trace(Shell.monitorBootstrappedBlocks(config));
+  }
+  static function testMonitorHeadBlockForChain(config : RPCConfig) {
+      trace("Monitor head block for a chain");
+      trace(Shell.monitorHeadBlockForChain(config, "main", None));
+    }
   static function main () {
     var config = new RPCConfig("http://localhost", "18731");
     testGetChainId(config, "main");
-
+    testBlocksForAChain(config, "main");
+    testInvalidBlocks(config, "main");
+    testGetMempool(config, "main");
+    testMonitorBootstrapped(config);
+    testMonitorHeadBlockForChain(config);
   }
 }

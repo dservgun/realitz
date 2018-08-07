@@ -35,24 +35,7 @@ import realitz.tezos.rpc.encoding.Requests.InjectProtocol;
 import realitz.tezos.rpc.encoding.Responses.InvalidBlockResponse;
 import realitz.tezos.rpc.encoding.Responses.Bootstrapped;
 import realitz.tezos.rpc.encoding.Responses.Mempool;
-
-class RPCConfig {
-  public var url (default, null) : String;
-  public var port (default, null) : String;
-  public function getHttp() : Http {
-    return (new Http('$url:$port'));
-  }
-  public function getHttpWithPath(path : String) : Http {
-    return (new Http('$url:$port/$path'));
-  }
-
-  public function new (aUrl : String, aPort : String) {
-    url = aUrl;
-    port = aPort;
-  }
-
-}
-
+import realitz.tezos.rpc.encoding.RPCConfig;
 class Shell {
 
   private static function setOptionalParameters<A>
@@ -123,11 +106,12 @@ class Shell {
     return (Some(new ChainId(haxe.Json.parse(httpRequest.responseData))));
   }
 
-  static function getInvalidBlocks(config : RPCConfig, chainId : String) : List<InvalidBlockResponse> {
-    var httpRequest : Http = config.getHttpWithPath("chains/$chainId/invalid_blocks");
+  public static function getInvalidBlocks(config : RPCConfig, chainId : String) : List<InvalidBlockResponse> {
+    var httpRequest : Http = config.getHttpWithPath('chains/$chainId/invalid_blocks');
     httpRequest.request();
     var res : Null<String> = httpRequest.responseData;
     if (res != null) {
+      trace(res);
       return (haxe.Json.parse(res));
     }else {
       return (new List());
@@ -136,7 +120,7 @@ class Shell {
 
   static function getInvalidBlock(config : RPCConfig, chainId : String, blockHash : String) : Option<InvalidBlockResponse> {
     var httpRequest : Http = config.getHttpWithPath(
-      "chains/$chainId/invalid_blocks/$blockkHash"
+      'chains/$chainId/invalid_blocks/$blockHash'
     );
     httpRequest.request();
     var res : Null<String> = httpRequest.responseData;
@@ -155,14 +139,15 @@ class Shell {
     throw "Function not supported.";
   }
 
-  static function getMempool (config : RPCConfig, chainId : String) : Option<Mempool> {
+  public static function getMempool (config : RPCConfig, chainId : String) : Option<Mempool> {
     var httpRequest : Http = config.getHttpWithPath(
-      "chains/$chainId/mempool"
+      'chains/$chainId/mempool'
     );
     httpRequest.request();
     var res : Null<String> = httpRequest.responseData;
     if (res != null) {
       var result : Dynamic = haxe.Json.parse(res);
+      trace(result);
       return Some(Mempool.fromDynamic(result));
     }else {
       return None;
@@ -214,7 +199,7 @@ class Shell {
   /**
   * Monitoring operations.
   */
-  static function monitorBootstrappedBlocks(config : RPCConfig) : Option<Bootstrapped> {
+  public static function monitorBootstrappedBlocks(config : RPCConfig) : Option<Bootstrapped> {
     var httpRequest : Http = config.getHttpWithPath("monitor/bootstrapped");
     httpRequest.request();
     var res : Null<String> = httpRequest.responseData;
@@ -225,12 +210,11 @@ class Shell {
       return None;
     }
   }
-  static function monitorHeadBlockForChain (config : RPCConfig, chainId : Option<ChainId>, nextProtocol : Option<ProtocolHash>) : Option<BlockHash> {
-    var httpRequestO : Http = config.getHttpWithPath("monitor/heads/$cId");
+  public static function monitorHeadBlockForChain (config : RPCConfig, chainId : String, nextProtocol : Option<ProtocolHash>) : Option<BlockHash> {
+    var httpRequestO : Http = config.getHttpWithPath('monitor/heads/$chainId');
     var httpRequest1 : Http = setNextProtocol(nextProtocol, httpRequestO);
-    var httpRequest : Http = setChainIdParameter(chainId, httpRequest1);
-    httpRequest.request();
-    var res : Null<String> = httpRequest.responseData;
+    httpRequest1.request();
+    var res : Null<String> = httpRequest1.responseData;
     if (res != null) {
       return (Some (new BlockHash(res)));
     }else {

@@ -150,9 +150,9 @@ class Mempool {
     }
     return result;
   }
-  private static function refusedMem(appliedMempool : Iterator<Dynamic>) : List<MempoolType> {
+  private static function refusedMem(refusedMem : Iterator<Dynamic>) : List<MempoolType> {
     var result : List<MempoolType> = new List();
-    for (aVal in appliedMempool) {
+    for (aVal in refusedMem) {
       result.add(Refused(aVal.hash, aVal.branch, aVal.data, aVal.errors));
     }
     return result;
@@ -185,13 +185,13 @@ class Mempool {
   public static function fromDynamic(mempoolResponse : Dynamic) : Mempool {
     var applied : List<MempoolType> = appliedMem(mempoolResponse.applied.iterator());
     var refused : List<MempoolType> = 
-        refusedMem(mempoolResponse.refused);
+        refusedMem(mempoolResponse.refused.iterator());
     var branchRefused : List<MempoolType> = 
-      branchRefusedMem(mempoolResponse.branch_refused);
+      branchRefusedMem(mempoolResponse.branch_refused.iterator());
     var branchDelayed : List<MempoolType> = 
-      branchDelayedMem(mempoolResponse.branch_delayed);
+      branchDelayedMem(mempoolResponse.branch_delayed.iterator());
     var unprocessed : List<MempoolType>  = 
-      unprocessedMem(mempoolResponse.unprocessed);
+      unprocessedMem(mempoolResponse.unprocessed.iterator());
     return (new Mempool(applied, refused, branchRefused, branchDelayed, unprocessed));
     
   }
