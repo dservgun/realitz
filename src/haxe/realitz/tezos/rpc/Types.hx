@@ -170,7 +170,7 @@ typedef Baker = PublicKey
 typedef PublicKeyHash = BlockHash
 typedef OperationsHash = BlockHash
 class PublicKey {
-  var hash : String;
+  public var hash (default, null) : String;
 }
 
 class IdPoint {
@@ -191,9 +191,10 @@ class ConnectionVersion {
     major = dyn.major;
     minor = dyn.minor;
   }
-  public static function fromList(dynList : List<Dynamic>) {
+  public static function fromArray(dynList : Array<Dynamic>) : List<ConnectionVersion> {
     var result : List<ConnectionVersion> = new List();
     for (aDyn in dynList) {
+      trace(aDyn);
       result.add(new ConnectionVersion(aDyn));
     }
     return result;
@@ -202,24 +203,32 @@ class ConnectionVersion {
 
 class ConnectionInformation {
   var incoming : Bool;
-  var peerId : PeerId;
+  public var peerId (default, null) : PeerId;
   var idPoint : IdPoint;
   var remoteSocketPort : Int;
   var versions : List<ConnectionVersion>;
   public function new (aDyn : Dynamic) {
+    trace("Creating connection information"); 
     incoming = aDyn.incoming;
     peerId = aDyn.peer_id;
     idPoint = new IdPoint(aDyn.id_point);
     remoteSocketPort = aDyn.remote_socket_port;
-    versions = ConnectionVersion.fromList(aDyn.versions);
+    versions = ConnectionVersion.fromArray(aDyn.versions);
   }
-  public static function parseJSON(dyn : List<Dynamic>) : List<ConnectionInformation> {
+
+  public static function parseJSON(dyn : Array<Dynamic>) : List<ConnectionInformation> {
     var result : List<ConnectionInformation> = new List();
-    for (aDyn in result) {
-      var connInfo = new ConnectionInformation(aDyn);
-      result.add(connInfo);
+    try {
+      for (aDyn in dyn) {
+        var connInfo = new ConnectionInformation(aDyn);
+        trace('Adding $connInfo');
+        result.add(connInfo);
+      }
+      return result;      
+    }catch(err : String) {
+      trace('$err');
+      return (new List());
     }
-    return result;
   }
 }
 

@@ -46,55 +46,19 @@ import realitz.tezos.rpc.encoding.RPCConfig;
 * A simple test shell for testing all requests given a config. 
 * Assuming localhost with a port.
 */
-class TestRealitz {
-  
-  static function testGetChainId(config : RPCConfig, aChain : String) {
-    trace(Shell.getChainId(config, aChain));
-  }
-  static function testBlocksForAChain(config : RPCConfig, aChain : String) {
-    trace(Shell.getBlocksForAChain(config, aChain, None, None, None));
-  }
-  static function testInvalidBlocks(config : RPCConfig, aChain : String) {
-    trace(Shell.getInvalidBlocks(config, aChain));
-  }
-  static function testGetMempool (config : RPCConfig, aChain : String) {
-    trace(Shell.getMempool(config, aChain));
-  }
-  static function testMonitorBootstrapped(config : RPCConfig) {
-    trace(Shell.monitorBootstrappedBlocks(config));
-  }
-  static function testMonitorHeadBlockForChain(config : RPCConfig) {
-      trace("Monitor head block for a chain");
-      trace(Shell.monitorHeadBlockForChain(config, "main", None));
-    }
-  static function testMonitorProtocols(config : RPCConfig) {
-    trace("Monitor protocols");
-    trace(Shell.monitorProtocols(config));
-  }
-  static function testMonitorValidBlocks(config : RPCConfig) {
-    trace("Shell monitor valid blocks");
-    trace(Shell.monitorValidBlocks(config, None, None, None));
-  }
+class TestNetworkConnection {
   static function testGetNetworkConnections(config : RPCConfig) {
     trace("Test get network connections");
     var peers : List<ConnectionInformation> = 
       Shell.getNetworkConnections(config);
     for (peer in peers) {
+      trace(peer);
       trace(Shell.getPeerDetails(config, peer.peerId));
     }
     trace("Done querying.");
-
   }
   static function main () {
     var config = new RPCConfig("http://localhost", "18732");
-    testGetChainId(config, "main");
-    testBlocksForAChain(config, "main");
-    testInvalidBlocks(config, "main");
-    testGetMempool(config, "main");
-    testMonitorBootstrapped(config);
-    testMonitorHeadBlockForChain(config);
-    testMonitorProtocols(config);
-    //testMonitorValidBlocks(config);
     testGetNetworkConnections(config);
   }
 }

@@ -223,7 +223,7 @@ class Shell {
   }
 
   //TODO : FIX ME (the documentation from the main source).
-  static function monitorProtocols (config : RPCConfig) : Option<BlockHash> {
+  public static function monitorProtocols (config : RPCConfig) : Option<BlockHash> {
     var httpRequest : Http = config.getHttpWithPath("monitor/protocols");
     httpRequest.request();
     var res : Null<String> = httpRequest.responseData;
@@ -234,15 +234,17 @@ class Shell {
     }
   }
 
-  static function monitorValidBlocks(config : RPCConfig, protocol : Option<ProtocolHash>, nextProtocol : Option<ProtocolHash>, 
+  public static function monitorValidBlocks(config : RPCConfig, protocol : Option<ProtocolHash>, nextProtocol : Option<ProtocolHash>, 
   chainId : Option<ChainId>) : Option<ValidBlockSummary> {
     var httpRequest : Http = config.getHttpWithPath("monitor/valid_blocks");
     var httpRequest0 : Http = setProtocol(protocol, httpRequest);
     var httpRequest1 : Http = setNextProtocol(protocol, httpRequest0);
     var httpRequest2 : Http = setChainIdParameter(chainId, httpRequest1);
+    trace(httpRequest + " " + httpRequest2);
     httpRequest2.request();
-    var res : Null<String> = httpRequest.responseData;
+    var res : Null<String> = httpRequest2.responseData;
     if (res != null){
+      trace("Result:" + res);
       var dyn : Dynamic = haxe.Json.parse(res);
       return Some(new ValidBlockSummary(dyn));
     }else {
@@ -251,19 +253,33 @@ class Shell {
   }
 
   /** Network operations */
-  static function getNetworkConnections(config : RPCConfig) : 
+  public static function getNetworkConnections(config : RPCConfig) : 
     List<ConnectionInformation> {
       var httpRequest : Http = config.getHttpWithPath("network/connections");
       httpRequest.request();
       var res : Null<String> = httpRequest.responseData;
       if (res != null) {
-        var dyn : List<Dynamic> = haxe.Json.parse(res);
+        var dyn : Array<Dynamic> = haxe.Json.parse(res);
         return (ConnectionInformation.parseJSON(dyn));
       }else {
         return (new List());
       }
     }
 
+  public static function getPeerDetails(config : RPCConfig, 
+    peerId : PeerId) : Option<ConnectionInformation> {
+      var httpRequest : Http = 
+        config.getHttpWithPath('network/connections/$peerId');
+      httpRequest.request();
+      var res : Null<String> = httpRequest.responseData;
+      if (res != null) {
+        var dyn : Dynamic = haxe.Json.parse(res);
+        trace('GET peer details : $dyn');
+        return (Some (new ConnectionInformation(dyn)));
+      }else {
+        return None;
+      }
+    }
 }
 
 //TODO: These types need to be consolidated. 
