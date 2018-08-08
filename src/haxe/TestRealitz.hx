@@ -83,7 +83,6 @@ class TestRealitz {
       trace(Shell.getPeerDetails(config, peer.peerId));
     }
     trace("Done querying.");
-
   }
   static function main () {
     var config = new RPCConfig("http://localhost", "18732");

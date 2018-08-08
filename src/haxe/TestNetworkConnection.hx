@@ -57,8 +57,19 @@ class TestNetworkConnection {
     }
     trace("Done querying.");
   }
+
+  static function testGetNetworkLog(config : RPCConfig) {
+    var logEvents = Shell.getNetworkLog(config);
+    trace(logEvents);
+  }  
+  static function testGetNetworkPeers(config : RPCConfig) {
+    var peers = Shell.getNetworkPeers(config);
+    trace(peers);
+  }
   static function main () {
     var config = new RPCConfig("http://localhost", "18732");
     testGetNetworkConnections(config);
+    testGetNetworkLog(config);
+    testGetNetworkPeers(config);
   }
 }

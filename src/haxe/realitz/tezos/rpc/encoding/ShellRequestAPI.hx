@@ -280,6 +280,29 @@ class Shell {
         return None;
       }
     }
+
+  public static function clearGreyList(config : RPCConfig) {
+    var httpRequest : Http = 
+      config.getHttpWithPath('network/greylist/clear');
+    httpRequest.request();
+  }
+
+  public static function getNetworkLog(config : RPCConfig): Null<String> {
+    var httpRequest : Http = 
+      config.getHttpWithPath('network/log');
+    httpRequest.request();
+    var res : Null<String> = httpRequest.responseData;
+    trace(res);
+    return res;
+  }
+  public static function getNetworkPeers(config : RPCConfig) : Null<String> { 
+    var httpRequest : Http = 
+      config.getHttpWithPath("/network/peers");
+    httpRequest.request();
+    var res : Null<String> = httpRequest.responseData;
+    trace(res);
+    return res;
+  }
 }
 
 //TODO: These types need to be consolidated. 
