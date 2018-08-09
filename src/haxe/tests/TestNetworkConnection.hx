@@ -63,6 +63,9 @@ class TestNetworkConnection {
   }  
   static function testGetNetworkPeers(config : RPCConfig) {
     var peers = Shell.getNetworkPeers(config);
+    for (peer in peers) {
+      trace(Shell.getNetworkPeer(config, peer.peerId));
+    }
     trace(peers);
   }
   static function main () {

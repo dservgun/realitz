@@ -176,6 +176,7 @@ file : p2p_connection.mli
 class ConnectionInfo {
   var connectionId : IdPoint;
   var timestamp : String;
+  
   public function new (dyn : Array<Dynamic>) {
     trace('ConnectionInfo $dyn');
     connectionId = new IdPoint(dyn[0]);

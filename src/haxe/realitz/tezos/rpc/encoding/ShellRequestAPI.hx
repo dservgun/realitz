@@ -309,6 +309,20 @@ class Shell {
     }
     return res;
   }
+  public static function getNetworkPeer(config : RPCConfig, peerId : PeerId) :
+    PeerPair {
+      var httpRequest : Http =
+        config.getHttpWithPath('/network/peers/$peerId');
+      httpRequest.request();
+      trace('Get network information for $peerId');
+      var dynPeer : Dynamic = 
+        haxe.Json.parse(httpRequest.responseData);
+      trace(dynPeer);
+      var peerInfo : PeerPair = 
+        new PeerPair(peerId, Peer.parseJSON(dynPeer));
+      return peerInfo;
+
+    }
 }
 
 //TODO: These types need to be consolidated. 

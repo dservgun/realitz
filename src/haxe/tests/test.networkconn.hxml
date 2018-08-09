@@ -1,5 +1,6 @@
+-cp ..
 -cp .
 -v 
-libs.hxml
+../libs.hxml
 -neko TestNetworkConnection.n
 -main TestNetworkConnection.hx
