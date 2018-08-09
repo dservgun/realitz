@@ -101,7 +101,7 @@ enum PoolEvent {
     peerId : PublicKey);
 
   /** 
-  * We rejected a connection after authentifying the remote peer.
+  * We rejected a connection after authenticating the remote peer.
   */
   RejectingRequest (point : IdPoint, identifier : PeerId, 
     peerId : PublicKey);
@@ -231,11 +231,47 @@ class PeerStatistics {
   }
 }
 
+enum RequestKind {
+  RejectingRequest;
+  IncomingRequest;
+  Disconnection;
+  ExternalDisconnection;
+  ConnectionEstablished;
+  RequestRejected;
+}
+
 class Monitor {
-  var requestKind : PoolEvent;
-  var timeStamp : Int64;
-  var address : String;
-  var port : Int;
+  var requestKind (default, null): RequestKind;
+  var timeStamp (default, null) : String;
+  var address (default, null) : String;
+  var port (default, null) : String;
+
+  public function parseRequestKindEventJSON(kindDyn : String) : RequestKind{
+    switch(kindDyn){
+      case "rejecting_request" : return RejectingRequest;
+      case "incoming_request" : return IncomingRequest;
+      case "disconnection" : return Disconnection;
+      case "external_disconnection" : return ExternalDisconnection;
+      case "connection_established" : return ConnectionEstablished;
+      case "request_rejected" : return RequestRejected;
+      case _ : throw 'Invalid event $kindDyn';
+    }
+  }
+  public function new(aDynamic : Dynamic) {
+    requestKind = parseRequestKindEventJSON(aDynamic.kind);
+    timeStamp = aDynamic.timestamp;
+    address = aDynamic.address;
+    port = aDynamic.port;
+  }
+
+  public static function parseFromJSONList(monitorEvents : Array<Dynamic>) : List<Monitor>{
+    var result : List<Monitor> = new List();
+    for (event in monitorEvents) {
+      result.add(new Monitor(event));
+    }
+    return result;
+  }
+
 }
 
 

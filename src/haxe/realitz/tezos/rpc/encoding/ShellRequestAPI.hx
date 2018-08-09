@@ -321,10 +321,52 @@ class Shell {
       var peerInfo : PeerPair = 
         new PeerPair(peerId, Peer.parseJSON(dynPeer));
       return peerInfo;
-
     }
-}
+  /**
+  * Ban the peer with $peerId.
+  */
+  public static function banNetworkPeer(config : RPCConfig, peer : PeerPair) {
+    var peerId = peer.peerId;
+    var httpRequest : Http =
+      config.getHttpWithPath('/network/peers/$peerId/ban');
+    httpRequest.request();
+    trace('Banned $peer.peerId');
+  }
 
+
+  public static function checkPeerBanStatus(config : RPCConfig, peer : PeerPair) : Bool {
+    var peerId = peer.peerId;    
+    var httpRequest : Http = 
+      config.getHttpWithPath('/network/peers/$peerId/banned');
+    httpRequest.request();
+    var responseData = httpRequest.responseData;
+    trace('Ban status $httpRequest : $responseData');
+    return (haxe.Json.parse(responseData));
+  }
+
+  //A none -> false. This should be ok?
+  private static function convertOptionToBool(anOption : Option<Bool>) : Bool {
+    switch(anOption) {
+      case(Some(anOption)): return anOption;
+      case None : return false;
+    }
+  }
+  public static function monitorPeerLog(config : RPCConfig, 
+      peer : PeerPair, monitor : Option<Bool>) : List<Monitor> {
+    var peerId = peer.peerId;
+    var httpRequest : Http =
+      config.getHttpWithPath('/network/peers/$peerId/log');
+    var monitorParameter : Bool = convertOptionToBool(monitor);
+    var httpRequest1 : Http = httpRequest.setParameter("monitor", 
+        '$monitorParameter');
+    httpRequest1.request();
+    var result : Array<Dynamic> = 
+      haxe.Json.parse(httpRequest1.responseData);
+    return (Monitor.parseFromJSONList(result));
+  }
+
+}
+  
 //TODO: These types need to be consolidated. 
 //Notes: Implement the rpc client in haskell and 
 //get a better sense of the type system.

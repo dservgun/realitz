@@ -48,11 +48,14 @@ import realitz.tezos.rpc.encoding.RPCConfig;
 */
 class TestNetworkPeers {
   static function testGetNetworkPeers(config : RPCConfig) {
-    var peers = Shell.getNetworkPeers(config);
-    for (peer in peers) {
-      trace(Shell.getNetworkPeer(config, peer.peerId));
+    var peers : List<PeerPair>= Shell.getNetworkPeers(config);
+    for (peerPair in peers) {
+      trace(Shell.getNetworkPeer(config, peerPair.peerId));
+      var banStatus = Shell.checkPeerBanStatus(config, peerPair);
+      trace(banStatus);
+      var monitorLog = Shell.monitorPeerLog(config, peerPair, None);
+      trace(monitorLog);
     }
-    trace(peers);
   }
   static function main () {
     var config = new RPCConfig("http://localhost", "18732");
