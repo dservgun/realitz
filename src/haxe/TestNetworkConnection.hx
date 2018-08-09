@@ -55,7 +55,6 @@ class TestNetworkConnection {
       trace(peer);
       trace(Shell.getPeerDetails(config, peer.peerId));
     }
-    trace("Done querying.");
   }
 
   static function testGetNetworkLog(config : RPCConfig) {

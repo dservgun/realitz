@@ -26,6 +26,7 @@ package realitz.tezos.rpc.encoding;
 /*****************************************************************************/
 
 import realitz.tezos.rpc.Types;
+import realitz.tezos.rpc.BlockHeader;
 import haxe.io.Bytes;
 import haxe.Http;
 import haxe.ds.Option;
@@ -295,12 +296,17 @@ class Shell {
     trace(res);
     return res;
   }
-  public static function getNetworkPeers(config : RPCConfig) : Null<String> { 
+  public static function getNetworkPeers(config : RPCConfig) : List<PeerPair> { 
     var httpRequest : Http = 
       config.getHttpWithPath("/network/peers");
     httpRequest.request();
-    var res : Null<String> = httpRequest.responseData;
-    trace(res);
+    trace("Get network peers");
+    var dynArray : Array<Dynamic> = haxe.Json.parse(httpRequest.responseData);
+    var res : List<PeerPair> = new List();
+    for(aDyn in dynArray) {
+      trace('$aDyn');
+      res.add(new PeerPair(aDyn[0], Peer.parseJSON(aDyn[1])));
+    }
     return res;
   }
 }

@@ -28,6 +28,7 @@ package realitz.tezos.rpc;
 import haxe.ds.Option;
 import haxe.Int64;
 import haxe.io.Bytes;
+import realitz.tezos.rpc.BlockHeader;
 typedef Protocol = String;
 typedef BigNum = String;
 typedef Mutez = String;
@@ -177,8 +178,12 @@ class IdPoint {
   var address : String;
   var port : Int;
   public function new (aDyn : Dynamic) {
+    trace('IdPoint $aDyn');
     address = aDyn.addr;
     port = aDyn.port;
+  }
+  public static function parseJSON(aDyn : Dynamic) {
+    return (new IdPoint(aDyn));
   }
 }
 
@@ -261,6 +266,14 @@ class InlinedEndorsementContent {
   var level : Int;
 }
 
+class PeerPair{
+  public var peerId (default, null): PeerId;
+  public var peer (default, null) : Peer;
+  public function new(pId : PeerId, p : Peer) {
+    peerId = pId;
+    peer = p;
+  }
+}
 
 typedef ContractId = BlockHash
 enum ContractKind {
