@@ -29,6 +29,9 @@ import haxe.ds.Option;
 import haxe.Int64;
 import haxe.io.Bytes;
 import realitz.tezos.rpc.BlockHeader;
+import realitz.tezos.rpc.ConnectionInfo;
+import realitz.tezos.rpc.Peer;
+
 typedef Protocol = String;
 typedef BigNum = String;
 typedef Mutez = String;
@@ -272,6 +275,15 @@ class PeerPair{
   public function new(pId : PeerId, p : Peer) {
     peerId = pId;
     peer = p;
+  }
+}
+
+class PointPair {
+  public var peerId (default, null) : PeerId;
+  public var point (default, null ): Point;
+  public function new (pId : PeerId, p : Point) {
+    peerId = pId;
+    point = p;
   }
 }
 

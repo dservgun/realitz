@@ -1,7 +1,9 @@
+package realitz.tezos.rpc;
+
 /*****************************************************************************/
 /*                                                                           */
 /* Open Source License                                                       */
-/* Copyright (c) Dinkar Ganti, dinkar.ganti@gmail.com */
+/* Copyright (c) Dinkar Ganti, dinkar.ganti@gmail.com                        */
 /*                                                                           */
 /* Permission is hereby granted, free of charge, to any person obtaining a   */
 /* copy of this software and associated documentation files (the "Software"),*/
@@ -23,47 +25,37 @@
 /*                                                                           */
 /*****************************************************************************/
 
-//TODO: add build file such that it picks up all the files.
-import realitz.core.Property;
-import realitz.tezos.rpc.BlockHeader;
-import realitz.tezos.rpc.BlockHeaderMetadata;
-import realitz.tezos.rpc.BlockPreValidator;
-import realitz.tezos.rpc.BlockValidator;
-import realitz.tezos.rpc.ContextConstants;
-import realitz.tezos.rpc.Error;
-import realitz.tezos.rpc.MetadataTypes;
-import realitz.tezos.rpc.Michelson;
-import realitz.tezos.rpc.MichelsonPrimitives;
-import realitz.tezos.rpc.Operation;
 import realitz.tezos.rpc.Types;
-import realitz.tezos.rpc.WorkerTypes;
-import realitz.tezos.rpc.encoding.Responses;
-import realitz.tezos.rpc.encoding.Requests;
-import realitz.tezos.rpc.encoding.ShellRequestAPI;
-import realitz.tezos.rpc.encoding.RPCConfig;
 
 /**
-* Test network peers.
-* Assuming localhost with a port.
+The information about a peer so, the node is now aware of this peer with a 
+'peerId' rather than the 'IdPoint'.
 */
-class TestNetworkPeers {
-  static function testGetNetworkPeers(config : RPCConfig) {
-    var peers : List<PeerPair>= Shell.getNetworkPeers(config);
-    for (peerPair in peers) {
-      trace(Shell.getNetworkPeer(config, peerPair.peerId));
-      var banStatus = Shell.checkPeerBanStatus(config, peerPair);
-      trace(banStatus);
-      var monitorLog = Shell.monitorPeerLog(config, peerPair, None);
-      trace(monitorLog);
+class PeerInfo {
+  var peerId : PeerId;
+  var timestamp : Date;
+}
+class ConnectionInfo {
+  var connectionId : IdPoint;
+  var timestamp : String;
+  
+  public function new (dyn : Array<Dynamic>) {
+    trace('ConnectionInfo $dyn');
+    connectionId = new IdPoint(dyn[0]);
+    timestamp = dyn[1];
+  }
+  public static function parseFromList(infoList : Array<Dynamic>) : List<ConnectionInfo> {
+    var result : List<ConnectionInfo> = new List();
+    if (infoList == null) {
+      return result;
     }
+    trace('Parse from list $infoList');
+    result.add(new ConnectionInfo(infoList));
+    return result;
   }
-  static function testNetworkPoints(config : RPCConfig) {
-    var points : List<PointPair> = Shell.getNetworkPoints(config, None);
-    trace(points);
-  }
-  static function main () {
-    var config = new RPCConfig("http://localhost", "18732");
-    testGetNetworkPeers(config);
-    testNetworkPoints(config);
-  }
+}
+
+class ConnectionMetadata {
+  var disableMempool : Bool;
+  var privateNode : Bool;
 }

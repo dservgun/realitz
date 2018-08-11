@@ -173,63 +173,6 @@ file : p2p_connection.mli
 
 */
 
-class ConnectionInfo {
-  var connectionId : IdPoint;
-  var timestamp : String;
-  
-  public function new (dyn : Array<Dynamic>) {
-    trace('ConnectionInfo $dyn');
-    connectionId = new IdPoint(dyn[0]);
-    timestamp = dyn[1];
-  }
-  public static function parseFromList(infoList : Array<Dynamic>) : List<ConnectionInfo> {
-    var result : List<ConnectionInfo> = new List();
-    if (infoList == null) {
-      return result;
-    }
-    trace('Parse from list $infoList');
-    result.add(new ConnectionInfo(infoList));
-    return result;
-  }
-}
-
-class ConnectionMetadata {
-  var disableMempool : Bool;
-  var privateNode : Bool;
-}
-enum PeerState {
-  Running;
-  Accepted;
-  Disconnected;
-}
-
-class PeerStatistics {
-  var totalSent (default, null) : Int64;
-  var totalReceived (default, null) : Int64;
-  var currentInflow (default, null) : Int;
-  var currentOutflow (default, null) : Int;
-  public function new(dyn : Dynamic) {
-    trace('New : $dyn');
-    totalSent = dyn.total_sent;
-    totalReceived = dyn.total_received;
-    currentInflow = dyn.current_inflow;
-    currentOutflow = dyn.current_outflow;
-  }
-  //TODO: How do i embed functions inside an enum.
-  public static function parsePeerStateJSON(aDyn : String) : PeerState {
-    trace("Parse peer state " + aDyn);
-    switch(aDyn){
-      case "running" : return Running;
-      case "accepted" : return Accepted;
-      case "disconnected" : return Disconnected;
-      case _ : throw ('Invalid peer state $aDyn');
-    }
-  }
-
-  public static  function parseJSON(dyn : Dynamic) : PeerStatistics {
-    return (new PeerStatistics(dyn));
-  }
-}
 
 enum RequestKind {
   RejectingRequest;
@@ -274,39 +217,5 @@ class Monitor {
 
 }
 
-
-class Peer {
-  function new(dyn : Dynamic) {
-    score = dyn.score;
-    trusted = dyn.trusted;
-    peerState = PeerStatistics.parsePeerStateJSON(dyn.state);
-    var rAt = dyn.reachable_at;
-    trace('Reachable $rAt');
-    reachableAt = IdPoint.parseJSON(rAt);
-    statistics = PeerStatistics.parseJSON(dyn.stat);
-    lastFailedConnection = ConnectionInfo.parseFromList(dyn.last_failed_connection);
-    lastRejectedConnection = ConnectionInfo.parseFromList(dyn.last_rejected_connection);
-    lastEstablishedConnection = ConnectionInfo.parseFromList(dyn.last_established_connection);
-    lastDisconnection = ConnectionInfo.parseFromList(dyn.last_disconnection);
-    lastSeen = ConnectionInfo.parseFromList(dyn.last_seen);
-    lastMiss = ConnectionInfo.parseFromList(dyn.last_miss);    
-
-  }
-  var score (default, null) : Int;
-  var trusted (default, null) : Bool;
-  var peerState (default, null) : PeerState;
-  var reachableAt (default, null) : IdPoint;
-  var statistics (default, null) : PeerStatistics;
-  var lastFailedConnection (default, null) : List<ConnectionInfo>;
-  var lastRejectedConnection (default, null) : List<ConnectionInfo>;
-  var lastEstablishedConnection(default, null) : List<ConnectionInfo>;
-  var lastDisconnection (default, null) : List<ConnectionInfo>;
-  var lastSeen (default, null) : List<ConnectionInfo>;
-  var lastMiss (default, null) : List<ConnectionInfo>;
-
-  public static function parseJSON(dyn : Dynamic) : Peer {
-    return (new Peer(dyn));
-  }
-}
 
 

@@ -37,6 +37,9 @@ import realitz.tezos.rpc.encoding.Responses.InvalidBlockResponse;
 import realitz.tezos.rpc.encoding.Responses.Bootstrapped;
 import realitz.tezos.rpc.encoding.Responses.Mempool;
 import realitz.tezos.rpc.encoding.RPCConfig;
+import realitz.tezos.rpc.Peer;
+
+typedef StateFilter = String;
 class Shell {
 
   private static function setOptionalParameters<A>
@@ -364,6 +367,48 @@ class Shell {
       haxe.Json.parse(httpRequest1.responseData);
     return (Monitor.parseFromJSONList(result));
   }
+  /**
+  * Trust peer 'peerPair' permanently. The host IP can
+  * still be blocked. 
+  */
+ 
+  /* 
+  * TODO: Under what conditions should a node trust a peer?
+  * Does it have any performance benefits?
+  * Can a vpn be used to manage the peers so that all peers 
+  * inside the vpn can be trusted as the start? Is this 
+  * how to setup nodes? 
+  */
+  public static function trustPeer(config : RPCConfig, 
+      peerPair : PeerPair) {
+    var peerId = peerPair.peerId;
+    var httpRequest : Http =
+      config.getHttpWithPath('/network/peers/$peerId/trust');
+    trace('Note: IP for the host can still be blocked. Trust $peerPair. ');
+    httpRequest.request();
+  }
+
+
+  /**
+  * List the pool of known IP, Port used for establishing P2P connections.
+  * 
+  */
+  public static function getNetworkPoints (config : RPCConfig, 
+    stateFilter : Option<StateFilter>) : List<PointPair> {
+    var httpRequest0 : Http = 
+      config.getHttpWithPath('/network/points/');
+    var httpRequest : Http = 
+      setOptionalParameters(stateFilter, "filter", httpRequest0);
+    httpRequest0.request();
+    var dynArray : Array<Dynamic> = haxe.Json.parse(httpRequest.responseData);
+    var res : List<PointPair> = new List();
+    for(aDyn in dynArray) {
+      trace('$aDyn');
+      res.add(new PointPair(aDyn[0], Point.parseJSON(aDyn[1])));
+    }
+    return res;
+  }
+
 
 }
   
