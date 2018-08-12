@@ -424,8 +424,56 @@ class Shell {
     return (new PointPair(dyn[1], Point.parseJSON(dyn[0])));
   }
 
+  public static function connectToPeer(config : RPCConfig, point : String) {
+    var ipAddr = point;
+    throw "PUT request not supported";       
+  }
+
+  public static function banPeer(config : RPCConfig, point : String) {
+    var url = "/network/points/" + point + "/ban";
+    var httpRequest : Http =
+      config.getHttpWithPath(url);
+    httpRequest.request();
+    trace("Banned " + point);
+  }
+  public static function checkBannedStatus(config : RPCConfig, point : String) : Bool  {
+    var url = "/network/points/" + point + "/banned";
+    var httpRequest : Http = 
+      config.getHttpWithPath(url);
+    httpRequest.request();
+    return (haxe.Json.parse(httpRequest.responseData));
+  }
+  public static function getPeerLog(config : RPCConfig, point : String) {
+    throw ("Feature not supported. TODO");
+  }
+
+  /**
+  * Need to model this in tlaplus. 
+  * Trust this peer permanently. 
+  * If state is trusted at a time: 
+  *   connection is open.
+  *   connection is closed, implies that 
+  *     the connection is blacklisted or grey listed until a time.
+  */
+  public static function trustPoint (config : RPCConfig, point : String) {
+    var url = "/network/points/" + point + "/trust";
+    var httpRequest : Http = 
+      config.getHttpWithPath(url);
+    httpRequest.request();
+
+  }
+
+  public static function networkStat(config : RPCConfig) : PeerStatistics {
+    var url = '/network/stat';
+    var httpRequest : Http =
+      config.getHttpWithPath(url);
+    httpRequest.request();
+    var result = httpRequest.responseData;
+    return (PeerStatistics.parseJSON(result));
+  }
 
 }
+
   
 //TODO: These types need to be consolidated. 
 //Notes: Implement the rpc client in haskell and 

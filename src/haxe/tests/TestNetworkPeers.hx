@@ -70,14 +70,15 @@ class TestNetworkPeers {
         Shell.getNetworkPoint(config, peerP.peer.ipAddress());
       trace(networkPoint);
     }
-
   }
-  static function testNetworkPointTimeout (config : RPCConfig) {
-    
-  }
+  static function testNetworkStat(config : RPCConfig) {
+    trace(Shell.networkStat(config));
+  }  
   static function main () {
     var config = new RPCConfig("http://localhost", "18732");
     testGetNetworkPeers(config);
     testNetworkPoints(config);
+    testNetworkStat(config);
+    //testNetworkPoint(config);
   }
 }
