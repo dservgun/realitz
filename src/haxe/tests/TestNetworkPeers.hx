@@ -61,6 +61,20 @@ class TestNetworkPeers {
     var points : List<PointPair> = Shell.getNetworkPoints(config, None);
     trace(points);
   }
+  //TODO : How to pass an ipv6 address?
+  static function testNetworkPoint(config : RPCConfig) {
+    var peers : List<PeerPair> = 
+      Shell.getNetworkPeers(config);
+    for (peerP in peers) {
+      var networkPoint = 
+        Shell.getNetworkPoint(config, peerP.peer.ipAddress());
+      trace(networkPoint);
+    }
+
+  }
+  static function testNetworkPointTimeout (config : RPCConfig) {
+    
+  }
   static function main () {
     var config = new RPCConfig("http://localhost", "18732");
     testGetNetworkPeers(config);

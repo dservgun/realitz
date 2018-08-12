@@ -113,7 +113,7 @@ class Peer {
   var score (default, null) : Int;
   var trusted (default, null) : Bool;
   var peerState (default, null) : PeerState;
-  var reachableAt (default, null) : IdPoint;
+  public var reachableAt (default, null) : IdPoint;
   var statistics (default, null) : PeerStatistics;
   var lastFailedConnection (default, null) : List<ConnectionInfo>;
   var lastRejectedConnection (default, null) : List<ConnectionInfo>;
@@ -121,7 +121,9 @@ class Peer {
   var lastDisconnection (default, null) : List<ConnectionInfo>;
   var lastSeen (default, null) : List<ConnectionInfo>;
   var lastMiss (default, null) : List<ConnectionInfo>;
-
+  public function ipAddress () : String {
+    return reachableAt.address;
+  }
   public static function parseJSON(dyn : Dynamic) : Peer {
     return (new Peer(dyn));
   }

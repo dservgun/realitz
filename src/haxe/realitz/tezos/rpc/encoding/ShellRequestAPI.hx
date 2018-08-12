@@ -409,6 +409,21 @@ class Shell {
     return res;
   }
 
+  public static function getNetworkPoint(config : RPCConfig, point : String) : PointPair {
+    var ipAddr  = point;
+    trace('Network point $point');
+    var url = "/network/points/" + "[" + ipAddr + "]";
+    trace('$url');
+    var httpRequest : Http = 
+      config.getHttpWithPath(url);
+    httpRequest.request();
+    var responseD = httpRequest.responseData;
+    trace(" " + responseD);
+    var dyn : Dynamic = haxe.Json.parse(responseD);
+
+    return (new PointPair(dyn[1], Point.parseJSON(dyn[0])));
+  }
+
 
 }
   

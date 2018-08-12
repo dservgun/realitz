@@ -178,8 +178,8 @@ class PublicKey {
 }
 
 class IdPoint {
-  var address : String;
-  var port : Int;
+  public var address (default, null): String;
+  public var port (default, null) : Int;
   public function new (aDyn : Dynamic) {
     trace('IdPoint $aDyn');
     address = aDyn.addr;
