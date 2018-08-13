@@ -71,7 +71,7 @@ class Component {
   function new(aName : String, anInterface : Bytes, anImplementation : Bytes) {
     name = aName;
     _interface = anInterface;
-    implementation = anImplementation
+    implementation = anImplementation;
   }
   public static function toJSON (components : List<Component>) : 
     List<Dynamic> {
@@ -86,8 +86,12 @@ class Component {
   public static function fromJSON(components : Array<Dynamic>) : List<Component> {
     var result : List<Component> = new List();
     for (component in components){
-
+      var name = component.name;
+      var interface_ = component.get("interface");
+      var implementation = component.implementation;
+      result.add(new Component(name, interface_, implementation));
     }
+    return result;
   }
 }
 
@@ -95,6 +99,11 @@ class Component {
 class InjectProtocol {
   var expectedEnvVersion : Int;
   var components : List<Component>;
+  
+  public function new (envVersion : Int, componentsList : List<Component>) {
+    expectedEnvVersion = envVersion;
+    components = componentsList;
+  }
   public function toJSON() : String {
     var dyn : Dynamic = 
       {
@@ -102,6 +111,12 @@ class InjectProtocol {
         "components" : Component.toJSON(components)
       };
     return haxe.Json.stringify(dyn);
+  }
+
+  public static function parseJSON(dyn : Dynamic) : InjectProtocol {
+    var envVersion = dyn.expected_env_version;
+    var components : List<Component> = Component.fromJSON(dyn.components);
+    return (new InjectProtocol(envVersion, components));
   }
 
 } 

@@ -78,6 +78,10 @@ class TestNetworkPeers {
     trace(Shell.getNetworkVersions(config));
   }
   static function testGetProtocols(config : RPCConfig) {
+    var protocols : List<String> = Shell.getProtocols(config);
+    for(protocol in protocols) {
+      trace(Shell.getProtocol(config, new ProtocolHash(protocol)));
+    }
     trace(Shell.getProtocols(config));
   }
   static function main () {

@@ -501,6 +501,17 @@ class Shell {
     }
     return result;
   }
+
+  public static function getProtocol(config : RPCConfig, protocol : ProtocolHash) : InjectProtocol {
+    var protoHash = protocol.hash;
+    var url = '/protocols/$protoHash';
+    trace(url);
+    var httpRequest :Http = 
+      config.getHttpWithPath(url);
+    httpRequest.request();
+    var result : Dynamic = httpRequest.responseData;
+    return result;
+  }  
 }
 
 
