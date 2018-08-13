@@ -74,11 +74,19 @@ class TestNetworkPeers {
   static function testNetworkStat(config : RPCConfig) {
     trace(Shell.networkStat(config));
   }  
+  static function testNetworkVersions(config : RPCConfig) {
+    trace(Shell.getNetworkVersions(config));
+  }
+  static function testGetProtocols(config : RPCConfig) {
+    trace(Shell.getProtocols(config));
+  }
   static function main () {
     var config = new RPCConfig("http://localhost", "18732");
     testGetNetworkPeers(config);
     testNetworkPoints(config);
     testNetworkStat(config);
+    testNetworkVersions(config);
+    testGetProtocols(config);
     //testNetworkPoint(config);
   }
 }

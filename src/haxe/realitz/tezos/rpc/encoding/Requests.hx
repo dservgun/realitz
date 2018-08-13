@@ -64,13 +64,15 @@ class InjectOperation {
 }
 
 
-
-
 class Component {
   var name : String ;
   var _interface : Bytes;
   var implementation : Bytes;
-
+  function new(aName : String, anInterface : Bytes, anImplementation : Bytes) {
+    name = aName;
+    _interface = anInterface;
+    implementation = anImplementation
+  }
   public static function toJSON (components : List<Component>) : 
     List<Dynamic> {
     var result : List<Dynamic> = new List();
@@ -80,6 +82,12 @@ class Component {
         });
     }
     return result;
+  }
+  public static function fromJSON(components : Array<Dynamic>) : List<Component> {
+    var result : List<Component> = new List();
+    for (component in components){
+
+    }
   }
 }
 
@@ -95,5 +103,6 @@ class InjectProtocol {
       };
     return haxe.Json.stringify(dyn);
   }
+
 } 
 

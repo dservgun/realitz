@@ -299,6 +299,14 @@ class Shell {
     trace(res);
     return res;
   }
+
+  //TODO: Create a task that sorts peers by load and 
+  //that are not banned, grey listed at the time. 
+  //Queue peers somewhere where the peer is nearing the term 
+  //limit of being greylisted. 
+  //chooses the one with the load for a particular request.
+  //Although, is this optimization needed? And what if the request
+  //is chasing a bandwidth, can this be done reliably?  
   public static function getNetworkPeers(config : RPCConfig) : List<PeerPair> { 
     var httpRequest : Http = 
       config.getHttpWithPath("/network/peers");
@@ -471,8 +479,30 @@ class Shell {
     var result = httpRequest.responseData;
     return (PeerStatistics.parseJSON(result));
   }
+  
+  public static function getNetworkVersions(config : RPCConfig) : List<ConnectionVersion> {
+    var url = '/network/versions';
+    var httpRequest : Http = 
+      config.getHttpWithPath(url);
+    httpRequest.request();
+    var responses : Array<Dynamic> = haxe.Json.parse(httpRequest.responseData);
+    return (ConnectionVersion.fromArray(responses));
+  }
 
+  public static function getProtocols(config : RPCConfig) : List<Protocol> {
+    var url = '/protocols';
+    var httpRequest : Http = 
+      config.getHttpWithPath(url);
+    httpRequest.request();
+    var responses : Array<String> = haxe.Json.parse(httpRequest.responseData);
+    var result = new List();
+    for (response in responses) {
+      result.add(response);
+    }
+    return result;
+  }
 }
+
 
   
 //TODO: These types need to be consolidated. 
