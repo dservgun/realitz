@@ -38,12 +38,39 @@ type worker_status =
 */
 
 enum WorkerStatus {
-  Launching (timestamp : Int64);
-  Running (timestamp : Int64);
-  Closing (start : Int64, end : Int64);
-  Closed (start : Int64, end : Int64, errors : Option<List<Error>>);
+  Launching (timestamp : Date);
+  Running (timestamp : Date);
+  Closing (birth : Date, since : Date);
+  Closed (birth : Date, since : Date);
+  Crashed (birth : Date, since : Date, crasted : Array<Dynamic>);
 }
 
+/**
+* Some invariants: need to verify this
+* If a state is in closed, closing or crashed, 
+* the 'dyn.birth' should be earlier than 'dyn.since';
+* In simple terms a validator could not have crashed before its birth.
+* Some invariants with reference to the previous state need to be captured here.
+* For example a crashed validator cannot go back to running state. Need to 
+* verify these states.
+*/
+class WorkerStatusEncoding {
+  public static function fromJSON(dyn : Dynamic) : WorkerStatus {
+    var workerStatus : Dynamic = dyn.status;
+    trace('WorkerStatus $workerStatus');    
+    switch(workerStatus.phase) {
+      case "launching" : return Launching(workerStatus.timestamp);
+      case "running" : return Running(workerStatus.since);
+      case "closing" : 
+        return Closing(workerStatus.birth, workerStatus.since);
+      case "closed" : return Closed(workerStatus.birth, workerStatus.since);
+      case "crashed" : 
+        return Crashed (workerStatus.birth, 
+            workerStatus.since, workerStatus.errors);
+      case _ : throw 'Invalid phase $workerStatus';
+    }
+  }
+}
 /*
 (** The runnning status of an individual request. *)
 type request_status =
@@ -57,3 +84,19 @@ enum RequestStatus {
   Treated (timestamp : Int64);
   Completed (timestamp : Int64);
 }
+
+class RequestStatusEncoding {
+  public static function fromJSON(status : Dynamic) : RequestStatus {
+    if (status.pushed != null) {
+      return Pushed(status.pushed);
+    }
+    if (status.treated != null) {
+      return Treated(status.treated);
+    }
+    if (status.completed != null) {
+      return Completed(status.completed);
+    }
+    throw 'Invalid status $status';
+  }
+}
+

@@ -47,15 +47,58 @@ class BlockRequestView {
   var chainId : ChainId;
   var block : BlockHash ;
   var peer : Option<PeerId>;
+  public function new (dyn : Dynamic) {
+    chainId = dyn.chain_id;
+    block = dyn.block;
+    if (dyn.peer == null){
+      peer = None;
+    }else {
+      peer = Some(new PeerId(dyn.peer));
+    }
+  }
 }
 
 class BlockRequest {
-  var timestamp : Int64;
+  var timestamp : Date;
   var requestView : BlockRequestView;
+  public function new(aDynamic : Dynamic) {
+    trace('BlockRequest $aDynamic');
+    if (aDynamic == null) {
+      trace("Using defaults");
+    }else {
+      timestamp = aDynamic.timestamp;
+      requestView = new BlockRequestView(aDynamic.request);      
+    }
+  }
+  public static function fromArray(aDynArray : Array<Dynamic>) : List<BlockRequest> {
+    trace('requests $aDynArray');
+    var result : List<BlockRequest> = new List();
+    var dynArrayLen = aDynArray.length;
+    trace('Dynamic array length $dynArrayLen');
+    if(dynArrayLen > 0) {
+      for (element in aDynArray) {
+        result.add(new BlockRequest(element));
+      }      
+    }else {
+      trace("Empty array");
+    }
+    return result;
+  }
 }
 class Backlog {
   var level : String;
   var events : List<WorkerStateEvent>;
+  public function new (backlog : Dynamic) {
+    level = backlog.level;
+    events = WorkerStateEventEncoding.fromArray(backlog.events);
+  }
+  public static function fromArray (aDynArray : Array<Dynamic>) : List<Backlog> {
+    var result : List<Backlog> = new List();
+    for (element in aDynArray) {
+      result.add(new Backlog(element));
+    }
+    return result;
+  }
 }
 
 /*
@@ -77,9 +120,42 @@ enum WorkerStateEvent {
     ValidationFailure (view : BlockRequestView, status : RequestStatus, errors : List<Error>);
 }
 
+class WorkerStateEventEncoding {
+  public static function fromJSON (event : Dynamic) : WorkerStateEvent {
+    if (event.message != null) {
+      return Debug(event.message);
+    }
+    if (event.successful_validation != null) {
+      var requestView = new BlockRequestView(event.successful_validation);
+      var status : RequestStatus = RequestStatusEncoding.fromJSON(event.status);
+      return (ValidationSuccess(requestView, status));
+    }
+    if (event.failed_validation != null) {
+      var requestView = new BlockRequestView(event.failed_validation);
+      var status : RequestStatus = RequestStatusEncoding.fromJSON(event.status);
+      return (ValidationFailure(requestView, status, event.errors));
+    }
+    throw 'Invalid state event $event';
+  }
+  public static function fromArray(events : Array<Dynamic>) : List<WorkerStateEvent> {
+    var result : List<WorkerStateEvent> = new List();
+    for (event in events){
+      result.add(fromJSON(event));
+    }
+    return result;
+  }
+}
 class BlockValidator {
-  var status : WorkerStatus;
-  var pendingRequests : List<BlockRequest>;
-  var currentRequest : BlockRequest;
-  var backlog : List<Backlog>;
+  var status (default, null) : WorkerStatus;
+  var pendingRequests (default, null): List<BlockRequest>;
+  var currentRequest (default, null) : BlockRequest;
+  var backlog (default, null) : List<Backlog>;
+
+  public function new (dyn : Dynamic) {
+    trace('Block validator $dyn');
+    status = WorkerStatusEncoding.fromJSON(dyn);
+    pendingRequests = BlockRequest.fromArray(dyn.pending_requests);
+    currentRequest = new BlockRequest(dyn.current_request);
+    backlog = Backlog.fromArray(dyn.backlog);
+  }
 }

@@ -175,6 +175,9 @@ typedef PublicKeyHash = BlockHash
 typedef OperationsHash = BlockHash
 class PublicKey {
   public var hash (default, null) : String;
+  public function new (aHash : String) {
+    hash = aHash;
+  }
 }
 
 class IdPoint {

@@ -511,7 +511,45 @@ class Shell {
     httpRequest.request();
     var result : Dynamic = httpRequest.responseData;
     return result;
+  }
+
+  //There is a single block validator per node.
+  public static function introspectBlockValidator(config : RPCConfig) : BlockValidator {
+    var url = '/workers/block_validator';
+    var httpRequest : Http = 
+      config.getHttpWithPath(url);
+    httpRequest.request();
+    trace(httpRequest.responseData);
+    var validator : Dynamic = haxe.Json.parse(httpRequest.responseData);
+    return (new BlockValidator(validator));
   }  
+
+  //There can be multiple chain validators per node.
+  public static function introspectChainValidators(config : RPCConfig) : 
+    List<ChainValidator> {
+    var url = 'workers/chain_validators';
+    var httpRequest : Http = 
+      config.getHttpWithPath(url);
+    httpRequest.request();
+    trace('Chain validators ${httpRequest.responseData}');
+    var validators : Array<Dynamic> = 
+      haxe.Json.parse(httpRequest.responseData);
+    return (ChainValidator.fromJSONArray(validators));
+  }
+
+  public static function introspectChainPrevalidators(config : RPCConfig) : 
+    List<ChainValidator> {
+    var url = 'workers/prevalidators';
+    var httpRequest : Http = 
+      config.getHttpWithPath(url);
+    httpRequest.request();
+    trace('Chain validators ${httpRequest.responseData}');
+    var validators : Array<Dynamic> = 
+      haxe.Json.parse(httpRequest.responseData);
+    return (ChainValidator.fromJSONArray(validators));
+
+  }
+
 }
 
 

@@ -28,7 +28,26 @@ package realitz.tezos.rpc;
 import realitz.tezos.rpc.Types;
 import realitz.tezos.rpc.WorkerTypes;
 
-class Prevalidator {
+class ChainValidator {
   var chainId : ChainId;
   var status : WorkerStatus;
+  public function new (chainValidator : Dynamic) {
+    if (chainValidator != null) {
+      //TODO: Check for null is needed because we are using
+      //dynamic here. Maybe this should also be a static function.
+      trace('Chain id ${chainValidator.chain_id}');
+      trace('Chain status ${chainValidator.status}');      
+      chainId = new ChainId(chainValidator.chain_id);
+      status = WorkerStatusEncoding.fromJSON(chainValidator);
+    }
+  }
+
+  public static function fromJSONArray(validators : Array<Dynamic>) {
+    var result : List<ChainValidator> = new List();
+    trace('Validators : $validators');
+    for(validator in validators) {
+      result.add(new ChainValidator(validator));
+    }
+    return result;
+  }
 }
