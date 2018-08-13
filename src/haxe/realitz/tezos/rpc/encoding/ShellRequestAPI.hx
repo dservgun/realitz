@@ -94,8 +94,16 @@ class Shell {
     httpRequest3.request();
     var res : Null<String> = httpRequest3.responseData;
     trace("Result " + res);
+    var result : List<List<BlockHash>> = new List();
     if (res != null) {
-      var result = haxe.Json.parse(res);
+      var resArray : Array<Array<String>> = haxe.Json.parse(res);
+      for (router in resArray){
+        var outList = new List();
+        for(rinner in router) {
+          outList.add(new BlockHash(rinner));
+        }
+        result.add(outList);
+      }
       return result;
     }else {
       return (new List());
@@ -547,9 +555,15 @@ class Shell {
     var validators : Array<Dynamic> = 
       haxe.Json.parse(httpRequest.responseData);
     return (ChainValidator.fromJSONArray(validators));
-
   }
 
+  public static function getBlockDetails(config : RPCConfig, chainId : String, blockId : String) : Dynamic {
+    var url = '/chains/$chainId/blocks/$blockId';
+    var httpRequest : Http = config.getHttpWithPath(url);
+    httpRequest.request();
+    trace('Block details : ${httpRequest.responseData}');
+    return httpRequest.responseData;
+  }
 }
 
 

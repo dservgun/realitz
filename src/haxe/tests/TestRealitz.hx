@@ -27,7 +27,7 @@
 import realitz.core.Property;
 import realitz.tezos.rpc.BlockHeader;
 import realitz.tezos.rpc.BlockHeaderMetadata;
-import realitz.tezos.rpc.BlockPreValidator;
+import realitz.tezos.rpc.ChainValidator;
 import realitz.tezos.rpc.BlockValidator;
 import realitz.tezos.rpc.ContextConstants;
 import realitz.tezos.rpc.Error;
@@ -52,7 +52,18 @@ class TestRealitz {
     trace(Shell.getChainId(config, aChain));
   }
   static function testBlocksForAChain(config : RPCConfig, aChain : String) {
-    trace(Shell.getBlocksForAChain(config, aChain, None, None, None));
+    var blocks : List<List<BlockHash>> = 
+      Shell.getBlocksForAChain(config, aChain, None, None, None);
+    trace('Test blocks $blocks');
+    for (outer in blocks) {
+      trace('Outer $outer');
+      for(inner in outer) {
+        trace('Inner : $inner');
+        var blockDetails = Shell.getBlockDetails(config, aChain, inner.hash);
+        trace('Block details $blockDetails');
+      }
+    }
+    
   }
   static function testInvalidBlocks(config : RPCConfig, aChain : String) {
     trace(Shell.getInvalidBlocks(config, aChain));
@@ -84,6 +95,7 @@ class TestRealitz {
     }
     trace("Done querying.");
   }
+
   static function main () {
     var config = new RPCConfig("http://localhost", "18732");
     testGetChainId(config, "main");
