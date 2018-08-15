@@ -561,6 +561,7 @@ class Shell {
   public static function getBlockDetails(config : RPCConfig, chainId : String, blockId : String) : Dynamic {
     var url = '/chains/$chainId/blocks/$blockId';
     var httpRequest : Http = config.getHttpWithPath(url);
+    trace('$httpRequest');
     httpRequest.request();
     trace('Block details : ${httpRequest.responseData}');
     return httpRequest.responseData;
@@ -568,10 +569,10 @@ class Shell {
 
   public static function getBlockContextConstants(config : RPCConfig, 
     chainId : String, blockId : String) : ContextConstants {
-    var url = '/chains/$chainId/blocks/$blockId/context/constants';
+    var url = '/chains/$chainId/blocks/$blockId/head/context/constants';
     var httpRequest : Http = config.getHttpWithPath(url);
     httpRequest.request();
-    trace('Response ${httpRequest.responseData}');
+    trace('$httpRequest : Response ${httpRequest.responseData}');
     return (new ContextConstants(haxe.Json.parse(httpRequest.responseData)));
   }
 }
