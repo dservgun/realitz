@@ -61,6 +61,8 @@ class TestRealitz {
         trace('Inner : $inner');
         var blockDetails = Shell.getBlockDetails(config, aChain, inner.hash);
         trace('Block details $blockDetails');
+        var blockConstants = Shell.getBlockContextConstants(config, aChain, inner.hash);
+        trace('Constants $blockConstants');
       }
     }
     

@@ -38,6 +38,7 @@ import realitz.tezos.rpc.encoding.Responses.Bootstrapped;
 import realitz.tezos.rpc.encoding.Responses.Mempool;
 import realitz.tezos.rpc.encoding.RPCConfig;
 import realitz.tezos.rpc.Peer;
+import realitz.tezos.rpc.ContextConstants;
 
 typedef StateFilter = String;
 class Shell {
@@ -563,6 +564,15 @@ class Shell {
     httpRequest.request();
     trace('Block details : ${httpRequest.responseData}');
     return httpRequest.responseData;
+  }
+
+  public static function getBlockContextConstants(config : RPCConfig, 
+    chainId : String, blockId : String) : ContextConstants {
+    var url = '/chains/$chainId/blocks/$blockId/context/constants';
+    var httpRequest : Http = config.getHttpWithPath(url);
+    httpRequest.request();
+    trace('Response ${httpRequest.responseData}');
+    return (new ContextConstants(haxe.Json.parse(httpRequest.responseData)));
   }
 }
 

@@ -53,8 +53,7 @@ class ContextConstants {
   var seedNonceRevelationTip (default, null) : Mutez;
   var timeBetweenBlocks (default, null) : List<Int64>;
   var tokensPerRoll (default, null) : Mutez;
-  function new (aJsonString : String) {
-    var json : Dynamic = haxe.Json.parse(aJsonString);
+  public function new (json : Dynamic) {
     blockReward = json.block_reward;
     blockSecurityDeposit = json.block_security_deposit;
     blocksPerCommitment = json.blocks_per_commitment;

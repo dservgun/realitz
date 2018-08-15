@@ -7,6 +7,9 @@ To build the project
     ** ``` haxe build.java.hxml ``` to build java/android target. 
 
 
+#### Dependencies
+``` haxelib install json2object ```
+
 #### Expert tips
 Tips from the core dev team to help us navigate the api.
 

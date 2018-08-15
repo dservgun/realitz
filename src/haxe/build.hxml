@@ -1,4 +1,5 @@
 -cp .
+-cp ./tests
 -v 
 libs.hxml
 -js TestRealitz.js
