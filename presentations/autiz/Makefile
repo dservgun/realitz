@@ -2,6 +2,7 @@
 
 PDF: main.tex
 	pdflatex main.tex
+	mv main.pdf Autiz.pdf
 
 clean:
 		rm main*.out
