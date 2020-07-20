@@ -569,7 +569,7 @@ class Shell {
 
   public static function getBlockContextConstants(config : RPCConfig, 
     chainId : String, blockId : String) : ContextConstants {
-    var url = '/chains/$chainId/blocks/$blockId/head/context/constants';
+    var url = 'chains/main/blocks/head/context/constants/';
     var httpRequest : Http = config.getHttpWithPath(url);
     httpRequest.request();
     trace('$httpRequest : Response ${httpRequest.responseData}');

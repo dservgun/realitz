@@ -50,6 +50,7 @@ class ScriptedContract {
   var code (default, null) : MichelsonV1Expression; 
   var storage (default, null) : MichelsonV1Expression;
 }
+
 enum Operation {
   ContentsAndResults(protocol : Protocol, 
     chainId : ChainId, 
@@ -109,6 +110,7 @@ class EndorsementMetadata {
   var delegate : PublicKeyHash;
   var slot : List<Int>;
 }
+
 enum ContentAndResult {
   Transaction(source : Contract, nonce : Int, amount : Mutez, destination : Contract, 
     parameters : MichelsonV1Expression, result : OperationResult);
@@ -130,7 +132,6 @@ enum ContentAndResult {
     publicKey : PublicKeyHash, 
     metadata : RevealMetadata);
 }
-
 
 class RevealMetadata {
   var balanceUpdates (default, null) : List<BalanceUpdate>;

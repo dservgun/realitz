@@ -54,6 +54,7 @@ class ContextConstants {
   var timeBetweenBlocks (default, null) : List<Int64>;
   var tokensPerRoll (default, null) : Mutez;
   public function new (json : Dynamic) {
+    trace('JSON $json');
     blockReward = json.block_reward;
     blockSecurityDeposit = json.block_security_deposit;
     blocksPerCommitment = json.blocks_per_commitment;
