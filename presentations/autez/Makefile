@@ -2,7 +2,7 @@
 
 PDF: main.tex
 	pdflatex main.tex
-	mv main.pdf Autiz.pdf
+	mv main.pdf Autez.pdf
 
 clean:
 		rm main*.out
